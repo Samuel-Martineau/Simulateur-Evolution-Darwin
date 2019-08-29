@@ -1,0 +1,19 @@
+{
+  "name": "simulateur-evolution-darwin",
+  "version": "0.0.0",
+  "description": "Un projet d'Expo-Science qui a pour but de simuler l'évolution naturelle selon la théorie de Charles Darwin",
+  "main": "index.js",
+  "scripts": {
+    "dev": "parcel src/index.html watch",
+    "prod": "parcel build src/index.html"
+  },
+  "author": "Samuel Martineau",
+  "devDependencies": {
+    "parcel-bundler": "^1.12.3",
+    "typescript": "^3.6.2",
+    "@types/p5": "^0.9.0"
+  },
+  "dependencies": {
+    "p5": "^0.9.0"
+  }
+}
