@@ -1,0 +1,15 @@
+todo:
+  autoAssign: true
+  keyword: [
+    "@PROBLEM",
+    "@IDEA",
+    "@IMPORTANT"
+  ]
+  bodyKeyword: [
+    "@BODY"
+  ]
+  blobLines: []
+  caseSensitive: false
+  label: [],
+  reopenClosed: true
+  exclude: null
