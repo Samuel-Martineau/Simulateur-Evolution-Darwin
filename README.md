@@ -5,4 +5,4 @@ Un projet d'Expo-Science qui a pour but de simuler l'évolution naturelle selon 
 ## Liens
 
 - [Site web principal](https://smartineau.me/simulateur-evolution-darwin)
-- [Recherche](https://smartineau.me/simulateur-evolution-darwin/recherche)
+- [Résumé des recherches](https://smartineau.me/simulateur-evolution-darwin/recherche)
