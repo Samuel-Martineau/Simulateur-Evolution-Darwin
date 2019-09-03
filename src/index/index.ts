@@ -1,11 +1,14 @@
+import './index.scss';
 import p5 from 'p5';
 import 'p5/lib/addons/p5.dom';
 import { getCanvasSize } from './helpers';
 
 const sketch = function(p: p5) {
+  window.processing = p;
   const size = 657;
   p.setup = () => {
     p.createCanvas(getCanvasSize(), getCanvasSize());
+    //@ts-ignore
     p.select('body').style('overflow', 'hidden');
   };
   p.draw = () => {

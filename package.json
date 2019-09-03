@@ -2,20 +2,43 @@
   "name": "simulateur-evolution-darwin",
   "version": "0.0.0",
   "description": "Un projet d'Expo-Science qui a pour but de simuler l'évolution naturelle selon la théorie de Charles Darwin",
-  "main": "index.js",
   "scripts": {
-    "dev": "parcel src/index.html src/recherche.html watch",
-    "prod": "parcel build src/index.html src/recherche.html"
+    "start": "webpack-dev-server --mode development",
+    "dev": "webpack --mode development",
+    "prod": "webpack --mode production"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.5.5",
+    "@babel/preset-env": "^7.5.5",
+    "@babel/preset-typescript": "^7.3.3",
+    "@types/lodash": "^4.14.138",
+    "@types/marked": "^0.6.5",
+    "@types/p5": "^0.9.0",
+    "autoprefixer": "^9.6.1",
+    "babel-loader": "^8.0.6",
+    "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^5.0.4",
+    "css-loader": "^3.2.0",
+    "file-loader": "^4.2.0",
+    "html-webpack-plugin": "^3.2.0",
+    "mini-css-extract-plugin": "^0.8.0",
+    "node-sass": "^4.12.0",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "postcss-loader": "^3.0.0",
+    "raw-loader": "^3.1.0",
+    "sass-loader": "^8.0.0",
+    "style-loader": "^1.0.0",
+    "typescript": "^3.6.2",
+    "uglifyjs-webpack-plugin": "^2.2.0",
+    "webpack": "^4.39.3",
+    "webpack-cli": "^3.3.7",
+    "webpack-dev-server": "^3.8.0",
+    "webpack-merge": "^4.2.2"
   },
   "author": "Samuel Martineau",
-  "devDependencies": {
-    "@types/p5": "^0.9.0",
-    "parcel-bundler": "^1.12.3",
-    "parcel-plugin-markdown": "^0.4.2",
-    "sass": "^1.22.10",
-    "typescript": "^3.6.2"
-  },
   "dependencies": {
+    "lodash": "^4.17.15",
+    "marked": "^0.7.0",
     "p5": "^0.9.0"
   }
 }
