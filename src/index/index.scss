@@ -1,4 +1,98 @@
 body {
   padding: 0;
   margin: 0;
+  overflow-x: hidden;
+  font-family: 'Kalam', cursive;
+  padding-right: 0 !important;
+}
+
+.button {
+  font-family: 'Kalam', cursive;
+  border-radius: 15px;
+  border-width: 5px;
+  font-size: 1.5em;
+  padding: 10px;
+  margin: 15px;
+  outline: none;
+  transition: all 0.4s;
+  &.purple {
+    $main: rgb(155, 89, 182);
+    $secondary: rgb(142, 68, 173);
+    border-color: $main;
+    &:hover {
+      background-color: $main;
+      border-color: $secondary;
+      color: white;
+    }
+  }
+  &.red {
+    $main: rgb(231, 76, 60);
+    $secondary: rgb(192, 57, 43);
+    border-color: $main;
+    &:hover {
+      background-color: $main;
+      border-color: $secondary;
+      color: white;
+    }
+  }
+  &.turquoise {
+    $main: rgb(26, 188, 156);
+    $secondary: rgb(39, 174, 96);
+    border-color: $main;
+    &:hover {
+      background-color: $main;
+      border-color: $secondary;
+      color: white;
+    }
+  }
+  &.green {
+    $main: rgb(46, 204, 113);
+    $secondary: rgb(39, 174, 96);
+    border-color: $main;
+    &:hover {
+      background-color: $main;
+      border-color: $secondary;
+      color: white;
+    }
+  }
+  &.blue {
+    $main: rgb(52, 152, 219);
+    $secondary: rgb(41, 128, 185);
+    border-color: $main;
+    &:hover {
+      background-color: $main;
+      border-color: $secondary;
+      color: white;
+    }
+  }
+  &.dark {
+    $main: rgb(52, 73, 94);
+    $secondary: rgb(44, 62, 80);
+    border-color: $main;
+    &:hover {
+      background-color: $main;
+      border-color: $secondary;
+      color: white;
+    }
+  }
+  &.yellow {
+    $main: rgb(241, 196, 15);
+    $secondary: rgb(243, 156, 18);
+    border-color: $main;
+    &:hover {
+      background-color: $main;
+      border-color: $secondary;
+      color: white;
+    }
+  }
+  &.orange {
+    $main: rgb(230, 126, 34);
+    $secondary: rgb(211, 84, 0);
+    border-color: $main;
+    &:hover {
+      background-color: $main;
+      border-color: $secondary;
+      color: white;
+    }
+  }
 }

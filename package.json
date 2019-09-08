@@ -11,6 +11,7 @@
     "@babel/core": "^7.5.5",
     "@babel/preset-env": "^7.5.5",
     "@babel/preset-typescript": "^7.3.3",
+    "@types/chart.js": "^2.8.4",
     "@types/lodash": "^4.14.138",
     "@types/marked": "^0.6.5",
     "@types/p5": "^0.9.0",
@@ -37,8 +38,10 @@
   },
   "author": "Samuel Martineau",
   "dependencies": {
+    "chart.js": "^2.8.0",
     "lodash": "^4.17.15",
     "marked": "^0.7.0",
-    "p5": "^0.9.0"
+    "p5": "^0.9.0",
+    "sweetalert2": "^8.17.1"
   }
 }

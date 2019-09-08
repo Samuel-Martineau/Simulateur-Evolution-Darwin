@@ -22,13 +22,3 @@ renderer.heading = (text, level) => {
 };
 
 document.body.innerHTML = `${document.body.innerHTML}${marked(md, { renderer })}`;
-
-window.copyLink = (id: string) => {
-  const text = `https://smartineau.me/simulateur-evolution-darwin/recherche#${id}`;
-  const tempInput = document.createElement('input');
-  body.appendChild(tempInput);
-  tempInput.setAttribute('value', text);
-  tempInput.select();
-  document.execCommand('copy');
-  body.removeChild(tempInput);
-};
