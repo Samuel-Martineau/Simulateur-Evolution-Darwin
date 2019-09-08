@@ -3,4 +3,5 @@ interface Window {
   speed: number;
   time: number;
   showAverageSpeedChart(): void;
+  showChangeSpeedDialog(): void;
 }

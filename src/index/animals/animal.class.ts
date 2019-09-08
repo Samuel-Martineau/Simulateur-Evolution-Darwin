@@ -1,20 +1,28 @@
-///<reference path="../global.d.ts" />
 import { Gene } from './gene.interface';
 import * as _ from 'lodash';
 import { stdDev } from '../helpers';
+import { Event } from './event.interface';
 
 export class Animal {
   public x: number;
   public y: number;
-  public specie: string = '';
   public genes: Gene[] = [];
+  public events: Event[] = [];
+  public canReproduce: boolean = false;
 
   constructor(x?: number, y?: number, genes?: Gene[], parent1?: Animal, parent2?: Animal) {
     if (x && y && genes && !parent1 && !parent2) {
       this.x = x;
       this.y = y;
       this.genes = genes;
-    } else if (!x && !y && !genes && parent1 && parent2 && parent1.specie === parent2.specie) {
+    } else if (
+      !x &&
+      !y &&
+      !genes &&
+      parent1 &&
+      parent2 &&
+      parent1.constructor === parent2.constructor
+    ) {
       const parents = [parent1, parent2];
       this.x = _.meanBy(parents, 'x');
       this.y = _.meanBy(parents, 'y');
@@ -36,4 +44,15 @@ export class Animal {
   }
 
   display() {}
+
+  update() {
+    _.filter(this.events, ['time', window.time]).forEach((event) => {
+      event.action(this);
+      _.remove(this.events, (el) => _.isMatch(el, event));
+    });
+  }
+
+  addEvent(event: Event) {
+    this.events.push(event);
+  }
 }

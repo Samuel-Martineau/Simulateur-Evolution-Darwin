@@ -19,44 +19,63 @@ export const showAverageSpeedChart = () => {
   const speed = window.speed;
   window.speed = 0;
   setTimeout(() => {
-    const canvas = <HTMLCanvasElement>document.getElementById('averageSpeedChart');
-    const speedChart = new Chart(canvas, {
-      type: 'bar',
+    new Chart(<HTMLCanvasElement>document.getElementById('averageSpeedChart'), {
+      type: 'line',
       data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        labels: _.range(0, 100).map((el) => el.toString()),
         datasets: [
           {
-            label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            backgroundColor: [
-              'rgba(255, 99, 132, 0.2)',
-              'rgba(54, 162, 235, 0.2)',
-              'rgba(255, 206, 86, 0.2)',
-              'rgba(75, 192, 192, 0.2)',
-              'rgba(153, 102, 255, 0.2)',
-              'rgba(255, 159, 64, 0.2)'
-            ],
-            borderColor: [
-              'rgba(255, 99, 132, 1)',
-              'rgba(54, 162, 235, 1)',
-              'rgba(255, 206, 86, 1)',
-              'rgba(75, 192, 192, 1)',
-              'rgba(153, 102, 255, 1)',
-              'rgba(255, 159, 64, 1)'
-            ],
-            borderWidth: 1
+            label: 'Lapins',
+            data: _.range(0, 100).map((el) => Math.pow(el, 2)),
+            borderColor: '#27ae60',
+            backgroundColor: '#2ecc71',
+            fill: false
+          },
+          {
+            label: 'Renards',
+            data: _.range(0, 100).map((el) => Math.pow(el, 2.25)),
+            borderColor: '#d35400',
+            backgroundColor: '#e67e22',
+            fill: false
           }
         ]
+      },
+      options: {
+        responsive: true,
+        tooltips: {
+          mode: 'index'
+        }
       }
     });
   });
   Swal.fire({
     title: 'Diagramme des vitesses moyennes selon le temps',
+    width: 1000,
     html: `
       <canvas id="averageSpeedChart"></canvas>
     `,
     confirmButtonText: 'Parfait !'
   }).then(() => {
     window.speed = speed;
+  });
+};
+
+export const showChangeSpeedDialog = () => {
+  const speed = window.speed;
+  window.speed = 0;
+  //@ts-ignore
+  Swal.fire({
+    title: '<h2 style="margin-bottom: 0;">Modification de la vitesse</h2>',
+    input: 'range',
+    inputAttributes: {
+      min: 0,
+      max: 200,
+      step: 1
+    },
+    inputValue: speed,
+    width: 1000,
+    confirmButtonText: 'Parfait !'
+  }).then(({ value }: { value: number }) => {
+    window.speed = value;
   });
 };

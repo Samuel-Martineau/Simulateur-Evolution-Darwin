@@ -1,8 +1,8 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const CopyWebpackPlugin = require('copy-webpack-plugin');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
+const path = require('path');
 
 module.exports = {
   entry: {
@@ -22,7 +22,8 @@ module.exports = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env', '@babel/typescript']
+            presets: ['@babel/preset-env', '@babel/typescript'],
+            plugins: ['@babel/plugin-proposal-class-properties']
           }
         }
       },
@@ -32,7 +33,7 @@ module.exports = {
           MiniCssExtractPlugin.loader,
           'css-loader',
           'sass-loader',
-          { loader: 'postcss-loader', options: { plugins: [require('autoprefixer')] } }
+          { loader: 'postcss-loader', options: { config: { path: './webpack' } } }
         ]
       },
       {
