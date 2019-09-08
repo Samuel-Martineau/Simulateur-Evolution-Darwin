@@ -20,6 +20,12 @@ const sketch = function(p: p5) {
       .addClass('button turquoise')
       .parent(controlPanelDiv)
       .mousePressed(window.showAverageSpeedChart);
+    p.createButton('Voir le travail de recherche')
+      .addClass('button orange')
+      .parent(controlPanelDiv)
+      .mousePressed(
+        () => (location.href = 'https://smartineau.me/simulateur-evolution-darwin/recherche')
+      );
   };
   p.draw = () => {
     // Clearing the canvas
