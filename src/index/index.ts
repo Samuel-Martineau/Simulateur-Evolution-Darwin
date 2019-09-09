@@ -6,17 +6,21 @@ import { getCanvasSize, showAverageSpeedChart, showChangeSpeedDialog } from './h
 const sketch = function(p: p5) {
   let size: number;
   let controlPanelDiv: p5.Element;
+  let imgs: p5.Image[] = [];
   p.windowResized = () => p.resizeCanvas(getCanvasSize(), getCanvasSize());
   p.preload = () => {
     window.showAverageSpeedChart = showAverageSpeedChart;
     window.showChangeSpeedDialog = showChangeSpeedDialog;
+    imgs.push(p.loadImage('assets/hare.png'));
+    imgs.push(p.loadImage('assets/fox.png'));
     window.processing = p;
     window.speed = 1;
     window.time = 0;
-    size = 2000;
+    size = 647;
   };
   p.setup = () => {
     p.createCanvas(getCanvasSize(), getCanvasSize());
+    p.imageMode('center');
     p.frameRate(30);
     controlPanelDiv = p.createElement('div');
     p.createButton('Voir le diagramme des vitesses moyennes')

@@ -1,9 +1,9 @@
-import { Gene } from './gene.interface';
+import Gene from './gene.interface';
 import * as _ from 'lodash';
 import { stdDev } from '../helpers';
-import { Event } from './event.interface';
+import Event from './event.interface';
 
-export class Animal {
+export default class Animal {
   public x: number;
   public y: number;
   public genes: Gene[] = [];

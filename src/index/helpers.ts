@@ -1,6 +1,7 @@
 import Swal from 'sweetalert2';
 import Chart from 'chart.js';
 import * as _ from 'lodash';
+import ChartData from './chart-data.interface';
 
 export const getCanvasSize = () => {
   return window.innerHeight < window.innerWidth ? window.innerHeight : window.innerWidth;
@@ -16,38 +17,54 @@ export const stdDev = (arr: any[], key?: string) => {
 };
 
 export const showAverageSpeedChart = () => {
+  // Generating fake data
+  let t = 0;
+  const data: ChartData = {
+    indexes: _.range(0, 1000),
+    foxData: new Array(1000).fill(0).map(() => {
+      t += 0.01;
+      return window.processing.noise(t) * 250;
+    }),
+    hareData: new Array(1000).fill(0).map(() => {
+      t += 0.01;
+      return window.processing.noise(t) * 250;
+    })
+  };
+  const dataToDisplay: ChartData = {
+    indexes: data.indexes.filter((val) => val % Math.floor(data.indexes.length / 100) === 0),
+    get hareData() {
+      return data.hareData.filter((val) => this.indexes.includes(data.hareData.indexOf(val)));
+    },
+    get foxData() {
+      return data.foxData.filter((val) => this.indexes.includes(data.foxData.indexOf(val)));
+    }
+  };
   const speed = window.speed;
   window.speed = 0;
   setTimeout(() => {
     new Chart(<HTMLCanvasElement>document.getElementById('averageSpeedChart'), {
       type: 'line',
       data: {
-        labels: _.range(0, 100).map((el) => el.toString()),
+        labels: dataToDisplay.indexes.map((el) => el.toString()),
         datasets: [
           {
-            label: 'Lapins',
-            data: _.range(0, 100).map((el) => Math.pow(el, 2)),
+            label: 'Lièvres',
+            data: dataToDisplay.hareData,
             borderColor: '#27ae60',
             backgroundColor: '#2ecc71',
             fill: false
           },
           {
             label: 'Renards',
-            data: _.range(0, 100).map((el) => Math.pow(el, 2.25)),
+            data: dataToDisplay.foxData,
             borderColor: '#d35400',
             backgroundColor: '#e67e22',
             fill: false
           }
         ]
-      },
-      options: {
-        responsive: true,
-        tooltips: {
-          mode: 'index'
-        }
       }
     });
-  });
+  }, 10);
   Swal.fire({
     title: 'Diagramme des vitesses moyennes selon le temps',
     width: 1000,
