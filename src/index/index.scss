@@ -6,6 +6,10 @@ body {
   user-select: none;
 }
 
+.swal2-actions {
+  margin-bottom: 30px !important;
+}
+
 .bouton {
   font-family: 'Kalam', cursive;
   border-radius: 15px;
@@ -37,6 +41,7 @@ body {
       color: white;
     }
   }
+
   &.turquoise {
     $main: rgb(26, 188, 156);
     $secondary: rgb(39, 174, 96);
@@ -91,6 +96,7 @@ body {
       color: white;
     }
   }
+
   &.orange {
     $main: rgb(230, 126, 34);
     $secondary: rgb(211, 84, 0);

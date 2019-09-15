@@ -13,9 +13,9 @@ export const stdDev = (arr: any[], key?: string) => {
   if (key) arr = arr.map((val) => val[key]);
   let avg = _.mean(arr);
   return _.chain(arr)
-      .map((val) => Math.abs(val - avg))
-      .mean()
-      .value();
+    .map((val) => Math.abs(val - avg))
+    .mean()
+    .value();
 };
 
 export const showAverageSpeedChart = () => {
@@ -23,12 +23,15 @@ export const showAverageSpeedChart = () => {
   window.speed = 0;
   const hareData = window.averageHareSpeed.slice();
   const foxData = window.averageFoxSpeed.slice();
-  const indexes = _.range(0, hareData.length > foxData.length ? hareData.length : foxData.length);
+  const indexes = _.range(
+    1,
+    (hareData.length > foxData.length ? hareData.length : foxData.length) + 1
+  );
   setTimeout(() => {
     new Chart(<HTMLCanvasElement>document.getElementById('averageSpeedChart'), {
       type: 'line',
       data: {
-        labels: indexes.map((el) => (el + 1).toString()),
+        labels: indexes.map((el) => el.toString()),
         datasets: [
           {
             label: 'Lièvres',
@@ -48,8 +51,8 @@ export const showAverageSpeedChart = () => {
       },
       options: {
         scales: {
-          yAxes: [{scaleLabel: {display: true, labelString: 'Vitesse moyenne'}}],
-          xAxes: [{scaleLabel: {display: true, labelString: 'Nombre de générations'}}]
+          yAxes: [{ scaleLabel: { display: true, labelString: 'Vitesse moyenne' } }],
+          xAxes: [{ scaleLabel: { display: true, labelString: 'Nombre de générations' } }]
         }
       }
     });
@@ -60,6 +63,7 @@ export const showAverageSpeedChart = () => {
     html: `
       <canvas id="averageSpeedChart"></canvas>
     `,
+    allowOutsideClick: false,
     confirmButtonText: 'Parfait !'
   }).then(() => {
     window.speed = speed;
@@ -72,11 +76,11 @@ export const showSpeedCurve = () => {
   const hares = _.filter(window.animals, ['specie', 0]);
   const foxes = _.filter(window.animals, ['specie', 1]);
   let highestGen = (
-      <Animal>_.maxBy(_.concat(hares, foxes), (a) => a.generation) || {generation: -1}
+    <Animal>_.maxBy(_.concat(hares, foxes), (a) => a.generation) || { generation: -1 }
   ).generation;
   let hareData: any[] = [];
   let foxData: any[] = [];
-  const data: any = {fox: [], hare: [], indexes: []};
+  const data: any = { fox: [], hare: [], indexes: [] };
   for (let i = 0; i < _.range(0, highestGen + 1).length; i++) {
     const haresInGen = _.filter(hares, (a) => a.generation === i);
     const foxesInGen = _.filter(foxes, (a) => a.generation === i);
@@ -108,7 +112,7 @@ export const showSpeedCurve = () => {
     if (t === 0) return;
     let color = randomColor(0.99, 0.99).hexString();
     chartData.push({
-      label: `Lièvres de génération ${index + 1}`,
+      label: `Lièvres de génération ${index}`,
       data: gen,
       backgroundColor: color,
       borderColor: color,
@@ -120,7 +124,7 @@ export const showSpeedCurve = () => {
     if (t === 0) return;
     let color = randomColor().hexString();
     chartData.push({
-      label: `Renards de génération ${index + 1}`,
+      label: `Renards de génération ${index}`,
       data: gen,
       backgroundColor: color,
       borderColor: color,
@@ -136,8 +140,8 @@ export const showSpeedCurve = () => {
       },
       options: {
         scales: {
-          yAxes: [{scaleLabel: {display: true, labelString: "Nombre d'individus"}}],
-          xAxes: [{scaleLabel: {display: true, labelString: 'Vitesse'}}]
+          yAxes: [{ scaleLabel: { display: true, labelString: "Nombre d'individus" } }],
+          xAxes: [{ scaleLabel: { display: true, labelString: 'Vitesse' } }]
         }
       }
     });
@@ -146,8 +150,9 @@ export const showSpeedCurve = () => {
     title: "Courbe du nombre d'individus selon leur vitesse",
     width: 1000,
     html: `
-    <canvas id="speedGaussianCurve"></canvas>
-  `,
+      <canvas id="speedGaussianCurve"></canvas>
+    `,
+    allowOutsideClick: false,
     confirmButtonText: 'Parfait !'
   }).then(() => {
     window.speed = speed;
@@ -168,18 +173,52 @@ export const showChangeSpeedDialog = () => {
     },
     inputValue: speed,
     width: 1000,
+    allowOutsideClick: false,
     confirmButtonText: 'Parfait !'
-  }).then(({value}: { value: number }) => {
+  }).then(({ value }: { value: number }) => {
     window.speed = value;
+  });
+};
+
+export const showStatsOfAnimal = (a: Animal) => {
+  const speed = window.speed;
+  window.speed = 0;
+  let genesText = '';
+  a.genes.forEach((gene) => {
+    genesText += `<li><b>${gene.displayName}: </b>${gene.value.toFixed(2)}</li>`;
+  });
+  let eventsText = '';
+  a.events.forEach((event) => {
+    const time = (event.time - window.time) / (30 * speed);
+    eventsText += `<li><b>${event.name} </b> dans ${time.toFixed(2)}<b>s</b></li>`;
+  });
+  Swal.fire({
+    title: `<h3 style="margin-bottom: 0;">Propriétés de l'animal ${a.uid}</h3>`,
+    allowOutsideClick: false,
+    width: 1000,
+    html: `
+      <div style="font-size: 1.4em; display: inline-block; text-align: left;">
+        <ul>
+          <li><b>Espèce: </b>${a.specie === 0 ? 'lièvre' : 'renard'}</li>
+          <li><b>Position: </b>X: ${a.position.x.toFixed(2)}, Y: ${a.position.y.toFixed(2)}</li>
+          <li><b>Génération: </b>${a.generation}</li>
+          <li><b>Gènes: </b><ul>${genesText}</ul></li>
+          <li><b>Évènements: </b><ul>${eventsText}</ul></li>
+        </ul>
+      </div>
+    `,
+    confirmButtonText: 'Parfait !'
+  }).then(() => {
+    window.speed = speed;
   });
 };
 
 export const updateAverageSpeed = (specie: number, generation: number) => {
   const animals = _.filter(window.animals, ['specie', specie]);
   const averageSpeed = specie === 0 ? window.averageHareSpeed : window.averageFoxSpeed;
-  if (!averageSpeed[generation]) averageSpeed[generation] = 0;
-  averageSpeed[generation] = _.chain(animals)
-      .filter(['generation', generation])
-      .meanBy((a) => a.getGene('speed', 0).value)
-      .value();
+  if (!averageSpeed[generation - 1]) averageSpeed[generation - 1] = 0;
+  averageSpeed[generation - 1] = _.chain(animals)
+    .filter(['generation', generation])
+    .meanBy((a) => a.getGene('speed', 0).value)
+    .value();
 };
