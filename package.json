@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "description": "Un projet d'Expo-Science qui a pour but de simuler l'évolution naturelle selon la théorie de Charles Darwin",
   "scripts": {
-    "start": "webpack-dev-server --mode development",
+    "start": "webpack-dev-server --mode development --host 0.0.0.0",
     "dev": "webpack --mode development",
     "prod": "webpack --mode production"
   },
@@ -16,6 +16,7 @@
     "@types/lodash": "^4.14.138",
     "@types/marked": "^0.6.5",
     "@types/p5": "^0.9.0",
+    "@types/uid-generator": "^2.0.0",
     "autoprefixer": "^9.6.1",
     "babel-loader": "^8.0.6",
     "clean-webpack-plugin": "^3.0.0",
@@ -44,6 +45,8 @@
     "lodash": "^4.17.15",
     "marked": "^0.7.0",
     "p5": "^0.9.0",
-    "sweetalert2": "^8.17.1"
+    "random-color": "^1.0.1",
+    "sweetalert2": "^8.17.1",
+    "uid-generator": "^2.0.0"
   }
 }

@@ -1,4 +1,4 @@
-import { Animal } from './animal.class';
+import Animal from './animal.class';
 export default interface Event {
   name: string;
   time: number;

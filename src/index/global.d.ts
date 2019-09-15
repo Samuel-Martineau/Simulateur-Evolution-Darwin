@@ -1,7 +1,13 @@
 interface Window {
-  processing: import('p5');
+  p5: import('p5');
+  imgs: import('p5').Image[];
+  animals: import('./animals/animal.class').default[];
+  size: number;
   speed: number;
   time: number;
+  averageHareSpeed: number[];
+  averageFoxSpeed: number[];
   showAverageSpeedChart(): void;
   showChangeSpeedDialog(): void;
+  showSpeedCurve(): void;
 }

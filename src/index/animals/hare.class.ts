@@ -1,8 +1,29 @@
 import Animal from './animal.class';
-import Gene from './gene.interface';
+import { DefaultParams, ChildParams } from './animalParams.interfaces';
+import { updateAverageSpeed } from '../helpers';
 
 export default class Hare extends Animal {
-  constructor(x?: number, y?: number, genes?: Gene[], parent1?: Hare, parent2?: Hare) {
-    super(x, y, genes, parent1, parent2);
+  constructor({ ...args }: DefaultParams | ChildParams) {
+    super({ ...args, specie: 0 });
+  }
+
+  update() {
+    this.position.add(0.1 * this.getGene('speed', 1).value, 0.1 * this.getGene('speed', 1).value);
+    if (this.position.x > window.size) this.position.x = 0;
+    if (this.position.x < 0) this.position.x = window.size;
+    if (this.position.y > window.size) this.position.y = 0;
+    if (this.position.y < 0) this.position.y = window.size;
+
+    if (this.canReproduce) {
+      const breedingPartner = this.getBreedingPartner();
+      if (breedingPartner) {
+        this.canReproduce = false;
+        breedingPartner.canReproduce = false;
+        const hare = new Hare({ parent1: this, parent2: breedingPartner });
+        window.animals.push(hare);
+        updateAverageSpeed(0, hare.generation);
+      }
+    }
+    super.update();
   }
 }
