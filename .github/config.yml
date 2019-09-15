@@ -8,7 +8,7 @@ todo:
   bodyKeyword: [
     "@BODY"
   ]
-  blobLines: false
+  blobLines: 1
   caseSensitive: false
   label: [],
   reopenClosed: true
