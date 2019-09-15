@@ -1,7 +1,7 @@
 import Swal from 'sweetalert2';
 import Chart from 'chart.js';
 import * as _ from 'lodash';
-import Animal from './animals/animal.class';
+import Animal from './animal/animal.class';
 //@ts-ignore
 import randomColor from 'random-color';
 
@@ -13,9 +13,9 @@ export const stdDev = (arr: any[], key?: string) => {
   if (key) arr = arr.map((val) => val[key]);
   let avg = _.mean(arr);
   return _.chain(arr)
-    .map((val) => Math.abs(val - avg))
-    .mean()
-    .value();
+      .map((val) => Math.abs(val - avg))
+      .mean()
+      .value();
 };
 
 export const showAverageSpeedChart = () => {
@@ -48,8 +48,8 @@ export const showAverageSpeedChart = () => {
       },
       options: {
         scales: {
-          yAxes: [{ scaleLabel: { display: true, labelString: 'Vitesse moyenne' } }],
-          xAxes: [{ scaleLabel: { display: true, labelString: 'Nombre de générations' } }]
+          yAxes: [{scaleLabel: {display: true, labelString: 'Vitesse moyenne'}}],
+          xAxes: [{scaleLabel: {display: true, labelString: 'Nombre de générations'}}]
         }
       }
     });
@@ -72,11 +72,11 @@ export const showSpeedCurve = () => {
   const hares = _.filter(window.animals, ['specie', 0]);
   const foxes = _.filter(window.animals, ['specie', 1]);
   let highestGen = (
-    <Animal>_.maxBy(_.concat(hares, foxes), (a) => a.generation) || { generation: -1 }
+      <Animal>_.maxBy(_.concat(hares, foxes), (a) => a.generation) || {generation: -1}
   ).generation;
   let hareData: any[] = [];
   let foxData: any[] = [];
-  const data: any = { fox: [], hare: [], indexes: [] };
+  const data: any = {fox: [], hare: [], indexes: []};
   for (let i = 0; i < _.range(0, highestGen + 1).length; i++) {
     const haresInGen = _.filter(hares, (a) => a.generation === i);
     const foxesInGen = _.filter(foxes, (a) => a.generation === i);
@@ -136,8 +136,8 @@ export const showSpeedCurve = () => {
       },
       options: {
         scales: {
-          yAxes: [{ scaleLabel: { display: true, labelString: "Nombre d'individus" } }],
-          xAxes: [{ scaleLabel: { display: true, labelString: 'Vitesse' } }]
+          yAxes: [{scaleLabel: {display: true, labelString: "Nombre d'individus"}}],
+          xAxes: [{scaleLabel: {display: true, labelString: 'Vitesse'}}]
         }
       }
     });
@@ -169,7 +169,7 @@ export const showChangeSpeedDialog = () => {
     inputValue: speed,
     width: 1000,
     confirmButtonText: 'Parfait !'
-  }).then(({ value }: { value: number }) => {
+  }).then(({value}: { value: number }) => {
     window.speed = value;
   });
 };
@@ -178,9 +178,8 @@ export const updateAverageSpeed = (specie: number, generation: number) => {
   const animals = _.filter(window.animals, ['specie', specie]);
   const averageSpeed = specie === 0 ? window.averageHareSpeed : window.averageFoxSpeed;
   if (!averageSpeed[generation]) averageSpeed[generation] = 0;
-  const avg = _.chain(animals)
-    .filter(['generation', generation])
-    .meanBy((a) => a.getGene('speed', 0).value)
-    .value();
-  averageSpeed[generation] = avg;
+  averageSpeed[generation] = _.chain(animals)
+      .filter(['generation', generation])
+      .meanBy((a) => a.getGene('speed', 0).value)
+      .value();
 };

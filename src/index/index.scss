@@ -1,13 +1,12 @@
 body {
-  padding: 0;
+  padding: 0 !important;
   margin: 0;
   overflow-x: hidden;
   font-family: 'Kalam', cursive;
-  padding-right: 0 !important;
   user-select: none;
 }
 
-.button {
+.bouton {
   font-family: 'Kalam', cursive;
   border-radius: 15px;
   border-width: 5px;
@@ -16,7 +15,8 @@ body {
   margin: 15px;
   outline: none;
   transition: all 0.4s;
-  &.purple {
+
+  &.mauve {
     $main: rgb(155, 89, 182);
     $secondary: rgb(142, 68, 173);
     border-color: $main;
@@ -26,7 +26,8 @@ body {
       color: white;
     }
   }
-  &.red {
+
+  &.rouge {
     $main: rgb(231, 76, 60);
     $secondary: rgb(192, 57, 43);
     border-color: $main;
@@ -46,7 +47,8 @@ body {
       color: white;
     }
   }
-  &.green {
+
+  &.vert {
     $main: rgb(46, 204, 113);
     $secondary: rgb(39, 174, 96);
     border-color: $main;
@@ -56,7 +58,8 @@ body {
       color: white;
     }
   }
-  &.blue {
+
+  &.bleu {
     $main: rgb(52, 152, 219);
     $secondary: rgb(41, 128, 185);
     border-color: $main;
@@ -66,7 +69,8 @@ body {
       color: white;
     }
   }
-  &.dark {
+
+  &.noir {
     $main: rgb(52, 73, 94);
     $secondary: rgb(44, 62, 80);
     border-color: $main;
@@ -76,7 +80,8 @@ body {
       color: white;
     }
   }
-  &.yellow {
+
+  &.jaune {
     $main: rgb(241, 196, 15);
     $secondary: rgb(243, 156, 18);
     border-color: $main;

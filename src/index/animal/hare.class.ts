@@ -1,6 +1,6 @@
 import Animal from './animal.class';
-import { DefaultParams, ChildParams } from './animalParams.interfaces';
-import { updateAverageSpeed } from '../helpers';
+import {ChildParams, DefaultParams} from './animalParams.interfaces';
+import {updateAverageSpeed} from '../helpers';
 
 export default class Hare extends Animal {
   constructor({ ...args }: DefaultParams | ChildParams) {

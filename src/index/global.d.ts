@@ -1,7 +1,7 @@
 interface Window {
   p5: import('p5');
   imgs: import('p5').Image[];
-  animals: import('./animals/animal.class').default[];
+    animals: import('./animal/animal.class').default[];
   size: number;
   speed: number;
   time: number;
