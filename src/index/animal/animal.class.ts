@@ -133,7 +133,7 @@ export default class Animal {
 
   display() {
     const { x, y } = this.position;
-    window.p5.image(window.imgs[this.specie], x, y);
+    window.p5.image(window.imgs[this.specie], x - window.offsetX, y - window.offsetY);
   }
 
   update() {
@@ -169,12 +169,12 @@ export default class Animal {
   }
 
   isClicked(mx: number, my: number) {
-    const proportion = getCanvasSize() / window.size;
+    const proportion = (getCanvasSize() / window.size) * window.scale;
     const clicked =
-      mx / proportion > this.position.x - 9 &&
-      mx / proportion < this.position.x + 9 &&
-      my / proportion > this.position.y - 9 &&
-      my / proportion < this.position.y + 9;
+      mx / proportion > this.position.x + window.offsetX - 9 &&
+      mx / proportion < this.position.x + window.offsetX + 9 &&
+      my / proportion > this.position.y + window.offsetY - 9 &&
+      my / proportion < this.position.y + window.offsetY + 9;
     return clicked;
   }
 }

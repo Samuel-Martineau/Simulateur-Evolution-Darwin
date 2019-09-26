@@ -8,11 +8,13 @@ import {
   showSpeedCurve,
   showStatsOfAnimal,
   stdDev,
-  updateAverageSpeed
+  updateAverageSpeed,
+  changeOffsets
 } from './helpers';
 import Fox from './animal/fox.class';
 import Hare from './animal/hare.class';
 import _ from 'lodash';
+import { showChangeScaleDialog } from './helpers';
 
 const sketch = function(p: p5) {
   let controlPanelDiv: p5.Element;
@@ -31,16 +33,20 @@ const sketch = function(p: p5) {
     window.showSpeedCurve = showSpeedCurve;
     window.showChangeSpeedDialog = showChangeSpeedDialog;
     window.showStatsOfAnimal = showStatsOfAnimal;
+    window.showChangeScaleDialog = showChangeScaleDialog;
     window.averageHareSpeed = [];
     window.averageFoxSpeed = [];
     window.animals = [];
     window.imgs = [];
+    window.scale = 1;
+    window.offsetX = 0;
+    window.offsetY = 0;
     window.imgs.push(p.loadImage('assets/hare.png'));
     window.imgs.push(p.loadImage('assets/fox.png'));
     window.p5 = p;
     window.speed = 1;
     window.time = 0;
-    window.size = 647;
+    window.size = 4000;
   };
   p.setup = () => {
     p.createCanvas(getCanvasSize(), getCanvasSize());
@@ -60,6 +66,10 @@ const sketch = function(p: p5) {
       .addClass('bouton mauve')
       .parent(controlPanelDiv)
       .mousePressed(window.showChangeSpeedDialog);
+    p.createButton("Changer l'échelle")
+      .addClass('bouton bleu')
+      .parent(controlPanelDiv)
+      .mousePressed(window.showChangeScaleDialog);
     p.createButton('Voir le travail de recherche')
       .addClass('bouton orange')
       .parent(controlPanelDiv)
@@ -117,8 +127,23 @@ const sketch = function(p: p5) {
   p.draw = () => {
     // Effacement du contenu du canvas
     p.background(0);
+    // Affichage du nombre de FPS
+    p.fill(255);
+    p.textSize(12);
+    p.text(Math.trunc(p.frameRate()), 10, 20);
+    // Affichage des flèches de déplacement
+    p.textAlign('center');
+    p.textSize(30);
+    const canSee = window.size / window.scale;
+    if (window.offsetY > 0) p.text('⬆️', getCanvasSize() / 2, 40);
+    if (window.offsetX > 0) p.text('⬅️', 30, getCanvasSize() / 2);
+    if (window.offsetX + canSee < window.size)
+      p.text('➡️', getCanvasSize() - 40, getCanvasSize() / 2);
+    if (window.offsetY + canSee < window.size)
+      p.text('⬇️', getCanvasSize() / 2, getCanvasSize() - 10);
+    if (p.mouseIsPressed && window.speed > 0) changeOffsets();
     // Redimensionnement proportionnel du canvas
-    p.scale(getCanvasSize() / window.size);
+    p.scale((getCanvasSize() / window.size) * window.scale);
     if (window.innerHeight <= getCanvasSize()) {
       //@ts-ignore
       p.select('body').style('overflow-y', 'hidden');
@@ -134,17 +159,21 @@ const sketch = function(p: p5) {
       controlPanelDiv.style('overflow-y', 'initial');
       controlPanelDiv.style('width', `100%`);
     }
-    // Affichage du nombre de FPS
-    p.fill(255);
-    p.textSize(12);
-    p.text(Math.trunc(p.frameRate()), window.size - 25, 20);
     // Calcul de l'évolution
     for (let i = 0; i < window.speed; i++) {
       window.animals.forEach((animal) => animal.update());
       window.time++;
     }
     // Affichage des animaux
-    window.animals.forEach((animal) => animal.display());
+    window.animals
+      .filter(
+        (animal) =>
+          animal.position.x < canSee + window.offsetX &&
+          animal.position.x > window.offsetX &&
+          animal.position.y < canSee + window.offsetY &&
+          animal.position.y > window.offsetY
+      )
+      .forEach((animal) => animal.display());
   };
 };
 

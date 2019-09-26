@@ -1,6 +1,6 @@
 import Animal from './animal.class';
-import {ChildParams, DefaultParams} from './animalParams.interfaces';
-import {updateAverageSpeed} from '../helpers';
+import { ChildParams, DefaultParams } from './animalParams.interfaces';
+import { updateAverageSpeed } from '../helpers';
 
 export default class Fox extends Animal {
   constructor({ ...args }: DefaultParams | ChildParams) {
@@ -8,7 +8,7 @@ export default class Fox extends Animal {
   }
 
   update() {
-    this.position.add(0.1 * this.getGene('speed', 1).value, 0.1 * this.getGene('speed', 1).value);
+    // this.position.add(0.1 * this.getGene('speed', 1).value, 0.1 * this.getGene('speed', 1).value);
     if (this.position.x > window.size) this.position.x = 0;
     if (this.position.x < 0) this.position.x = window.size;
     if (this.position.y > window.size) this.position.y = 0;

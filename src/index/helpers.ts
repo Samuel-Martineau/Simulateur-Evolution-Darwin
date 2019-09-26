@@ -222,3 +222,66 @@ export const updateAverageSpeed = (specie: number, generation: number) => {
     .meanBy((a) => a.getGene('speed', 0).value)
     .value();
 };
+
+export const showChangeScaleDialog = () => {
+  const speed = window.speed;
+  window.speed = 0;
+  //@ts-ignore
+  Swal.fire({
+    title: '<h2 style="margin-bottom: 0;">Modification de l\'échelle</h2>',
+    input: 'range',
+    inputAttributes: {
+      min: 1,
+      max: 10,
+      step: 1
+    },
+    inputValue: window.scale,
+    width: 1000,
+    allowOutsideClick: false,
+    confirmButtonText: 'Parfait !'
+  }).then(({ value }: { value: number }) => {
+    window.speed = speed;
+    window.scale = value;
+    window.offsetX = 0;
+    window.offsetY = 0;
+  });
+};
+
+export const changeOffsets = () => {
+  const arrowsCoordinates = [
+    [getCanvasSize() / 2 - 20, getCanvasSize() / 2 + 20, 0, 50],
+    [getCanvasSize() / 2 - 20, getCanvasSize() / 2 + 20, getCanvasSize() - 40, getCanvasSize()],
+    [0, 50, getCanvasSize() / 2 - 25, getCanvasSize() / 2 + 25],
+    [getCanvasSize() - 57, getCanvasSize(), getCanvasSize() / 2 - 30, getCanvasSize() / 2 + 25]
+  ];
+  let clickedArrow = -1;
+  arrowsCoordinates.forEach((coor, index) => {
+    const [minX, maxX, minY, maxY] = coor;
+    if (
+      window.p5.mouseX > minX &&
+      window.p5.mouseX < maxX &&
+      window.p5.mouseY > minY &&
+      window.p5.mouseY < maxY
+    )
+      clickedArrow = index;
+  });
+  const canSee = window.size / window.scale;
+  switch (clickedArrow) {
+    case 0:
+      if (window.offsetY <= 0) return;
+      window.offsetY -= 20 / window.scale;
+      break;
+    case 1:
+      if (window.offsetY + canSee >= window.size) return;
+      window.offsetY += 20 / window.scale;
+      break;
+    case 2:
+      if (window.offsetX <= 0) return;
+      window.offsetX -= 20 / window.scale;
+      break;
+    case 3:
+      if (window.offsetX + canSee >= window.size) return;
+      window.offsetX += 20 / window.scale;
+      break;
+  }
+};
