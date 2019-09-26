@@ -4,3 +4,4 @@ package-lock.json
 dist/
 .vscode/
 .idea/
+yarn.lock
