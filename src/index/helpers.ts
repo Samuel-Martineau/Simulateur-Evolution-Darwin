@@ -2,6 +2,7 @@ import Swal from 'sweetalert2';
 import Chart from 'chart.js';
 import * as _ from 'lodash';
 import Animal from './animal/animal.class';
+import { ExportToCsv } from 'export-to-csv';
 //@ts-ignore
 import randomColor from 'random-color';
 
@@ -242,8 +243,7 @@ export const showChangeScaleDialog = () => {
   }).then(({ value }: { value: number }) => {
     window.speed = speed;
     window.scale = value;
-    window.offsetX = 0;
-    window.offsetY = 0;
+    centerZoom();
   });
 };
 
@@ -284,4 +284,76 @@ export const changeOffsets = () => {
       window.offsetX += 20 / window.scale;
       break;
   }
+};
+
+export const centerZoom = () => {
+  const canSee = window.size / window.scale;
+  const offset = (window.size - canSee) / 2;
+  window.offsetX = offset;
+  window.offsetY = offset;
+};
+
+export const exportToCSV = () => {
+  const allGenes: any[] = [];
+  const allEvents: any[] = [];
+  window.animals.forEach((animal) => {
+    animal.genes.forEach((gene) =>
+      _.findIndex(allGenes, ['name', gene.name]) === -1 ? allGenes.push(gene) : null
+    );
+    animal.events.forEach((event) =>
+      _.findIndex(allEvents, ['name', event.name]) === -1 ? allEvents.push(event) : null
+    );
+  });
+  const data: any[] = window.animals.map((animal) => {
+    let {
+      uid,
+      canReproduce,
+      events,
+      intervalBetweenReproducingPeriods,
+      genes,
+      specie,
+      position,
+      generation
+    } = animal;
+    const { x, y } = position;
+    allGenes.forEach((gene) =>
+      _.findIndex(genes, ['name', gene.name]) === -1
+        ? genes.push(animal.getGene(gene.name, undefined))
+        : null
+    );
+    allEvents.forEach((event) =>
+      _.findIndex(events, ['name', event.name]) === -1
+        ? events.push({ name: event.name, time: -1, action: () => null })
+        : null
+    );
+    const genesObj: any = {};
+    genes.forEach((gene) => (genesObj[`gene:${gene.displayName}`] = gene.value));
+    const eventsObj: any = {};
+    events.forEach((event) => (eventsObj[`event:${event.name}`] = `${event.time}`));
+    return {
+      uid,
+      specie,
+      x,
+      y,
+      generation,
+      canReproduce,
+      intervalBetweenReproducingPeriods,
+      ...eventsObj,
+      ...genesObj
+    };
+  });
+
+  const options = {
+    fieldSeparator: ',',
+    quoteStrings: '"',
+    decimalSeparator: '.',
+    showLabels: true,
+    filename: `DONNEES_ANIMAUX_${new Date().toString().toUpperCase()}`,
+    useBom: true,
+    useKeysAsHeaders: true
+  };
+
+  const csvExporter = new ExportToCsv(options);
+
+  csvExporter.generateCsv(data);
 };

@@ -4,7 +4,7 @@ import { updateAverageSpeed } from '../helpers';
 
 export default class Hare extends Animal {
   constructor({ ...args }: DefaultParams | ChildParams) {
-    super({ ...args, specie: 0 });
+    super({ ...args, specie: 1 });
   }
 
   update() {
@@ -21,7 +21,7 @@ export default class Hare extends Animal {
         breedingPartner.canReproduce = false;
         const hare = new Hare({ parent1: this, parent2: breedingPartner });
         window.animals.push(hare);
-        updateAverageSpeed(0, hare.generation);
+        updateAverageSpeed(1, hare.generation);
       }
     }
     super.update();

@@ -4,7 +4,7 @@ import { updateAverageSpeed } from '../helpers';
 
 export default class Fox extends Animal {
   constructor({ ...args }: DefaultParams | ChildParams) {
-    super({ ...args, specie: 1 });
+    super({ ...args, specie: 2 });
   }
 
   update() {
@@ -21,7 +21,7 @@ export default class Fox extends Animal {
         breedingPartner.canReproduce = false;
         const fox = new Fox({ parent1: this, parent2: breedingPartner });
         window.animals.push(fox);
-        updateAverageSpeed(1, fox.generation);
+        updateAverageSpeed(2, fox.generation);
       }
     }
     super.update();

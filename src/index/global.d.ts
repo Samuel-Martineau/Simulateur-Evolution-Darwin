@@ -11,6 +11,7 @@ interface Window {
   offsetX: number;
   offsetY: number;
 
+  exportToCSV(): void;
   showAverageSpeedChart(): void;
   showChangeSpeedDialog(): void;
   showChangeScaleDialog(): void;

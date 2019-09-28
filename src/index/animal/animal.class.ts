@@ -148,7 +148,7 @@ export default class Animal {
     this.events.push(event);
   }
 
-  getGene(name: string, defValue: number): Gene {
+  getGene(name: string, defValue: any): Gene {
     return _.filter(this.genes, ['name', name])[0] || { displayName: name, name, value: defValue };
   }
 

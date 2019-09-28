@@ -42,6 +42,7 @@
   "author": "Samuel Martineau",
   "dependencies": {
     "chart.js": "^2.8.0",
+    "export-to-csv": "^0.2.1",
     "lodash": "^4.17.15",
     "marked": "^0.7.0",
     "p5": "^0.9.0",
