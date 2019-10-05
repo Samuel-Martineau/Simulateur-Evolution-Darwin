@@ -10,6 +10,7 @@ interface Window {
   scale: number;
   offsetX: number;
   offsetY: number;
+  isPopupActive: boolean;
 
   exportToCSV(): void;
   showAverageSpeedChart(): void;

@@ -6,8 +6,7 @@ const path = require('path');
 
 module.exports = {
   entry: {
-    index: './src/index/index.ts',
-    recherche: './src/research/research.ts'
+    index: './src/index.ts'
   },
   output: {
     filename: '[name].bundle.js',
@@ -56,17 +55,8 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      filename: 'recherche.html',
-      template: './src/research/research.html',
-      inject: false,
-      minify: {
-        removeComments: true,
-        collapseWhitespace: true
-      }
-    }),
-    new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: './src/index/index.html',
+      template: './src/index.html',
       inject: false,
       minify: {
         removeComments: true,

@@ -21,6 +21,7 @@ export const stdDev = (arr: any[], key?: string) => {
 
 export const showAverageSpeedChart = () => {
   const speed = window.speed;
+  window.isPopupActive = true;
   window.speed = 0;
   const hareData = window.averageHareSpeed.slice();
   const foxData = window.averageFoxSpeed.slice();
@@ -68,10 +69,12 @@ export const showAverageSpeedChart = () => {
     confirmButtonText: 'Parfait !'
   }).then(() => {
     window.speed = speed;
+    window.isPopupActive = false;
   });
 };
 
 export const showSpeedCurve = () => {
+  window.isPopupActive = true;
   const speed = window.speed;
   window.speed = 0;
   const hares = _.filter(window.animals, ['specie', 0]);
@@ -157,10 +160,12 @@ export const showSpeedCurve = () => {
     confirmButtonText: 'Parfait !'
   }).then(() => {
     window.speed = speed;
+    window.isPopupActive = false;
   });
 };
 
 export const showChangeSpeedDialog = () => {
+  window.isPopupActive = true;
   const speed = window.speed;
   window.speed = 0;
   //@ts-ignore
@@ -178,10 +183,12 @@ export const showChangeSpeedDialog = () => {
     confirmButtonText: 'Parfait !'
   }).then(({ value }: { value: number }) => {
     window.speed = value;
+    window.isPopupActive = false;
   });
 };
 
 export const showStatsOfAnimal = (a: Animal) => {
+  window.isPopupActive = true;
   const speed = window.speed;
   window.speed = 0;
   let genesText = '';
@@ -211,6 +218,7 @@ export const showStatsOfAnimal = (a: Animal) => {
     confirmButtonText: 'Parfait !'
   }).then(() => {
     window.speed = speed;
+    window.isPopupActive = false;
   });
 };
 
@@ -225,6 +233,7 @@ export const updateAverageSpeed = (specie: number, generation: number) => {
 };
 
 export const showChangeScaleDialog = () => {
+  window.isPopupActive = true;
   const speed = window.speed;
   window.speed = 0;
   //@ts-ignore
@@ -244,6 +253,7 @@ export const showChangeScaleDialog = () => {
     window.speed = speed;
     window.scale = value;
     centerZoom();
+    window.isPopupActive = false;
   });
 };
 
@@ -305,6 +315,7 @@ export const exportToCSV = () => {
     );
   });
   const data: any[] = window.animals.map((animal) => {
+    animal = animal.clone();
     let {
       uid,
       canReproduce,

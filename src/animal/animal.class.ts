@@ -8,22 +8,12 @@ import { getCanvasSize } from '../helpers';
 //@ts-ignore
 const uidgen = new UIDGenerator();
 
-interface AnimalProperties {
-  position: p5.Vector;
-  genes: Gene[];
-  events: Event[];
-  canReproduce: boolean;
-  intervalBetweenReproducingPeriods: number;
-  longevity: number;
-  specie: number;
-  uid: string;
-  generation: number;
-}
-
 export default class Animal {
-  private properties: AnimalProperties;
+  private properties: any;
+  public customData: any;
 
   constructor({ ...args }: DefaultParams | ChildParams) {
+    this.customData = {};
     //@ts-ignore
     const { x, y, genes, specie, parent1, parent2 } = args;
     this.properties = {
@@ -32,19 +22,21 @@ export default class Animal {
       events: [],
       canReproduce: false,
       intervalBetweenReproducingPeriods: 200,
-      longevity: 2000,
+      longevity: 3000,
       specie: -1,
       uid: uidgen.generateSync(),
-      generation: 1
+      generation: 1,
+      renderDistance: 200
     };
+    if (specie === 2) this.properties.intervalBetweenEatingPeriods = 175;
     this.addEvent({
       name: 'Peut se reproduire',
-      time: window.time + this.properties.intervalBetweenReproducingPeriods,
+      time: this.properties.intervalBetweenReproducingPeriods,
       action: (self) => (self.canReproduce = true)
     });
     this.addEvent({
       name: 'Mort',
-      time: window.time + this.properties.longevity,
+      time: this.properties.longevity,
       action: (self) => _.remove(window.animals, ['uid', self.uid])
     });
     if (x && y && genes && specie !== undefined && !parent1 && !parent2) {
@@ -127,8 +119,16 @@ export default class Animal {
     return this.properties.uid;
   }
 
+  get renderDistance(): number {
+    return this.properties.renderDistance;
+  }
+
   get generation(): number {
     return this.properties.generation;
+  }
+
+  get intervalBetweenEatingPeriods(): number {
+    return this.properties.intervalBetweenEatingPeriods;
   }
 
   display() {
@@ -137,7 +137,11 @@ export default class Animal {
   }
 
   update() {
-    // Event system
+    while (this.position.x > window.size) this.position.x -= window.size;
+    while (this.position.x < 0) this.position.x += window.size;
+    while (this.position.y > window.size) this.position.y -= window.size;
+    while (this.position.y < 0) this.position.y += window.size;
+    // Système d'évènements
     _.filter(this.events, (e) => e.time <= window.time).forEach((event) => {
       event.action(this);
       _.remove(this.events, (el) => _.isMatch(el, event));
@@ -145,6 +149,7 @@ export default class Animal {
   }
 
   addEvent(event: Event) {
+    event.time += window.time;
     this.events.push(event);
   }
 
@@ -176,5 +181,9 @@ export default class Animal {
       my / proportion > this.position.y + window.offsetY - 9 &&
       my / proportion < this.position.y + window.offsetY + 9;
     return clicked;
+  }
+
+  clone(): Animal {
+    return _.cloneDeep(this);
   }
 }

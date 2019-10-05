@@ -9,18 +9,20 @@ import {
   showStatsOfAnimal,
   stdDev,
   updateAverageSpeed,
-  changeOffsets
+  changeOffsets,
+  showChangeScaleDialog,
+  centerZoom,
+  exportToCSV
 } from './helpers';
 import Fox from './animal/fox.class';
 import Hare from './animal/hare.class';
 import _ from 'lodash';
-import { showChangeScaleDialog, centerZoom, exportToCSV } from './helpers';
 
 const sketch = function(p: p5) {
   let controlPanelDiv: p5.Element;
   p.windowResized = () => p.resizeCanvas(getCanvasSize(), getCanvasSize());
   p.mouseClicked = () => {
-    if (window.speed < 1) return;
+    if (window.isPopupActive) return;
     for (let animal of window.animals) {
       if (animal.isClicked(p.mouseX, p.mouseY)) {
         showStatsOfAnimal(animal);
@@ -45,7 +47,6 @@ const sketch = function(p: p5) {
     window.speed = 1;
     window.time = 0;
     window.size = 4000;
-    window.imgs.push(p.loadImage('assets/background.jpg'));
     window.imgs.push(p.loadImage('assets/hare.png'));
     window.imgs.push(p.loadImage('assets/fox.png'));
     window.p5 = p;
@@ -70,7 +71,8 @@ const sketch = function(p: p5) {
       .mousePressed(window.showChangeSpeedDialog);
     p.createButton("Changer l'échelle")
       .addClass('bouton bleu')
-      .parent(controlPanelDiv);
+      .parent(controlPanelDiv)
+      .mousePressed(window.showChangeScaleDialog);
     p.createButton('Exporter les données en CSV')
       .addClass('bouton rouge')
       .parent(controlPanelDiv)
@@ -79,7 +81,9 @@ const sketch = function(p: p5) {
       .addClass('bouton orange')
       .parent(controlPanelDiv)
       .mousePressed(
-        () => (location.href = 'https://smartineau.me/simulateur-evolution-darwin/recherche')
+        () =>
+          (location.href =
+            'https://docs.google.com/document/d/1-0XiVGQqNu3fPAFKN3vtxdBR2Abm4OA3ouX9kTg74Gk')
       );
     // Création des animaux
     for (let i = 0; i < 5; i++) {
@@ -104,11 +108,11 @@ const sketch = function(p: p5) {
         })
       );
     }
-    updateAverageSpeed(1, 1);
+    updateAverageSpeed(0, 1);
     for (let i = 0; i < 5; i++) {
       window.animals.push(
         new Fox({
-          x: 75 * (i + 1),
+          x: 150 * (i + 1),
           y: 75 * (i + 1),
           genes: [
             {
@@ -127,7 +131,7 @@ const sketch = function(p: p5) {
         })
       );
     }
-    updateAverageSpeed(2, 1);
+    updateAverageSpeed(1, 1);
     centerZoom();
   };
   p.draw = () => {
@@ -147,7 +151,7 @@ const sketch = function(p: p5) {
       p.text('➡️', getCanvasSize() - 40, getCanvasSize() / 2);
     if (window.offsetY + canSee < window.size)
       p.text('⬇️', getCanvasSize() / 2, getCanvasSize() - 10);
-    if (p.mouseIsPressed && window.speed > 0) changeOffsets();
+    if (p.mouseIsPressed && !window.isPopupActive) changeOffsets();
     // Redimensionnement proportionnel du canvas
     p.scale((getCanvasSize() / window.size) * window.scale);
     if (window.innerHeight <= getCanvasSize()) {

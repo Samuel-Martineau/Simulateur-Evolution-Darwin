@@ -5,21 +5,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = merge(webpackBaseConfig, {
   plugins: [
     new HtmlWebpackPlugin({
-      filename: 'recherche.html',
-      template: './src/research/research.html',
-      inject: false,
-      minify: {
-        removeComments: false,
-        collapseWhitespace: false
-      }
-    }),
-    new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: './src/index/index.html',
+      template: './src/index.html',
       inject: false,
       minify: {
-        removeComments: false,
-        collapseWhitespace: false
+        removeComments: true,
+        collapseWhitespace: true
       }
     })
   ]
