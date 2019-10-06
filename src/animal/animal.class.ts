@@ -176,10 +176,10 @@ export default class Animal {
   isClicked(mx: number, my: number) {
     const proportion = (getCanvasSize() / window.size) * window.scale;
     const clicked =
-      mx / proportion > this.position.x + window.offsetX - 9 &&
-      mx / proportion < this.position.x + window.offsetX + 9 &&
-      my / proportion > this.position.y + window.offsetY - 9 &&
-      my / proportion < this.position.y + window.offsetY + 9;
+      mx / proportion > this.position.x - window.offsetX - 9 &&
+      mx / proportion < this.position.x - window.offsetX + 9 &&
+      my / proportion > this.position.y - window.offsetY - 9 &&
+      my / proportion < this.position.y - window.offsetY + 9;
     return clicked;
   }
 
