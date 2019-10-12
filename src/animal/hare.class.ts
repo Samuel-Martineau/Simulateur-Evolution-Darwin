@@ -7,59 +7,41 @@ import p5 from 'p5';
 export default class Hare extends Animal {
   constructor({ ...args }: DefaultParams | ChildParams) {
     super({ ...args, specie: 0 });
+    this.customData.noiseOffset = Math.random();
   }
 
   update() {
-    let v: p5.Vector;
+    let v: p5.Vector | undefined;
+    let foxes;
     if (this.canReproduce) {
-      const hares = <Fox[]>window.animals.filter((h) => {
-        return (
-          h.specie === 0 &&
-          h.canReproduce &&
-          h.uid !== this.uid &&
-          this.position.copy().dist(h.position) < this.renderDistance
-        );
-      });
-      const nearestHare = hares.sort((f1, f2) => {
-        const d1 = this.position.dist(f1.position);
-        const d2 = this.position.dist(f2.position);
-        return d1 - d2;
-      })[0];
-      if (nearestHare) {
-        v = nearestHare.position
+      const breedingPartner = this.getBreedingPartner();
+      if (breedingPartner) {
+        v = breedingPartner.position
           .copy()
           .sub(this.position)
           .limit(this.getGene('speed', 0).value);
-        const foxes = <Fox[]>window.animals.filter((f) => f.specie === 1);
-        if (
-          foxes.some(
-            (fox) =>
-              Math.abs(
-                this.position
-                  .copy()
-                  .add(v)
-                  .dist(fox.position)
-              ) < fox.getGene('speed', 0).value
+        foxes = <Fox[]>(
+          window.animals.filter(
+            (f) => f.specie === 1 && this.position.dist(f.position) < this.renderDistance
           )
-        ) {
-          //@ts-ignore
-          v = undefined;
+        );
+        if (this.canBeReachedByFox(this.position.copy().add(v), foxes)) v = undefined;
+        if (breedingPartner.position.dist(this.position) <= 18) {
+          this.canReproduce = false;
+          breedingPartner.canReproduce = false;
+          const hare = new Hare({ parent1: this, parent2: breedingPartner });
+          window.animals.push(hare);
+          updateAverageSpeed(0, hare.generation);
         }
       }
-      const breedingPartner = this.getBreedingPartner();
-      if (breedingPartner) {
-        this.canReproduce = false;
-        breedingPartner.canReproduce = false;
-        const hare = new Hare({ parent1: this, parent2: breedingPartner });
-        window.animals.push(hare);
-        updateAverageSpeed(0, hare.generation);
-      }
     }
-    //@ts-ignore
     if (!v) {
-      const foxes = <Fox[]>window.animals.filter((f) => {
-        return f.specie === 1 && this.position.copy().dist(f.position) < this.renderDistance;
-      });
+      if (!foxes)
+        foxes = <Fox[]>(
+          window.animals.filter(
+            (f) => f.specie === 1 && this.position.copy().dist(f.position) < this.renderDistance
+          )
+        );
       const nearestFox = foxes.sort((f1, f2) => {
         const d1 = this.position.dist(f1.position);
         const d2 = this.position.dist(f2.position);
@@ -72,16 +54,23 @@ export default class Hare extends Animal {
           .limit(this.getGene('speed', 0).value)
           .mult(-1);
       } else {
-        const { map, noise, createVector } = window.p5;
-        const { x, y } = this.position;
+        const { noise, map, createVector } = window.p5;
         const speed = this.getGene('speed', 0).value;
-        v = createVector(
-          map(noise(x, window.time), 0, 1, 0, speed),
-          map(noise(y, window.time), 0, 1, 0, speed)
-        );
+        const { x, y } = this.velocity;
+        const xToAdd = map(noise(x, window.time), 0, 1, -speed, speed);
+        const yToAdd = map(noise(y, window.time), 0, 1, -speed, speed);
+        v = this.velocity.add(createVector(xToAdd, yToAdd)).limit(speed);
+        console.log(v);
       }
     }
-    this.position.add(v);
+    //@ts-ignore
+    this.velocity = v;
     super.update();
+  }
+
+  canBeReachedByFox(position = this.position.copy(), foxes: Fox[]): boolean {
+    return foxes.some(
+      (fox) => Math.abs(position.dist(fox.position)) < fox.getGene('speed', 0).value
+    );
   }
 }

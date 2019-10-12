@@ -140,6 +140,7 @@ const sketch = function(p: p5) {
     // Affichage du nombre de FPS
     p.fill(255);
     p.textSize(12);
+    //@ts-ignore
     p.text(Math.trunc(p.frameRate()), 10, 20);
     // Affichage des flèches de déplacement
     p.textAlign('center');

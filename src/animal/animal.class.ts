@@ -17,13 +17,14 @@ export default class Animal {
     //@ts-ignore
     const { x, y, genes, specie, parent1, parent2 } = args;
     this.properties = {
-      position: window.p5.createVector(0, 0),
-      genes: [],
+      position: window.p5.createVector(x || 0, y || 0),
+      velocity: window.p5.createVector(0, 0),
+      genes: genes || [],
       events: [],
       canReproduce: false,
       intervalBetweenReproducingPeriods: 200,
       longevity: 3000,
-      specie: -1,
+      specie,
       uid: uidgen.generateSync(),
       generation: 1,
       renderDistance: 200
@@ -39,11 +40,7 @@ export default class Animal {
       time: this.properties.longevity,
       action: (self) => _.remove(window.animals, ['uid', self.uid])
     });
-    if (x && y && genes && specie !== undefined && !parent1 && !parent2) {
-      this.properties.position = window.p5.createVector(x, y);
-      this.properties.genes = genes;
-      this.properties.specie = specie;
-    } else if (
+    if (
       !x &&
       !y &&
       !genes &&
@@ -69,8 +66,10 @@ export default class Animal {
           modificator: parent1.properties.genes[i].modificator
         };
       }
-    } else {
-      throw new Error('Wrong args for the Animal constructor');
+    }
+    for (let key in this.properties) {
+      if (this.properties[key] === (undefined || null))
+        throw new Error('Wrong args for the Animal constructor');
     }
   }
 
@@ -131,12 +130,21 @@ export default class Animal {
     return this.properties.intervalBetweenEatingPeriods;
   }
 
+  set velocity(newV: p5.Vector) {
+    this.properties.velocity = newV;
+  }
+
+  get velocity() {
+    return this.properties.velocity;
+  }
+
   display() {
     const { x, y } = this.position;
     window.p5.image(window.imgs[this.specie], x - window.offsetX, y - window.offsetY);
   }
 
   update() {
+    this.position.add(this.velocity);
     while (this.position.x > window.size) this.position.x -= window.size;
     while (this.position.x < 0) this.position.x += window.size;
     while (this.position.y > window.size) this.position.y -= window.size;
@@ -157,23 +165,18 @@ export default class Animal {
     return _.filter(this.genes, ['name', name])[0] || { displayName: name, name, value: defValue };
   }
 
-  getBreedingPartner() {
-    return _.filter(window.animals, (animal) => {
-      return (
-        animal.specie === this.specie &&
-        animal.uid !== this.uid &&
-        animal.canReproduce &&
-        Math.abs(
-          animal.position
-            .copy()
-            .sub(this.position)
-            .mag()
-        ) < 18
-      );
+  getBreedingPartner(): Animal {
+    return _.filter(
+      window.animals,
+      (animal) => animal.specie === this.specie && animal.uid !== this.uid && animal.canReproduce
+    ).sort((a1, a2) => {
+      const d1 = this.position.dist(a1.position);
+      const d2 = this.position.dist(a2.position);
+      return d1 - d2;
     })[0];
   }
 
-  isClicked(mx: number, my: number) {
+  isClicked(mx: number, my: number): boolean {
     const proportion = (getCanvasSize() / window.size) * window.scale;
     const clicked =
       mx / proportion > this.position.x - window.offsetX - 9 &&
