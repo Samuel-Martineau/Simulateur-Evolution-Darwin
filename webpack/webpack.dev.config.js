@@ -13,5 +13,6 @@ module.exports = merge(webpackBaseConfig, {
         collapseWhitespace: true
       }
     })
-  ]
+  ],
+  devtool: 'inline-source-map'
 });

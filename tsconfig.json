@@ -1,14 +1,11 @@
 {
   "compilerOptions": {
-    "target": "es5",
+    "target": "es6",
     "moduleResolution": "node",
-    "allowJs": true,
-    "noEmit": true,
     "strict": true,
     "esModuleInterop": true,
     "baseUrl": ".",
-    "sourceMap": true
-  },
-  "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/*.spec.ts"]
+    "sourceMap": true,
+    "outDir": "./dist/"
+  }
 }
