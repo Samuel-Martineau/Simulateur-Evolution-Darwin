@@ -11,6 +11,7 @@ interface Window {
   offsetX: number;
   offsetY: number;
   isPopupActive: boolean;
+  enabledLoggers: string[];
 
   exportToCSV(): void;
   showAverageSpeedChart(): void;
@@ -18,4 +19,6 @@ interface Window {
   showChangeScaleDialog(): void;
   showSpeedCurve(): void;
   showStatsOfAnimal(animal: import('./animal/animal.class').default): void;
+  enableLogger(name: string): void;
+  disableLogger(name: string): void;
 }

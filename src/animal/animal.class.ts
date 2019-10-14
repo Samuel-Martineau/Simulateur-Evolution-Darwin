@@ -5,12 +5,17 @@ import p5 from 'p5';
 import UIDGenerator from 'uid-generator';
 import { ChildParams, DefaultParams } from './animalParams.interfaces';
 import { getCanvasSize } from '../helpers';
+import Logger from '../logger.class';
 //@ts-ignore
 const uidgen = new UIDGenerator();
 
 export default class Animal {
   private properties: any;
   public customData: any;
+  public info: (name: string) => void;
+  public warning: (name: string) => void;
+  public error: (name: string) => void;
+  public success: (name: string) => void;
 
   constructor({ ...args }: DefaultParams | ChildParams) {
     this.customData = {};
@@ -29,6 +34,10 @@ export default class Animal {
       generation: 1,
       renderDistance: 200
     };
+    this.info = Logger('info', this.uid);
+    this.warning = Logger('info', this.uid);
+    this.error = Logger('info', this.uid);
+    this.success = Logger('info', this.uid);
     if (specie === 2) this.properties.intervalBetweenEatingPeriods = 175;
     this.addEvent({
       name: 'Peut se reproduire',
@@ -66,10 +75,11 @@ export default class Animal {
           modificator: parent1.properties.genes[i].modificator
         };
       }
-    }
+      this.info('Création à partir de parents');
+    } else this.info('Création à partir de données');
     for (let key in this.properties) {
       if (this.properties[key] === (undefined || null))
-        throw new Error('Wrong args for the Animal constructor');
+        this.error('Les arguments donnés ne correspondent pas à ceux requis');
     }
   }
 
@@ -80,6 +90,7 @@ export default class Animal {
   set canReproduce(canReproduce: boolean) {
     if (canReproduce) {
       this.properties.canReproduce = true;
+      this.info('Peut se reproduire');
     } else {
       this.properties.canReproduce = false;
       this.addEvent({
@@ -87,6 +98,7 @@ export default class Animal {
         time: window.time + this.intervalBetweenReproducingPeriods,
         action: () => (this.canReproduce = true)
       });
+      this.info('Ne peut pas se reproduire');
     }
   }
 
@@ -112,6 +124,7 @@ export default class Animal {
 
   set position(newValue: p5.Vector) {
     this.properties.position = newValue;
+    this.info('La position a été mise à jour');
   }
 
   get uid(): string {
@@ -132,15 +145,17 @@ export default class Animal {
 
   set velocity(newV: p5.Vector) {
     this.properties.velocity = newV;
+    this.info('La vélocité à été mise à jour');
   }
 
-  get velocity() {
+  get velocity(): p5.Vector {
     return this.properties.velocity;
   }
 
   display() {
     const { x, y } = this.position;
     window.p5.image(window.imgs[this.specie], x - window.offsetX, y - window.offsetY);
+    this.info('Affichage');
   }
 
   update() {
@@ -154,11 +169,13 @@ export default class Animal {
       event.action(this);
       _.remove(this.events, (el) => _.isMatch(el, event));
     });
+    this.info('Mise à jour');
   }
 
   addEvent(event: Event) {
     event.time += window.time;
     this.events.push(event);
+    this.info('Un nouvel évènement a été ajouté');
   }
 
   getGene(name: string, defValue: any): Gene {
@@ -187,6 +204,7 @@ export default class Animal {
   }
 
   clone(): Animal {
+    this.info('Cloné !');
     return _.cloneDeep(this);
   }
 }

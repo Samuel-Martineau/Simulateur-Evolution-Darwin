@@ -3,8 +3,9 @@ import Chart from 'chart.js';
 import * as _ from 'lodash';
 import Animal from './animal/animal.class';
 import { ExportToCsv } from 'export-to-csv';
-//@ts-ignore
+// @ts-ignore
 import randomColor from 'random-color';
+import Logger from './logger.class';
 
 export const getCanvasSize = () => {
   return window.innerHeight < window.innerWidth ? window.innerHeight : window.innerWidth;
@@ -58,7 +59,9 @@ export const showAverageSpeedChart = () => {
         }
       }
     });
+    Logger('info', 'showAverageSpeedChart')('Le diagramme a été affiché');
   }, 10);
+  Logger('info', 'showAverageSpeedChart')('Le popup a été ouvert');
   Swal.fire({
     title: 'Diagramme des vitesses moyennes selon le temps',
     width: 1000,
@@ -70,6 +73,7 @@ export const showAverageSpeedChart = () => {
   }).then(() => {
     window.speed = speed;
     window.isPopupActive = false;
+    Logger('info', 'showAverageSpeedChart')('Le popup a été ouvert');
   });
 };
 
@@ -135,6 +139,7 @@ export const showSpeedCurve = () => {
       fill: false
     });
   });
+  Logger('info', 'showSpeedCurve')('Les calculs ont été effectués');
   setTimeout(() => {
     new Chart(<HTMLCanvasElement>document.getElementById('speedGaussianCurve'), {
       type: 'line',
@@ -149,7 +154,9 @@ export const showSpeedCurve = () => {
         }
       }
     });
+    Logger('info', 'showSpeedCurve')('Le diagramme a été affiché');
   }, 10);
+  Logger('info', 'showSpeedCurve')('Le popup a été ouvert');
   Swal.fire({
     title: "Courbe du nombre d'individus selon leur vitesse",
     width: 1000,
@@ -161,6 +168,7 @@ export const showSpeedCurve = () => {
   }).then(() => {
     window.speed = speed;
     window.isPopupActive = false;
+    Logger('info', 'showSpeedCurve')('Le popup a été fermé');
   });
 };
 
@@ -168,7 +176,8 @@ export const showChangeSpeedDialog = () => {
   window.isPopupActive = true;
   const speed = window.speed;
   window.speed = 0;
-  //@ts-ignore
+  Logger('info', 'showChangeSpeedDialog')('Le popup a été ouvert');
+  // @ts-ignore
   Swal.fire({
     title: '<h2 style="margin-bottom: 0;">Modification de la vitesse</h2>',
     input: 'range',
@@ -184,6 +193,7 @@ export const showChangeSpeedDialog = () => {
   }).then(({ value }: { value: number }) => {
     window.speed = value;
     window.isPopupActive = false;
+    Logger('info', 'showChangeSpeedDialog')('Le popup a été fermé');
   });
 };
 
@@ -200,6 +210,7 @@ export const showStatsOfAnimal = (a: Animal) => {
     const time = (event.time - window.time) / (30 * speed);
     eventsText += `<li><b>${event.name} </b> dans ${time.toFixed(2)}<b>s</b></li>`;
   });
+  Logger('info', 'showStatsOfAnimal')('Le popup a été ouvert');
   Swal.fire({
     title: `<h3 style="margin-bottom: 0;">Propriétés de l'animal ${a.uid}</h3>`,
     allowOutsideClick: false,
@@ -219,6 +230,7 @@ export const showStatsOfAnimal = (a: Animal) => {
   }).then(() => {
     window.speed = speed;
     window.isPopupActive = false;
+    Logger('info', 'showStatsOfAnimal')('Le popup a été fermé');
   });
 };
 
@@ -230,12 +242,16 @@ export const updateAverageSpeed = (specie: number, generation: number) => {
     .filter(['generation', generation])
     .meanBy((a) => a.getGene('speed', 0).value)
     .value();
+  Logger('info', 'updateAverageSpeed')(
+    `La vitesse moyenne de la génération ${generation} de l\'espèce ${specie} a été mise à jour`
+  );
 };
 
 export const showChangeScaleDialog = () => {
   window.isPopupActive = true;
   const speed = window.speed;
   window.speed = 0;
+  Logger('info', 'showChangeScaleDialog')('Le popup a été ouvert');
   //@ts-ignore
   Swal.fire({
     title: '<h2 style="margin-bottom: 0;">Modification de l\'échelle</h2>',
@@ -254,6 +270,7 @@ export const showChangeScaleDialog = () => {
     window.scale = value;
     centerZoom();
     window.isPopupActive = false;
+    Logger('info', 'showChangeScaleDialog')('Le popup a été fermé');
   });
 };
 
@@ -280,18 +297,22 @@ export const changeOffsets = () => {
     case 0:
       if (window.offsetY <= 0) return;
       window.offsetY -= 20 / window.scale;
+      Logger('info', 'changeOffsets')('Le décalage de zoom en Y a été mis à jour');
       break;
     case 1:
       if (window.offsetY + canSee >= window.size) return;
       window.offsetY += 20 / window.scale;
+      Logger('info', 'changeOffsets')('Le décalage de zoom en Y a été mis à jour');
       break;
     case 2:
       if (window.offsetX <= 0) return;
       window.offsetX -= 20 / window.scale;
+      Logger('info', 'changeOffsets')('Le décalage de zoom en X a été mis à jour');
       break;
     case 3:
       if (window.offsetX + canSee >= window.size) return;
       window.offsetX += 20 / window.scale;
+      Logger('info', 'changeOffsets')('Le décalage de zoom en X a été mis à jour');
       break;
   }
 };
@@ -301,6 +322,7 @@ export const centerZoom = () => {
   const offset = (window.size - canSee) / 2;
   window.offsetX = offset;
   window.offsetY = offset;
+  Logger('info', 'centerZoom')('Le zoom a été centré');
 };
 
 export const exportToCSV = () => {
@@ -367,4 +389,18 @@ export const exportToCSV = () => {
   const csvExporter = new ExportToCsv(options);
 
   csvExporter.generateCsv(data);
+  Logger('info', 'exportToCSV')('Le fichier a été téléchargé');
+};
+
+export const enableLogger = (loggerName: string) => {
+  window.enabledLoggers.push(loggerName);
+  Logger('info', 'enableLogger')(`Le logger ${loggerName} est activé`);
+};
+
+export const disableLogger = (loggerName: string) => {
+  const i = window.enabledLoggers.indexOf(loggerName);
+  if (i === -1)
+    return Logger('warning', 'disableLogger')(`Le logger ${loggerName} n'est pas activé`);
+  window.enabledLoggers.slice(i, 1);
+  Logger('success', 'disableLogger')(`Le logger ${loggerName} est désactivé`);
 };

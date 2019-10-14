@@ -7,7 +7,7 @@ import p5 from 'p5';
 export default class Hare extends Animal {
   constructor({ ...args }: DefaultParams | ChildParams) {
     super({ ...args, specie: 0 });
-    this.customData.noiseOffset = Math.random();
+    this.customData.noiseOffset = window.p5.random(-300, 300);
   }
 
   update() {
@@ -25,7 +25,16 @@ export default class Hare extends Animal {
             (f) => f.specie === 1 && this.position.dist(f.position) < this.renderDistance
           )
         );
-        if (this.canBeReachedByFox(this.position.copy().add(v), foxes)) v = undefined;
+        // if (this.canBeReachedByFox(this.position.copy().add(v), foxes)) v = undefined;
+        const newPosition = this.position.copy().add(v);
+        const nearestFox = foxes.sort((f1, f2) => {
+          const d1 = newPosition.dist(f1.position);
+          const d2 = newPosition.dist(f2.position);
+          return d1 - d2;
+        })[0];
+        if (nearestFox && nearestFox.position.dist(newPosition) < nearestFox.renderDistance)
+          v = undefined;
+        else this.info('Mouvement de reproduction');
         if (breedingPartner.position.dist(this.position) <= 18) {
           this.canReproduce = false;
           breedingPartner.canReproduce = false;
@@ -53,24 +62,18 @@ export default class Hare extends Animal {
           .sub(this.position)
           .limit(this.getGene('speed', 0).value)
           .mult(-1);
+        this.info('Mouvement de proie');
       } else {
         const { noise, map, createVector } = window.p5;
         const speed = this.getGene('speed', 0).value;
         const { x, y } = this.velocity;
-        const xToAdd = map(noise(x, window.time), 0, 1, -speed, speed);
-        const yToAdd = map(noise(y, window.time), 0, 1, -speed, speed);
+        const xToAdd = map(noise(x, window.time, this.customData.noiseOffset), 0, 1, -speed, speed);
+        const yToAdd = map(noise(y, window.time, this.customData.noiseOffset), 0, 1, -speed, speed);
         v = this.velocity.add(createVector(xToAdd, yToAdd)).limit(speed);
-        console.log(v);
+        this.info('Mouvement de perlin');
       }
     }
-    //@ts-ignore
     this.velocity = v;
     super.update();
-  }
-
-  canBeReachedByFox(position = this.position.copy(), foxes: Fox[]): boolean {
-    return foxes.some(
-      (fox) => Math.abs(position.dist(fox.position)) < fox.getGene('speed', 0).value
-    );
   }
 }
