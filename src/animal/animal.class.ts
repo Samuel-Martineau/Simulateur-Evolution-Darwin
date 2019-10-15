@@ -38,7 +38,7 @@ export default class Animal {
     this.warning = Logger('info', this.uid);
     this.error = Logger('info', this.uid);
     this.success = Logger('info', this.uid);
-    if (specie === 2) this.properties.intervalBetweenEatingPeriods = 175;
+    if (specie === 1) this.properties.intervalBetweenEatingPeriods = 175;
     this.addEvent({
       name: 'Peut se reproduire',
       time: this.properties.intervalBetweenReproducingPeriods,
@@ -145,17 +145,32 @@ export default class Animal {
 
   set velocity(newV: p5.Vector) {
     this.properties.velocity = newV;
-    this.info('La vélocité à été mise à jour');
+    // this.info('La vélocité à été mise à jour');
   }
 
   get velocity(): p5.Vector {
     return this.properties.velocity;
   }
 
+  getBreedingPartner(): Animal {
+    return _.filter(
+      window.animals,
+      (animal) =>
+        animal.specie === this.specie &&
+        animal.canReproduce &&
+        animal.uid !== this.uid &&
+        animal.position.dist(this.position) < this.renderDistance
+    ).sort((a1, a2) => {
+      const d1 = this.position.dist(a1.position);
+      const d2 = this.position.dist(a2.position);
+      return d1 - d2;
+    })[0];
+  }
+
   display() {
     const { x, y } = this.position;
     window.p5.image(window.imgs[this.specie], x - window.offsetX, y - window.offsetY);
-    this.info('Affichage');
+    // this.info('Affichage');
   }
 
   update() {
@@ -169,7 +184,7 @@ export default class Animal {
       event.action(this);
       _.remove(this.events, (el) => _.isMatch(el, event));
     });
-    this.info('Mise à jour');
+    // this.info('Mise à jour');
   }
 
   addEvent(event: Event) {
@@ -180,17 +195,6 @@ export default class Animal {
 
   getGene(name: string, defValue: any): Gene {
     return _.filter(this.genes, ['name', name])[0] || { displayName: name, name, value: defValue };
-  }
-
-  getBreedingPartner(): Animal {
-    return _.filter(
-      window.animals,
-      (animal) => animal.specie === this.specie && animal.uid !== this.uid && animal.canReproduce
-    ).sort((a1, a2) => {
-      const d1 = this.position.dist(a1.position);
-      const d2 = this.position.dist(a2.position);
-      return d1 - d2;
-    })[0];
   }
 
   isClicked(mx: number, my: number): boolean {

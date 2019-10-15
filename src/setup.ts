@@ -86,7 +86,7 @@ export const createAnimals = () => {
           {
             displayName: 'Vitesse',
             name: 'speed',
-            value: window.p5.random(3, 5),
+            value: window.p5.random(5, 7),
             modificator: (parent1Value: number, parent2Value) => {
               const mean = _.mean([parent1Value, parent2Value]);
               const std = stdDev([parent1Value, parent2Value]);

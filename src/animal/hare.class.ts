@@ -20,19 +20,16 @@ export default class Hare extends Animal {
           .copy()
           .sub(this.position)
           .limit(this.getGene('speed', 0).value);
-        foxes = <Fox[]>(
-          window.animals.filter(
-            (f) => f.specie === 1 && this.position.dist(f.position) < this.renderDistance
-          )
+        foxes = window.animals.filter(
+          (f) => f.specie === 1 && this.position.dist(f.position) < this.renderDistance
         );
-        // if (this.canBeReachedByFox(this.position.copy().add(v), foxes)) v = undefined;
         const newPosition = this.position.copy().add(v);
         const nearestFox = foxes.sort((f1, f2) => {
           const d1 = newPosition.dist(f1.position);
           const d2 = newPosition.dist(f2.position);
           return d1 - d2;
         })[0];
-        if (nearestFox && nearestFox.position.dist(newPosition) < nearestFox.renderDistance)
+        if (nearestFox && nearestFox.position.dist(newPosition) < this.renderDistance)
           v = undefined;
         else this.info('Mouvement de reproduction');
         if (breedingPartner.position.dist(this.position) <= 18) {
@@ -46,10 +43,8 @@ export default class Hare extends Animal {
     }
     if (!v) {
       if (!foxes)
-        foxes = <Fox[]>(
-          window.animals.filter(
-            (f) => f.specie === 1 && this.position.copy().dist(f.position) < this.renderDistance
-          )
+        foxes = window.animals.filter(
+          (f) => f.specie === 1 && this.position.copy().dist(f.position) < this.renderDistance
         );
       const nearestFox = foxes.sort((f1, f2) => {
         const d1 = this.position.dist(f1.position);

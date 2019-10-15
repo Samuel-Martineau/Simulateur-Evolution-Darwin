@@ -398,9 +398,12 @@ export const enableLogger = (loggerName: string) => {
 };
 
 export const disableLogger = (loggerName: string) => {
-  const i = window.enabledLoggers.indexOf(loggerName);
-  if (i === -1)
-    return Logger('warning', 'disableLogger')(`Le logger ${loggerName} n'est pas activé`);
-  window.enabledLoggers.slice(i, 1);
+  if (loggerName === '*') window.enabledLoggers = [];
+  else {
+    const i = window.enabledLoggers.indexOf(loggerName);
+    if (i === -1)
+      return Logger('warning', 'disableLogger')(`Le logger ${loggerName} n'est pas activé`);
+    window.enabledLoggers.splice(i, 1);
+  }
   Logger('success', 'disableLogger')(`Le logger ${loggerName} est désactivé`);
 };
