@@ -9,9 +9,9 @@ import {
   showChangeScaleDialog,
   exportToCSV
 } from './helpers';
-import Hare from './animal/hare.class';
+import Predator from './animal/predator.class';
+import Prey from './animal/prey.class';
 import _ from 'lodash';
-import Fox from './animal/fox.class';
 import { enableLogger, disableLogger } from './helpers';
 import Logger from './logger.class';
 
@@ -54,17 +54,20 @@ export const createDomElements = (controlPanelDiv: p5.Element) => {
 };
 
 export const createAnimals = () => {
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < window.preyConfig.startingNb; i++) {
     window.animals.push(
-      new Hare({
-        x: 100 * (i + 1),
-        y: 100 * (i + 1),
+      new Prey({
+        x: window.p5.random(0, window.size),
+        y: window.p5.random(0, window.size),
         genes: [
           {
             displayName: 'Vitesse',
             name: 'speed',
-            value: window.p5.randomGaussian(4.5, 1),
-            modificator: (parent1Value: number, parent2Value) => {
+            value: window.p5.randomGaussian(
+              window.preyConfig.avgSpeed,
+              window.preyConfig.stdDevSpeed
+            ),
+            modificator: (parent1Value: number, parent2Value: number) => {
               const mean = _.mean([parent1Value, parent2Value]);
               const std = stdDev([parent1Value, parent2Value]);
               let val = window.p5.randomGaussian(mean, std);
@@ -72,22 +75,26 @@ export const createAnimals = () => {
               return val;
             }
           }
-        ]
+        ],
+        ...window.preyConfig
       })
     );
   }
   updateAverageSpeed(0, 1);
-  for (let i = 0; i < 5; i++) {
+  for (let i = 0; i < window.predatorConfig.startingNb; i++) {
     window.animals.push(
-      new Fox({
-        x: 150 * (i + 1),
-        y: 75 * (i + 1),
+      new Predator({
+        x: window.p5.random(0, window.size),
+        y: window.p5.random(0, window.size),
         genes: [
           {
             displayName: 'Vitesse',
             name: 'speed',
-            value: window.p5.random(5, 7),
-            modificator: (parent1Value: number, parent2Value) => {
+            value: window.p5.randomGaussian(
+              window.predatorConfig.avgSpeed,
+              window.predatorConfig.stdDevSpeed
+            ),
+            modificator: (parent1Value: number, parent2Value: number) => {
               const mean = _.mean([parent1Value, parent2Value]);
               const std = stdDev([parent1Value, parent2Value]);
               let val = window.p5.randomGaussian(mean, std);
@@ -95,7 +102,8 @@ export const createAnimals = () => {
               return val;
             }
           }
-        ]
+        ],
+        ...window.predatorConfig
       })
     );
   }
@@ -104,17 +112,66 @@ export const createAnimals = () => {
 };
 
 export const initiateGlobalVariables = (p: p5) => {
+  let config;
+  let error = true;
+  const specieRequiredFields = [
+    'name',
+    'avgSpeed',
+    'stdDevSpeed',
+    'avgNbOfBabies',
+    'stdDevNbOfBabies',
+    'intervalBetweenReproducingPeriods',
+    'renderDistance',
+    'longevity'
+  ];
+  while (error) {
+    let configUrl;
+    while (!configUrl)
+      configUrl = prompt(
+        "Indiquez l'URL de la configuration que vous voulez utiliser pour le simulateur",
+        window.location.href + 'assets/simulator-config.json'
+      );
+    const req = new XMLHttpRequest();
+    req.open('GET', configUrl, false);
+    req.send(null);
+    try {
+      if (req.status !== 200) throw new Error();
+      config = JSON.parse(req.responseText);
+      const { prey, predator, size, scale, offsetX, offsetY, speed } = config;
+      if (
+        !prey ||
+        !predator ||
+        !size ||
+        !scale ||
+        offsetX === (null || undefined) ||
+        offsetY === (null || undefined) ||
+        speed === (null || undefined)
+      )
+        throw new Error();
+      if (
+        _.difference(specieRequiredFields, Object.keys(prey)).length !== 0 ||
+        _.difference(specieRequiredFields, Object.keys(predator)).length !== 0
+      )
+        throw new Error();
+      error = false;
+    } catch {
+      error = true;
+    }
+  }
+
+  window.preyConfig = config.prey;
+  window.predatorConfig = config.predator;
   window.enabledLoggers = [];
-  window.averageHareSpeed = [];
-  window.averageFoxSpeed = [];
+  window.averagePreySpeed = [];
+  window.averagePredatorSpeed = [];
   window.animals = [];
   window.imgs = [];
-  window.scale = 1;
-  window.offsetX = 0;
-  window.offsetY = 0;
-  window.speed = 1;
+  window.scale = config.scale;
+  window.offsetX = config.offsetY;
+  window.offsetY = config.offsetX;
+  window.speed = config.speed;
   window.time = 0;
-  window.size = 4000;
+  window.size = config.size;
   try {
     window.p5 = p;
     window.enableLogger = enableLogger;
@@ -125,8 +182,8 @@ export const initiateGlobalVariables = (p: p5) => {
     window.showStatsOfAnimal = showStatsOfAnimal;
     window.showChangeScaleDialog = showChangeScaleDialog;
     window.exportToCSV = exportToCSV;
-    window.imgs.push(p.loadImage('assets/hare.png'));
-    window.imgs.push(p.loadImage('assets/fox.png'));
+    window.imgs.push(p.loadImage('assets/prey.png'));
+    window.imgs.push(p.loadImage('assets/predator.png'));
     Logger('success', 'initiateGlobalVariables')("La fonction s'est déroulée sans incidents");
   } catch (err) {
     Logger('error', 'initiateGlobalVariables')(err.message);

@@ -3,7 +3,6 @@ import * as _ from 'lodash';
 import Event from './event.interface';
 import p5 from 'p5';
 import UIDGenerator from 'uid-generator';
-import { ChildParams, DefaultParams } from './animalParams.interfaces';
 import { getCanvasSize } from '../helpers';
 import Logger from '../logger.class';
 //@ts-ignore
@@ -17,28 +16,37 @@ export default class Animal {
   public error: (name: string) => void;
   public success: (name: string) => void;
 
-  constructor({ ...args }: DefaultParams | ChildParams) {
+  constructor({ ...args }: any) {
     this.customData = {};
     //@ts-ignore
-    const { x, y, genes, specie, parent1, parent2 } = args;
+    const {
+      x,
+      y,
+      genes,
+      intervalBetweenReproducingPeriods,
+      renderDistance,
+      longevity,
+      specie,
+      parent1,
+      parent2
+    } = args;
     this.properties = {
       position: window.p5.createVector(x || 0, y || 0),
       velocity: window.p5.createVector(0, 0),
       genes: genes || [],
       events: [],
       canReproduce: false,
-      intervalBetweenReproducingPeriods: 200,
-      longevity: 3000,
+      intervalBetweenReproducingPeriods,
+      longevity,
       specie,
       uid: uidgen.generateSync(),
       generation: 1,
-      renderDistance: 200
+      renderDistance
     };
     this.info = Logger('info', this.uid);
     this.warning = Logger('info', this.uid);
     this.error = Logger('info', this.uid);
     this.success = Logger('info', this.uid);
-    if (specie === 1) this.properties.intervalBetweenEatingPeriods = 175;
     this.addEvent({
       name: 'Peut se reproduire',
       time: this.properties.intervalBetweenReproducingPeriods,
@@ -137,10 +145,6 @@ export default class Animal {
 
   get generation(): number {
     return this.properties.generation;
-  }
-
-  get intervalBetweenEatingPeriods(): number {
-    return this.properties.intervalBetweenEatingPeriods;
   }
 
   set velocity(newV: p5.Vector) {

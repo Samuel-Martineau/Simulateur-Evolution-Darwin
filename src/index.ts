@@ -1,14 +1,7 @@
 import './index.scss';
 import p5 from 'p5';
 import 'p5/lib/addons/p5.dom';
-import {
-  getCanvasSize,
-  showStatsOfAnimal,
-  changeOffsets,
-  centerZoom,
-  enableLogger
-} from './helpers';
-import _ from 'lodash';
+import { getCanvasSize, showStatsOfAnimal, changeOffsets, centerZoom } from './helpers';
 import { createDomElements, createAnimals, initiateGlobalVariables } from './setup';
 import Logger from './logger.class';
 
@@ -44,11 +37,21 @@ const sketch = (p: p5) => {
   p.draw = () => {
     // Effaçure du contenu du canvas
     p.background(0);
-    // Affichage du nombre de FPS
+    // Affichage du nombre d'infos utiles
+    const nbOfPreys = window.animals.filter((a) => a.specie === 0).length;
+    const nbOfPredators = window.animals.length - nbOfPreys;
     p.fill(255);
     p.textSize(12);
-    //@ts-ignore
-    p.text(Math.trunc(p.frameRate()), 10, 20);
+    p.textAlign('left');
+    p.text(
+      `${Math.trunc(p.frameRate())}fps ${window.time}ut ${window.size}ut ${nbOfPreys} ${
+        window.preyConfig.name
+      }${nbOfPreys > 1 ? 's' : ''} ${nbOfPredators} ${window.predatorConfig.name}${
+        nbOfPredators > 1 ? 's' : ''
+      }`,
+      10,
+      20
+    );
     // Affichage des flèches de déplacement
     p.textAlign('center');
     p.textSize(30);

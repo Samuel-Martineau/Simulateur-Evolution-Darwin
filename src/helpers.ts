@@ -24,11 +24,11 @@ export const showAverageSpeedChart = () => {
   const speed = window.speed;
   window.isPopupActive = true;
   window.speed = 0;
-  const hareData = window.averageHareSpeed.slice();
-  const foxData = window.averageFoxSpeed.slice();
+  const preyData = window.averagePreySpeed.slice();
+  const predatorData = window.averagePredatorSpeed.slice();
   const indexes = _.range(
     1,
-    (hareData.length > foxData.length ? hareData.length : foxData.length) + 1
+    (preyData.length > predatorData.length ? preyData.length : predatorData.length) + 1
   );
   setTimeout(() => {
     new Chart(<HTMLCanvasElement>document.getElementById('averageSpeedChart'), {
@@ -37,15 +37,15 @@ export const showAverageSpeedChart = () => {
         labels: indexes.map((el) => el.toString()),
         datasets: [
           {
-            label: 'Lièvres',
-            data: hareData,
+            label: `${window.preyConfig.name}s`,
+            data: preyData,
             borderColor: '#27ae60',
             backgroundColor: '#2ecc71',
             fill: false
           },
           {
-            label: 'Renards',
-            data: foxData,
+            label: `${window.predatorConfig.name}s`,
+            data: predatorData,
             borderColor: '#d35400',
             backgroundColor: '#e67e22',
             fill: false
@@ -81,58 +81,58 @@ export const showSpeedCurve = () => {
   window.isPopupActive = true;
   const speed = window.speed;
   window.speed = 0;
-  const hares = _.filter(window.animals, ['specie', 0]);
-  const foxes = _.filter(window.animals, ['specie', 1]);
+  const preys = _.filter(window.animals, ['specie', 0]);
+  const predators = _.filter(window.animals, ['specie', 1]);
   let highestGen = (
-    <Animal>_.maxBy(_.concat(hares, foxes), (a) => a.generation) || { generation: -1 }
+    <Animal>_.maxBy(_.concat(preys, predators), (a) => a.generation) || { generation: -1 }
   ).generation;
-  let hareData: any[] = [];
-  let foxData: any[] = [];
+  let preyData: any[] = [];
+  let predatorData: any[] = [];
   const data: any = { fox: [], hare: [], indexes: [] };
   for (let i = 0; i < _.range(0, highestGen + 1).length; i++) {
-    const haresInGen = _.filter(hares, (a) => a.generation === i);
-    const foxesInGen = _.filter(foxes, (a) => a.generation === i);
-    const haresSpeed = haresInGen.map((a) => a.getGene('speed', 0).value);
-    const foxesSpeed = foxesInGen.map((a) => a.getGene('speed', 0).value);
-    const hareChunk = _.countBy(haresSpeed, Math.floor);
-    const foxChunk = _.countBy(foxesSpeed, Math.floor);
-    for (let num in Object.assign({}, hareChunk, foxChunk))
+    const preysInGen = _.filter(preys, (a) => a.generation === i);
+    const predatorsInGen = _.filter(predators, (a) => a.generation === i);
+    const preysSpeed = preysInGen.map((a) => a.getGene('speed', 0).value);
+    const predatorsSpeed = predatorsInGen.map((a) => a.getGene('speed', 0).value);
+    const preyChunk = _.countBy(preysSpeed, Math.floor);
+    const predatorChunk = _.countBy(predatorsSpeed, Math.floor);
+    for (let num in Object.assign({}, preyChunk, predatorChunk))
       if (!data.indexes.includes(parseInt(num))) data.indexes.push(parseInt(num));
-    hareData.push(hareChunk);
-    foxData.push(foxChunk);
+    preyData.push(preyChunk);
+    predatorData.push(predatorChunk);
   }
-  for (let gen in hareData) {
-    data.hare[gen] = [];
+  for (let gen in preyData) {
+    data.prey[gen] = [];
     data.indexes.forEach((i: number) => {
-      data.hare[gen].push(hareData[gen][i] || 0);
+      data.prey[gen].push(preyData[gen][i] || 0);
     });
   }
-  for (let gen in foxData) {
-    data.fox[gen] = [];
+  for (let gen in predatorData) {
+    data.predator[gen] = [];
     data.indexes.forEach((i: number) => {
-      data.fox[gen].push(foxData[gen][i] || 0);
+      data.predator[gen].push(predatorData[gen][i] || 0);
     });
   }
   data.indexes = data.indexes.sort((a: number, b: number) => a - b);
   const chartData: Chart.ChartDataSets[] = [];
-  data.hare.forEach((gen: number[], index: number) => {
+  data.prey.forEach((gen: number[], index: number) => {
     let t = gen.reduce((acc, curr) => acc + curr);
     if (t === 0) return;
     let color = randomColor(0.99, 0.99).hexString();
     chartData.push({
-      label: `Lièvres de génération ${index}`,
+      label: `${window.preyConfig.name}${t > 1 ? 's' : ''} de génération ${index}`,
       data: gen,
       backgroundColor: color,
       borderColor: color,
       fill: false
     });
   });
-  data.fox.forEach((gen: number[], index: number) => {
+  data.predator.forEach((gen: number[], index: number) => {
     let t = gen.reduce((acc, curr) => acc + curr);
     if (t === 0) return;
     let color = randomColor().hexString();
     chartData.push({
-      label: `Renards de génération ${index}`,
+      label: `${window.predatorConfig.name}${t > 1 ? 's' : ''} de génération ${index}`,
       data: gen,
       backgroundColor: color,
       borderColor: color,
@@ -218,7 +218,9 @@ export const showStatsOfAnimal = (a: Animal) => {
     html: `
       <div style="font-size: 1.4em; display: inline-block; text-align: left;">
         <ul>
-          <li><b>Espèce: </b>${a.specie === 0 ? 'lièvre' : 'renard'}</li>
+          <li><b>Espèce: </b>${
+            a.specie === 0 ? window.preyConfig.name : window.predatorConfig.name
+          }</li>
           <li><b>Position: </b>X: ${a.position.x.toFixed(2)}, Y: ${a.position.y.toFixed(2)}</li>
           <li><b>Génération: </b>${a.generation}</li>
           <li><b>Gènes: </b><ul>${genesText}</ul></li>
@@ -236,14 +238,16 @@ export const showStatsOfAnimal = (a: Animal) => {
 
 export const updateAverageSpeed = (specie: number, generation: number) => {
   const animals = _.filter(window.animals, ['specie', specie]);
-  const averageSpeed = specie === 0 ? window.averageHareSpeed : window.averageFoxSpeed;
+  const averageSpeed = specie === 0 ? window.averagePreySpeed : window.averagePredatorSpeed;
   if (!averageSpeed[generation - 1]) averageSpeed[generation - 1] = 0;
   averageSpeed[generation - 1] = _.chain(animals)
     .filter(['generation', generation])
     .meanBy((a) => a.getGene('speed', 0).value)
     .value();
   Logger('info', 'updateAverageSpeed')(
-    `La vitesse moyenne de la génération ${generation} de l\'espèce ${specie} a été mise à jour`
+    `La vitesse moyenne de la génération ${generation} de l\'espèce ${
+      specie === 0 ? window.preyConfig.name : window.predatorConfig.name
+    } a été mise à jour`
   );
 };
 
@@ -363,6 +367,7 @@ export const exportToCSV = () => {
     genes.forEach((gene) => (genesObj[`gene:${gene.displayName}`] = gene.value));
     const eventsObj: any = {};
     events.forEach((event) => (eventsObj[`event:${event.name}`] = `${event.time}`));
+    specie = specie === 0 ? window.preyConfig.name : window.predatorConfig.name;
     return {
       uid,
       specie,

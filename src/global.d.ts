@@ -5,13 +5,15 @@ interface Window {
   size: number;
   speed: number;
   time: number;
-  averageHareSpeed: number[];
-  averageFoxSpeed: number[];
+  averagePreySpeed: number[];
+  averagePredatorSpeed: number[];
   scale: number;
   offsetX: number;
   offsetY: number;
   isPopupActive: boolean;
   enabledLoggers: string[];
+  preyConfig: any;
+  predatorConfig: any;
 
   exportToCSV(): void;
   showAverageSpeedChart(): void;
