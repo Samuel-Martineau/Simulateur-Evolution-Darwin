@@ -1,0 +1,9 @@
+{
+  "name": "expo-sciences-generateur-de-configurations",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "Samuel-Martineau",
+  "dependencies": {
+    "puppeteer": "^1.20.0"
+  }
+}
