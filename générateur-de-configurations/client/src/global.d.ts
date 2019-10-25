@@ -9,4 +9,6 @@ interface Window {
   enabledLoggers: string[];
   preyConfig: any;
   predatorConfig: any;
+  nbOfPreys: number;
+  nbOfPredators: number;
 }

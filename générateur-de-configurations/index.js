@@ -24,9 +24,11 @@ const headers = [
   'predator:eatingInterval'
 ];
 
-exec('cd client && npm run start');
+exec(`cd '${__dirname}'/client && npm run start`);
 
 fs.writeFileSync(csvFilePath, convertToCsv(headers));
+
+let i = 0;
 
 (async () => {
   const browser = await puppeteer.launch();
@@ -35,7 +37,7 @@ fs.writeFileSync(csvFilePath, convertToCsv(headers));
   await page.waitFor(1000);
 
   await page.exposeFunction('done', (time, preyConfig, predatorConfig) => {
-    console.log('done');
+    console.log(`${++i} configuration${i > 1 ? 's ont' : ' a'} été générée${i > 1 ? 's' : ''}`);
     const data = [
       time,
       preyConfig.avgSpeed,
@@ -61,8 +63,6 @@ fs.writeFileSync(csvFilePath, convertToCsv(headers));
   });
 
   await page.goto('http://0.0.0.0:8080/');
-
-  setTimeout(browser.close, 1000 * 60 * 60 * 10);
 })();
 
 function convertToCsv(array) {

@@ -105,9 +105,11 @@ export const initiateGlobalVariables = (p: p5) => {
       eatingInterval
     };
   })();
+  window.nbOfPredators = window.predatorConfig.startingNb;
+  window.nbOfPreys = window.preyConfig.startingNb;
   window.animals = [];
-  window.speed = 5;
   window.time = 0;
+  window.speed = 5;
   window.size = 12000;
   try {
     window.p5 = p;

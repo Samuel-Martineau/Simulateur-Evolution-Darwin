@@ -45,7 +45,11 @@ export default class Animal {
     this.addEvent({
       name: 'Mort',
       time: this.properties.longevity,
-      action: (self) => _.remove(window.animals, ['uid', self.uid])
+      action: (self) => {
+        _.remove(window.animals, ['uid', self.uid]);
+        if (this.specie === 0) window.nbOfPreys--;
+        if (this.specie === 1) window.nbOfPredators--;
+      }
     });
     if (
       !x &&

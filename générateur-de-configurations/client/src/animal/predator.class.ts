@@ -36,6 +36,7 @@ export default class Predator extends Animal {
         if (this.position.dist(nearestPrey.position) < 18) {
           this.hunger -= 1;
           _.remove(window.animals, ['uid', nearestPrey.uid]);
+          window.nbOfPreys--;
         }
       }
     } else if (this.canReproduce) {
@@ -53,6 +54,7 @@ export default class Predator extends Animal {
           for (let i = 0; i < nbOfBabies; i++) {
             const predator = new Predator({ parent1: this, parent2: breedingPartner });
             window.animals.push(predator);
+            window.nbOfPredators++;
           }
         }
       }

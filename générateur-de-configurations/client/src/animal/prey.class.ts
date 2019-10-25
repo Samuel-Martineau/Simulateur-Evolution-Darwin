@@ -36,6 +36,7 @@ export default class Prey extends Animal {
           for (let i = 0; i < nbOfBabies; i++) {
             const prey = new Prey({ parent1: this, parent2: breedingPartner });
             window.animals.push(prey);
+            window.nbOfPreys++;
           }
         }
       }

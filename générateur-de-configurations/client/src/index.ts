@@ -5,7 +5,6 @@ const sketch = (p: p5) => {
   p.preload = () => initiateGlobalVariables(p);
   p.setup = () => {
     p.noCanvas();
-    p.frameRate(30);
     createAnimals();
   };
   p.draw = () => {
@@ -13,18 +12,15 @@ const sketch = (p: p5) => {
       window.animals.forEach((animal) => animal.update());
       window.time++;
     }
-    const nbOfPreys = window.animals.filter((a) => a.specie === 0).length;
-    const nbOfPredators = window.animals.length - nbOfPreys;
-    if (!nbOfPreys || !nbOfPredators) done();
-    if (window.time > 25000) done();
+    if (window.nbOfPreys <= 0 || window.nbOfPredators <= 0 || window.time > 100000) done();
   };
 };
 
 new p5(sketch);
 
-const done = () => {
-  //@ts-ignore
+function done() {
+  // @ts-ignore
   window.done(window.time, window.preyConfig, window.predatorConfig);
   initiateGlobalVariables(window.p5);
   createAnimals();
-};
+}
