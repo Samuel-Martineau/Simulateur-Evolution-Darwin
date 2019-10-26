@@ -7,5 +7,6 @@
     "baseUrl": ".",
     "sourceMap": true,
     "outDir": "./dist/"
-  }
+  },
+  "exclude": ["générateur-de-configurations"]
 }

@@ -14,6 +14,10 @@ interface Window {
   enabledLoggers: string[];
   preyConfig: any;
   predatorConfig: any;
+  ue: number;
+  ueUnit: string;
+  ut: number;
+  utUnit: string;
 
   exportToCSV(): void;
   showAverageSpeedChart(): void;

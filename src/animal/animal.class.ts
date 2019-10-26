@@ -80,7 +80,8 @@ export default class Animal {
             parent1.getGene(name, 0).value,
             parent2.getGene(name, 0).value
           ),
-          modificator: parent1.properties.genes[i].modificator
+          modificator: parent1.genes[i].modificator,
+          displayValue: parent1.genes[i].displayValue
         };
       }
       this.info('Création à partir de parents');

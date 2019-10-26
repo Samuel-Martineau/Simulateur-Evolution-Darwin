@@ -73,6 +73,11 @@ export const createAnimals = () => {
               let val = window.p5.randomGaussian(mean, std);
               if (val < 0) val = 0.5;
               return val;
+            },
+            displayValue() {
+              return `${(this.value * window.ut).toFixed(2)} ${window.ueUnit} / ${window.ut} ${
+                window.utUnit
+              }`;
             }
           }
         ],
@@ -100,6 +105,11 @@ export const createAnimals = () => {
               let val = window.p5.randomGaussian(mean, std);
               if (val < 0) val = 0.5;
               return val;
+            },
+            displayValue() {
+              return `${(this.value * window.ut).toFixed(2)} ${window.ueUnit} / ${window.ut} ${
+                window.utUnit
+              }`;
             }
           }
         ],
@@ -137,12 +147,28 @@ export const initiateGlobalVariables = (p: p5) => {
     try {
       if (req.status !== 200) throw new Error();
       config = JSON.parse(req.responseText);
-      const { prey, predator, size, scale, offsetX, offsetY, speed } = config;
+      const {
+        prey,
+        predator,
+        size,
+        scale,
+        offsetX,
+        offsetY,
+        speed,
+        ue,
+        ueUnit,
+        ut,
+        utUnit
+      } = config;
       if (
         !prey ||
         !predator ||
         !size ||
         !scale ||
+        !ue ||
+        !ueUnit ||
+        !ut ||
+        !utUnit ||
         offsetX === (null || undefined) ||
         offsetY === (null || undefined) ||
         speed === (null || undefined)
@@ -172,6 +198,10 @@ export const initiateGlobalVariables = (p: p5) => {
   window.speed = config.speed;
   window.time = 0;
   window.size = config.size;
+  window.ue = config.ue;
+  window.ueUnit = config.ueUnit;
+  window.ut = config.ut;
+  window.utUnit = config.utUnit;
   try {
     window.p5 = p;
     window.enableLogger = enableLogger;

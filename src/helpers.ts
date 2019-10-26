@@ -203,12 +203,16 @@ export const showStatsOfAnimal = (a: Animal) => {
   window.speed = 0;
   let genesText = '';
   a.genes.forEach((gene) => {
-    genesText += `<li><b>${gene.displayName}: </b>${gene.value.toFixed(2)}</li>`;
+    genesText += `<li><b>${gene.displayName}: </b>${gene.value.toFixed(
+      2
+    )} ue / ut <i>(${gene.displayValue()})</i></li>`;
   });
   let eventsText = '';
   a.events.forEach((event) => {
     const time = (event.time - window.time) / (30 * speed);
-    eventsText += `<li><b>${event.name} </b> dans ${time.toFixed(2)}<b>s</b></li>`;
+    eventsText += `<li><b>${event.name} </b> dans ${time.toFixed(2)} ue <i>(${(
+      time * window.ut
+    ).toFixed(2)} ${window.utUnit})</i></li>`;
   });
   Logger('info', 'showStatsOfAnimal')('Le popup a été ouvert');
   Swal.fire({
