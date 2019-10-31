@@ -65,7 +65,7 @@ export const initiateGlobalVariables = (p: p5) => {
     const avgSpeed = floor(random(50, 1000));
     const stdDevSpeed = floor((random(0, 20) * avgSpeed) / 100);
     const avgNbOfBabies = floor(random(1, 25));
-    const stdDevNbOfBabies = floor((random(0, 20) * avgSpeed) / 100);
+    const stdDevNbOfBabies = floor((random(0, 20) * avgNbOfBabies) / 100);
     const intervalBetweenReproducingPeriods = floor(random(0, 2000));
     const longevity = floor(random(2000, 80000));
     const renderDistance = floor((avgSpeed * random(100, 500)) / 100);
@@ -85,7 +85,7 @@ export const initiateGlobalVariables = (p: p5) => {
     const avgSpeed = floor(random(50, 1000));
     const stdDevSpeed = floor((random(0, 20) * avgSpeed) / 100);
     const avgNbOfBabies = floor(random(1, 25));
-    const stdDevNbOfBabies = floor((random(0, 20) * avgSpeed) / 100);
+    const stdDevNbOfBabies = floor((random(0, 20) * avgNbOfBabies) / 100);
     const intervalBetweenReproducingPeriods = floor(random(0, 2000));
     const longevity = floor(random(2000, 80000));
     const renderDistance = floor((avgSpeed * random(100, 500)) / 100);
