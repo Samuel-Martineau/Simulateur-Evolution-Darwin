@@ -60,16 +60,16 @@ export const createAnimals = () => {
 };
 
 export const initiateGlobalVariables = (p: p5) => {
-  const { random, floor } = p;
+  const { random, ceil } = p;
   (() => {
-    const avgSpeed = floor(random(50, 1000));
-    const stdDevSpeed = floor((random(0, 20) * avgSpeed) / 100);
-    const avgNbOfBabies = floor(random(1, 25));
-    const stdDevNbOfBabies = floor((random(0, 20) * avgNbOfBabies) / 100);
-    const intervalBetweenReproducingPeriods = floor(random(0, 2000));
-    const longevity = floor(random(2000, 80000));
-    const renderDistance = floor((avgSpeed * random(100, 500)) / 100);
-    const startingNb = floor(random(4, 100));
+    const avgSpeed = ceil(random(50, 1000));
+    const stdDevSpeed = ceil((random(5, 20) * avgSpeed) / 100);
+    const avgNbOfBabies = ceil(random(1, 25));
+    const stdDevNbOfBabies = ceil((random(5, 20) * avgNbOfBabies) / 100);
+    const intervalBetweenReproducingPeriods = ceil(random(100, 2000));
+    const longevity = ceil(random(2000, 80000));
+    const renderDistance = ceil((avgSpeed * random(100, 500)) / 100);
+    const startingNb = ceil(random(4, 100));
     window.preyConfig = {
       avgSpeed,
       stdDevSpeed,
@@ -82,16 +82,16 @@ export const initiateGlobalVariables = (p: p5) => {
     };
   })();
   (() => {
-    const avgSpeed = floor(random(50, 1000));
-    const stdDevSpeed = floor((random(0, 20) * avgSpeed) / 100);
-    const avgNbOfBabies = floor(random(1, 25));
-    const stdDevNbOfBabies = floor((random(0, 20) * avgNbOfBabies) / 100);
-    const intervalBetweenReproducingPeriods = floor(random(0, 2000));
-    const longevity = floor(random(2000, 80000));
-    const renderDistance = floor((avgSpeed * random(100, 500)) / 100);
-    const startingNb = floor(random(4, 100));
-    const nbOfPreysToEat = floor(random(1, 50));
-    const eatingInterval = floor(random(50, 2500));
+    const avgSpeed = ceil(random(50, 1000));
+    const stdDevSpeed = ceil((random(5, 20) * avgSpeed) / 100);
+    const avgNbOfBabies = ceil(random(1, 25));
+    const stdDevNbOfBabies = ceil((random(5, 20) * avgNbOfBabies) / 100);
+    const intervalBetweenReproducingPeriods = ceil(random(100, 2000));
+    const longevity = ceil(random(2000, 80000));
+    const renderDistance = ceil((avgSpeed * random(100, 500)) / 100);
+    const startingNb = ceil(random(4, 100));
+    const nbOfPreysToEat = ceil(random(1, 50));
+    const eatingInterval = ceil(random(50, 2500));
     window.predatorConfig = {
       avgSpeed,
       stdDevSpeed,

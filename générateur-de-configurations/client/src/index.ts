@@ -4,6 +4,7 @@ import { createAnimals, initiateGlobalVariables } from './setup';
 const sketch = (p: p5) => {
   p.preload = () => initiateGlobalVariables(p);
   p.setup = () => {
+    p.randomSeed(123456789);
     p.noCanvas();
     createAnimals();
   };

@@ -26,6 +26,7 @@ const sketch = (p: p5) => {
   };
   p.preload = () => initiateGlobalVariables(p);
   p.setup = () => {
+    p.randomSeed(123456789);
     p.createCanvas(getCanvasSize(), getCanvasSize());
     p.imageMode('center');
     p.frameRate(30);
