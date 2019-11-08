@@ -25,10 +25,7 @@ export default class Animal {
       parent2
     } = args;
     this.properties = {
-      position: window.p5.createVector(x || 0, y || 0),
-      velocity: window.p5.createVector(0, 0),
       genes: genes || [],
-      events: [],
       canReproduce: false,
       intervalBetweenReproducingPeriods,
       longevity,
@@ -37,6 +34,9 @@ export default class Animal {
       generation: 1,
       renderDistance
     };
+    this.customData.position = window.p5.createVector(x || 0, y || 0);
+    this.customData.velocity = window.p5.createVector(0, 0);
+    this.customData.events = [];
     this.addEvent({
       name: 'Peut se reproduire',
       time: this.properties.intervalBetweenReproducingPeriods,
@@ -45,11 +45,7 @@ export default class Animal {
     this.addEvent({
       name: 'Mort',
       time: this.properties.longevity,
-      action: (self) => {
-        _.remove(window.animals, ['uid', self.uid]);
-        if (this.specie === 0) window.nbOfPreys--;
-        if (this.specie === 1) window.nbOfPredators--;
-      }
+      action: (self) => _.remove(window.animals, ['uid', self.uid])
     });
     if (
       !x &&
@@ -62,7 +58,7 @@ export default class Animal {
       const parents = [parent1, parent2];
       let x = _.meanBy(parents, (p: Animal) => p.position.x);
       let y = _.meanBy(parents, (p: Animal) => p.position.y);
-      this.properties.position = window.p5.createVector(x, y);
+      this.customData.position = window.p5.createVector(x, y);
       this.properties.specie = parent1.specie;
       this.properties.generation = _.maxBy(parents, (p) => p.generation).generation + 1;
       for (let i = 0; i < parent1.genes.length; i++) {
@@ -81,14 +77,14 @@ export default class Animal {
   }
 
   get canReproduce(): boolean {
-    return this.properties.canReproduce;
+    return this.customData.canReproduce;
   }
 
   set canReproduce(canReproduce: boolean) {
     if (canReproduce) {
-      this.properties.canReproduce = true;
+      this.customData.canReproduce = true;
     } else {
-      this.properties.canReproduce = false;
+      this.customData.canReproduce = false;
       this.addEvent({
         name: 'Peut se reproduire',
         time: window.time + this.intervalBetweenReproducingPeriods,
@@ -98,7 +94,7 @@ export default class Animal {
   }
 
   get events(): Event[] {
-    return this.properties.events;
+    return this.customData.events;
   }
 
   get intervalBetweenReproducingPeriods(): number {
@@ -114,11 +110,11 @@ export default class Animal {
   }
 
   get position(): p5.Vector {
-    return this.properties.position;
+    return this.customData.position;
   }
 
   set position(newValue: p5.Vector) {
-    this.properties.position = newValue;
+    this.customData.position = newValue;
   }
 
   get uid(): string {
@@ -134,11 +130,11 @@ export default class Animal {
   }
 
   set velocity(newV: p5.Vector) {
-    this.properties.velocity = newV;
+    this.customData.velocity = newV;
   }
 
   get velocity(): p5.Vector {
-    return this.properties.velocity;
+    return this.customData.velocity;
   }
 
   getBreedingPartner(): Animal {

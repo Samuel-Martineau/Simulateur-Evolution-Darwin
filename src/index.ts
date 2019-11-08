@@ -1,7 +1,13 @@
 import './index.scss';
 import p5 from 'p5';
 import 'p5/lib/addons/p5.dom';
-import { getCanvasSize, showStatsOfAnimal, changeOffsets, centerZoom } from './helpers';
+import {
+  getCanvasSize,
+  showStatsOfAnimal,
+  changeOffsets,
+  centerZoom,
+  createPlant
+} from './helpers';
 import { createDomElements, createAnimals, initiateGlobalVariables } from './setup';
 import Logger from './logger.class';
 
@@ -26,7 +32,6 @@ const sketch = (p: p5) => {
   };
   p.preload = () => initiateGlobalVariables(p);
   p.setup = () => {
-    p.randomSeed(123456789);
     p.createCanvas(getCanvasSize(), getCanvasSize());
     p.imageMode('center');
     p.frameRate(30);
@@ -34,6 +39,7 @@ const sketch = (p: p5) => {
     createDomElements(controlPanelDiv);
     createAnimals();
     centerZoom();
+    for (let i = 0; i < window.plantsConfig.startingNb; i++) createPlant();
   };
   p.draw = () => {
     // Effaçure du contenu du canvas
@@ -45,7 +51,7 @@ const sketch = (p: p5) => {
     p.textSize(12);
     p.textAlign('left');
     p.text(
-      `${Math.trunc(p.frameRate())}fps ${window.time}ut ${window.size}ut ${nbOfPreys} ${
+      `${Math.trunc(p.frameRate())}fps ${window.time}ut ${window.size}ue ${nbOfPreys} ${
         window.preyConfig.name
       }${nbOfPreys > 1 ? 's' : ''} ${nbOfPredators} ${window.predatorConfig.name}${
         nbOfPredators > 1 ? 's' : ''
@@ -83,19 +89,30 @@ const sketch = (p: p5) => {
     }
     // Calcul de l'évolution
     for (let i = 0; i < window.speed; i++) {
+      if (window.time % window.plantsConfig.reproductionSpeed === 0) createPlant();
       window.animals.forEach((animal) => animal.update());
       window.time++;
     }
     // Affichage des animaux
     window.animals
       .filter(
-        (animal) =>
-          animal.position.x < canSee + window.offsetX &&
-          animal.position.x > window.offsetX &&
-          animal.position.y < canSee + window.offsetY &&
-          animal.position.y > window.offsetY
+        (a) =>
+          a.position.x < canSee + window.offsetX &&
+          a.position.x > window.offsetX &&
+          a.position.y < canSee + window.offsetY &&
+          a.position.y > window.offsetY
       )
-      .forEach((animal) => animal.display());
+      .forEach((a) => a.display());
+    // Affichage des plantes
+    window.plants
+      .filter(
+        (p) =>
+          p.position.x < canSee + window.offsetX &&
+          p.position.x > window.offsetX &&
+          p.position.y < canSee + window.offsetY &&
+          p.position.y > window.offsetY
+      )
+      .forEach((p) => p.display());
   };
 };
 

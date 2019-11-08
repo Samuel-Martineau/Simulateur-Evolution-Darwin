@@ -2,6 +2,7 @@ interface Window {
   p5: import('p5');
   imgs: import('p5').Image[];
   animals: import('./animal/animal.class').default[];
+  plants: import('./plant.class').default[];
   size: number;
   speed: number;
   time: number;
@@ -14,6 +15,7 @@ interface Window {
   enabledLoggers: string[];
   preyConfig: any;
   predatorConfig: any;
+  plantsConfig: any;
   ue: number;
   ueUnit: string;
   ut: number;

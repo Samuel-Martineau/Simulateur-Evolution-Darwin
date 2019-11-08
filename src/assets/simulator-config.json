@@ -1,27 +1,33 @@
 {
   "prey": {
     "name": "Proie",
-    "avgSpeed": 847,
-    "stdDevSpeed": 133,
-    "avgNbOfBabies": 24,
+    "avgSpeed": 440,
+    "stdDevSpeed": 61,
+    "avgNbOfBabies": 17,
     "stdDevNbOfBabies": 2,
-    "intervalBetweenReproducingPeriods": 1341,
-    "renderDistance": 1928,
-    "longevity": 73194,
-    "startingNb": 89
+    "intervalBetweenReproducingPeriods": 550,
+    "renderDistance": 1937,
+    "longevity": 52975,
+    "nbOfPlantsToEat": 3,
+    "eatingInterval": 780,
+    "startingNb": 92
   },
   "predator": {
     "name": "Prédateur",
-    "avgSpeed": 185,
-    "stdDevSpeed": 8,
-    "avgNbOfBabies": 22,
-    "stdDevNbOfBabies": 3,
-    "intervalBetweenReproducingPeriods": 692,
-    "renderDistance": 773,
-    "longevity": 17574,
-    "nbOfPreysToEat": 48,
-    "eatingInterval": 335,
-    "startingNb": 35
+    "avgSpeed": 145,
+    "stdDevSpeed": 25,
+    "avgNbOfBabies": 9,
+    "stdDevNbOfBabies": 1,
+    "intervalBetweenReproducingPeriods": 718,
+    "renderDistance": 190,
+    "longevity": 64270,
+    "nbOfPreysToEat": 3,
+    "eatingInterval": 780,
+    "startingNb": 16
+  },
+  "plants": {
+    "startingNb": 50,
+    "reproductionSpeed": 80
   },
   "size": 8000,
   "scale": 1,
@@ -31,5 +37,6 @@
   "ue": 20,
   "ueUnit": "cm",
   "ut": 10,
-  "utUnit": "min"
+  "utUnit": "min",
+  "seed": 123456789
 }

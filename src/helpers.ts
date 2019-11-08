@@ -6,6 +6,7 @@ import { ExportToCsv } from 'export-to-csv';
 // @ts-ignore
 import randomColor from 'random-color';
 import Logger from './logger.class';
+import Plant from './plant.class';
 
 export const getCanvasSize = () => {
   return window.innerHeight < window.innerWidth ? window.innerHeight : window.innerWidth;
@@ -63,7 +64,7 @@ export const showAverageSpeedChart = () => {
   }, 10);
   Logger('info', 'showAverageSpeedChart')('Le popup a été ouvert');
   Swal.fire({
-    title: 'Diagramme des vitesses moyennes selon le temps',
+    title: 'Diagramme des vitesses moyennes selon les générations',
     width: 1000,
     html: `
       <canvas id="averageSpeedChart"></canvas>
@@ -209,10 +210,10 @@ export const showStatsOfAnimal = (a: Animal) => {
   });
   let eventsText = '';
   a.events.forEach((event) => {
-    const time = (event.time - window.time) / (30 * speed);
-    eventsText += `<li><b>${event.name} </b> dans ${time.toFixed(2)} ue <i>(${(
+    const time = event.time - window.time;
+    eventsText += `<li><b>${event.name} </b> dans ${time.toFixed(2)} ue <i>: ${(
       time * window.ut
-    ).toFixed(2)} ${window.utUnit})</i></li>`;
+    ).toFixed(2)} ${window.utUnit}</i> (${time / (30 * speed)} sec)</li>`;
   });
   Logger('info', 'showStatsOfAnimal')('Le popup a été ouvert');
   Swal.fire({
@@ -415,4 +416,10 @@ export const disableLogger = (loggerName: string) => {
     window.enabledLoggers.splice(i, 1);
   }
   Logger('success', 'disableLogger')(`Le logger ${loggerName} est désactivé`);
+};
+
+export const createPlant = () => {
+  const { random } = window.p5;
+  const { size } = window;
+  window.plants.push(new Plant(random(size), random(size)));
 };

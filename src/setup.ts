@@ -158,7 +158,9 @@ export const initiateGlobalVariables = (p: p5) => {
         ue,
         ueUnit,
         ut,
-        utUnit
+        utUnit,
+        seed,
+        plants
       } = config;
       if (
         !prey ||
@@ -169,6 +171,8 @@ export const initiateGlobalVariables = (p: p5) => {
         !ueUnit ||
         !ut ||
         !utUnit ||
+        !seed ||
+        !plants ||
         offsetX === (null || undefined) ||
         offsetY === (null || undefined) ||
         speed === (null || undefined)
@@ -202,6 +206,9 @@ export const initiateGlobalVariables = (p: p5) => {
   window.ueUnit = config.ueUnit;
   window.ut = config.ut;
   window.utUnit = config.utUnit;
+  window.plantsConfig = config.plants;
+  window.plants = [];
+  p.randomSeed(config.seed);
   try {
     window.p5 = p;
     window.enableLogger = enableLogger;
@@ -214,6 +221,7 @@ export const initiateGlobalVariables = (p: p5) => {
     window.exportToCSV = exportToCSV;
     window.imgs.push(p.loadImage('assets/prey.png'));
     window.imgs.push(p.loadImage('assets/predator.png'));
+    window.imgs.push(p.loadImage('assets/plant.png'));
     Logger('success', 'initiateGlobalVariables')("La fonction s'est déroulée sans incidents");
   } catch (err) {
     Logger('error', 'initiateGlobalVariables')(err.message);

@@ -12,8 +12,10 @@ const sketch = (p: p5) => {
     for (let i = 0; i < window.speed; i++) {
       window.animals.forEach((animal) => animal.update());
       window.time++;
+      const nbOfPreys = window.animals.filter((a) => a.specie === 0).length;
+      const nbOfPredators = window.animals.length - nbOfPreys;
+      if (nbOfPreys <= 0 || nbOfPredators <= 0 || window.time > 100000) done();
     }
-    if (window.nbOfPreys <= 0 || window.nbOfPredators <= 0 || window.time > 100000) done();
   };
 };
 

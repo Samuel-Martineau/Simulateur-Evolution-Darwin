@@ -1,5 +1,5 @@
 import Animal from './animal.class';
-import { updateAverageSpeed, enableLogger } from '../helpers';
+import { updateAverageSpeed } from '../helpers';
 import _ from 'lodash';
 import p5 from 'p5';
 
@@ -22,7 +22,7 @@ export default class Predator extends Animal {
     let preys;
     if (this.hunger > 0) {
       preys = window.animals.filter(
-        (a) => a.specie === 0 && this.position.copy().dist(a.position) < this.renderDistance
+        (a) => a.specie === 0 && this.position.dist(a.position) < this.renderDistance
       );
       const nearestPrey = preys.sort((a1, a2) => {
         const d1 = this.position.dist(a1.position);
@@ -36,7 +36,7 @@ export default class Predator extends Animal {
           .limit(this.getGene('speed', 0).value);
         this.info('Mouvement de chasse');
         if (this.position.dist(nearestPrey.position) < 18) {
-          this.hunger -= 1;
+          this.hunger--;
           _.remove(window.animals, ['uid', nearestPrey.uid]);
         }
       }
@@ -65,8 +65,8 @@ export default class Predator extends Animal {
       const { noise, map, createVector } = window.p5;
       const speed = this.getGene('speed', 0).value;
       const { x, y } = this.velocity;
-      const xToAdd = map(noise(x, window.time, this.customData.noiseOffset), 0, 1, -speed, speed);
-      const yToAdd = map(noise(y, window.time, this.customData.noiseOffset), 0, 1, -speed, speed);
+      const xToAdd = map(noise(x, window.time, -this.noiseOffset * 3), 0, 1, -speed, speed);
+      const yToAdd = map(noise(y, window.time, this.noiseOffset / 3), 0, 1, -speed, speed);
       v = this.velocity
         .copy()
         .add(createVector(xToAdd, yToAdd))
@@ -88,21 +88,5 @@ export default class Predator extends Animal {
         action: (self: Predator) => self.checkHunger()
       });
     } else _.remove(window.animals, ['uid', this.uid]);
-  }
-
-  set hunger(newHunger: number) {
-    this.customData.hunger = newHunger;
-  }
-
-  get hunger(): number {
-    return this.customData.hunger;
-  }
-
-  set eatingInterval(newInterval: number) {
-    this.customData.eatingInterval = newInterval;
-  }
-
-  get eatingInterval() {
-    return this.customData.eatingInterval;
   }
 }
