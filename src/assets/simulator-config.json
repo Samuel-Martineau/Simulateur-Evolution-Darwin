@@ -26,8 +26,8 @@
     "startingNb": 16
   },
   "plant": {
-    "startingNb": 50,
-    "reproductionSpeed": 80
+    "startingNb": 200,
+    "reproductionSpeed": 50
   },
   "size": 8000,
   "scale": 1,

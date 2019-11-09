@@ -4,9 +4,9 @@
     "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "sourceMap": true,
     "outDir": "./dist/"
   },
-  "exclude": ["générateur-de-configurations"]
+  "exclude": ["generateur-de-configurations"]
 }
