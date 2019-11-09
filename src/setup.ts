@@ -160,7 +160,7 @@ export const initiateGlobalVariables = (p: p5) => {
         ut,
         utUnit,
         seed,
-        plants
+        plant
       } = config;
       if (
         !prey ||
@@ -172,7 +172,7 @@ export const initiateGlobalVariables = (p: p5) => {
         !ut ||
         !utUnit ||
         !seed ||
-        !plants ||
+        !plant ||
         offsetX === (null || undefined) ||
         offsetY === (null || undefined) ||
         speed === (null || undefined)
@@ -206,7 +206,7 @@ export const initiateGlobalVariables = (p: p5) => {
   window.ueUnit = config.ueUnit;
   window.ut = config.ut;
   window.utUnit = config.utUnit;
-  window.plantsConfig = config.plants;
+  window.plantConfig = config.plant;
   window.plants = [];
   p.randomSeed(config.seed);
   try {

@@ -24,7 +24,8 @@ export const createAnimals = () => {
               let val = window.p5.randomGaussian(mean, std);
               if (val < 0) val = 0.5;
               return val;
-            }
+            },
+            displayValue() {}
           }
         ],
         ...window.preyConfig
@@ -50,7 +51,8 @@ export const createAnimals = () => {
               let val = window.p5.randomGaussian(mean, std);
               if (val < 0) val = 0.5;
               return val;
-            }
+            },
+            displayValue() {}
           }
         ],
         ...window.predatorConfig
@@ -62,23 +64,11 @@ export const createAnimals = () => {
 export const initiateGlobalVariables = (p: p5) => {
   const { random, ceil } = p;
   (() => {
-    const avgSpeed = ceil(random(50, 1000));
-    const stdDevSpeed = ceil((random(5, 20) * avgSpeed) / 100);
-    const avgNbOfBabies = ceil(random(1, 25));
-    const stdDevNbOfBabies = ceil((random(5, 20) * avgNbOfBabies) / 100);
-    const intervalBetweenReproducingPeriods = ceil(random(100, 2000));
-    const longevity = ceil(random(2000, 80000));
-    const renderDistance = ceil((avgSpeed * random(100, 500)) / 100);
-    const startingNb = ceil(random(4, 100));
-    window.preyConfig = {
-      avgSpeed,
-      stdDevSpeed,
-      avgNbOfBabies,
-      stdDevNbOfBabies,
-      intervalBetweenReproducingPeriods,
-      renderDistance,
-      longevity,
-      startingNb
+    const startingNb = ceil(random(2, 5000));
+    const reproductionSpeed = ceil(random(10, 1000));
+    window.plantConfig = {
+      startingNb,
+      reproductionSpeed
     };
   })();
   (() => {
@@ -105,11 +95,35 @@ export const initiateGlobalVariables = (p: p5) => {
       eatingInterval
     };
   })();
+  (() => {
+    const avgSpeed = ceil(random(50, 1000));
+    const stdDevSpeed = ceil((random(5, 20) * avgSpeed) / 100);
+    const avgNbOfBabies = ceil(random(1, 25));
+    const stdDevNbOfBabies = ceil((random(5, 20) * avgNbOfBabies) / 100);
+    const intervalBetweenReproducingPeriods = ceil(random(100, 2000));
+    const longevity = ceil(random(2000, 80000));
+    const renderDistance = ceil((avgSpeed * random(100, 500)) / 100);
+    const startingNb = ceil(random(4, 100));
+    const nbOfPlantsToEat = ceil(random(1, 50));
+    const eatingInterval = ceil(random(50, 2500));
+    window.preyConfig = {
+      avgSpeed,
+      stdDevSpeed,
+      avgNbOfBabies,
+      stdDevNbOfBabies,
+      intervalBetweenReproducingPeriods,
+      renderDistance,
+      longevity,
+      startingNb,
+      nbOfPlantsToEat,
+      eatingInterval
+    };
+  })();
   window.animals = [];
-  window.time = 0;
+  window.plants = [];
   window.speed = 5;
-  window.size = 12000;
-  try {
-    window.p5 = p;
-  } catch {}
+  window.time = 0;
+  window.size = 8000;
+  p.randomSeed(123456789);
+  window.p5 = p;
 };

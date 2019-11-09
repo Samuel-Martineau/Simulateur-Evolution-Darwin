@@ -184,7 +184,7 @@ export const showChangeSpeedDialog = () => {
     input: 'range',
     inputAttributes: {
       min: 0,
-      max: 200,
+      max: 10,
       step: 1
     },
     inputValue: speed,
@@ -211,9 +211,15 @@ export const showStatsOfAnimal = (a: Animal) => {
   let eventsText = '';
   a.events.forEach((event) => {
     const time = event.time - window.time;
-    eventsText += `<li><b>${event.name} </b> dans ${time.toFixed(2)} ue <i>: ${(
-      time * window.ut
-    ).toFixed(2)} ${window.utUnit}</i> (${time / (30 * speed)} sec)</li>`;
+    const regex = /%/g;
+    let array;
+    let name = event.name;
+    let i = 0;
+    //@ts-ignore
+    while ((array = regex.exec(name)) !== null) name = name.replace('%', event.data[i](a));
+    eventsText += `<li><b>${name} </b> dans ${time.toFixed(2)} ue <i>: ${(time * window.ut).toFixed(
+      2
+    )} ${window.utUnit}</i> (${time / (30 * speed)} sec)</li>`;
   });
   Logger('info', 'showStatsOfAnimal')('Le popup a été ouvert');
   Swal.fire({

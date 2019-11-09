@@ -1,5 +1,4 @@
 import Animal from './animal.class';
-import { updateAverageSpeed } from '../helpers';
 import p5 from 'p5';
 import _ from 'lodash';
 
@@ -32,7 +31,6 @@ export default class Prey extends Animal {
         .sub(this.position)
         .limit(this.getGene('speed', 0).value)
         .mult(-1);
-      this.info('Mouvement de proie');
     } else if (this.hunger > 0) {
       const nearestPlant = window.plants
         .filter((p) => this.position.dist(p.position) < this.renderDistance)
@@ -42,7 +40,6 @@ export default class Prey extends Animal {
           .copy()
           .sub(this.position)
           .limit(this.getGene('speed', 0).value);
-        this.info("Mouvement d'alimentation");
         if (this.position.dist(nearestPlant.position) < 18) {
           this.hunger--;
           _.remove(window.plants, ['uid', nearestPlant.uid]);
@@ -60,7 +57,6 @@ export default class Prey extends Animal {
           (f) => f.specie === 1 && newPosition.dist(f.position) < this.renderDistance
         );
         if (ps.length > 0) v = undefined;
-        else this.info('Mouvement de reproduction');
         if (breedingPartner.position.dist(this.position) <= 18) {
           this.canReproduce = false;
           breedingPartner.canReproduce = false;
@@ -69,7 +65,6 @@ export default class Prey extends Animal {
           for (let i = 0; i < nbOfBabies; i++) {
             const prey = new Prey({ parent1: this, parent2: breedingPartner });
             window.animals.push(prey);
-            updateAverageSpeed(0, prey.generation);
           }
         }
       }
@@ -84,7 +79,6 @@ export default class Prey extends Animal {
         .copy()
         .add(createVector(xToAdd, yToAdd))
         .limit(speed);
-      this.info('Mouvement de perlin');
     }
     this.velocity = v;
     super.update();

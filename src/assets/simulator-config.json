@@ -25,7 +25,7 @@
     "eatingInterval": 780,
     "startingNb": 16
   },
-  "plants": {
+  "plant": {
     "startingNb": 50,
     "reproductionSpeed": 80
   },

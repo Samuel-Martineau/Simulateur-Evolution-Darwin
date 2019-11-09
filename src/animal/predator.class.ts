@@ -13,7 +13,8 @@ export default class Predator extends Animal {
         this.hunger > 1 ? 's' : ''
       }`,
       time: this.eatingInterval,
-      action: (self: Predator) => self.checkHunger()
+      action: (self: Predator) => self.checkHunger(),
+      data: [(self: Animal) => self.hunger]
     });
   }
 
@@ -24,11 +25,9 @@ export default class Predator extends Animal {
       preys = window.animals.filter(
         (a) => a.specie === 0 && this.position.dist(a.position) < this.renderDistance
       );
-      const nearestPrey = preys.sort((a1, a2) => {
-        const d1 = this.position.dist(a1.position);
-        const d2 = this.position.dist(a2.position);
-        return d1 - d2;
-      })[0];
+      const nearestPrey = preys.sort(
+        (a1, a2) => this.position.dist(a1.position) - this.position.dist(a2.position)
+      )[0];
       if (nearestPrey) {
         v = nearestPrey.position
           .copy()

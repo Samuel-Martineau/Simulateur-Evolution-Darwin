@@ -39,7 +39,7 @@ const sketch = (p: p5) => {
     createDomElements(controlPanelDiv);
     createAnimals();
     centerZoom();
-    for (let i = 0; i < window.plantsConfig.startingNb; i++) createPlant();
+    for (let i = 0; i < window.plantConfig.startingNb; i++) createPlant();
   };
   p.draw = () => {
     // Effaçure du contenu du canvas
@@ -89,7 +89,7 @@ const sketch = (p: p5) => {
     }
     // Calcul de l'évolution
     for (let i = 0; i < window.speed; i++) {
-      if (window.time % window.plantsConfig.reproductionSpeed === 0) createPlant();
+      if (window.time % window.plantConfig.reproductionSpeed === 0) createPlant();
       window.animals.forEach((animal) => animal.update());
       window.time++;
     }

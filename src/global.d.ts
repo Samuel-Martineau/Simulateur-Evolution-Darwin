@@ -15,7 +15,7 @@ interface Window {
   enabledLoggers: string[];
   preyConfig: any;
   predatorConfig: any;
-  plantsConfig: any;
+  plantConfig: any;
   ue: number;
   ueUnit: string;
   ut: number;

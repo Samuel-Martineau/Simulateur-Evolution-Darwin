@@ -3,5 +3,6 @@ import Animal from './animal.class';
 export default interface Event {
   name: string;
   time: number;
-  action(slef: Animal): void;
+  action(self: Animal): void;
+  data?: ((self: Animal) => any)[];
 }

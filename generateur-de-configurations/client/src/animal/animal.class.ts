@@ -3,6 +3,7 @@ import * as _ from 'lodash';
 import Event from './event.interface';
 import p5 from 'p5';
 import UIDGenerator from 'uid-generator';
+
 //@ts-ignore
 const uidgen = new UIDGenerator();
 
@@ -25,28 +26,19 @@ export default class Animal {
       parent2
     } = args;
     this.properties = {
+      position: window.p5.createVector(x || 0, y || 0),
+      velocity: window.p5.createVector(0, 0),
       genes: genes || [],
+      events: [],
       canReproduce: false,
       intervalBetweenReproducingPeriods,
       longevity,
       specie,
       uid: uidgen.generateSync(),
       generation: 1,
-      renderDistance
+      renderDistance,
+      noiseOffset: window.p5.random(-300, 300)
     };
-    this.customData.position = window.p5.createVector(x || 0, y || 0);
-    this.customData.velocity = window.p5.createVector(0, 0);
-    this.customData.events = [];
-    this.addEvent({
-      name: 'Peut se reproduire',
-      time: this.properties.intervalBetweenReproducingPeriods,
-      action: (self) => (self.canReproduce = true)
-    });
-    this.addEvent({
-      name: 'Mort',
-      time: this.properties.longevity,
-      action: (self) => _.remove(window.animals, ['uid', self.uid])
-    });
     if (
       !x &&
       !y &&
@@ -55,11 +47,17 @@ export default class Animal {
       parent2 &&
       parent1.properties.specie === parent2.properties.specie
     ) {
-      const parents = [parent1, parent2];
-      let x = _.meanBy(parents, (p: Animal) => p.position.x);
-      let y = _.meanBy(parents, (p: Animal) => p.position.y);
-      this.customData.position = window.p5.createVector(x, y);
+      const parents: Animal[] = [parent1, parent2];
+      let x = _.meanBy(parents, (p) => p.position.x);
+      let y = _.meanBy(parents, (p) => p.position.y);
+      this.properties.position = window.p5.createVector(x, y);
       this.properties.specie = parent1.specie;
+      this.properties.intervalBetweenReproducingPeriods = (<Animal>(
+        parent1
+      )).intervalBetweenReproducingPeriods;
+      this.properties.longevity = (<Animal>parent1).longevity;
+      this.properties.renderDistance = (<Animal>parent1).renderDistance;
+      //@ts-ignore
       this.properties.generation = _.maxBy(parents, (p) => p.generation).generation + 1;
       for (let i = 0; i < parent1.genes.length; i++) {
         let name = parent1.genes[i].name;
@@ -70,21 +68,43 @@ export default class Animal {
             parent1.getGene(name, 0).value,
             parent2.getGene(name, 0).value
           ),
-          modificator: parent1.properties.genes[i].modificator
+          modificator: parent1.genes[i].modificator,
+          displayValue: parent1.genes[i].displayValue
         };
       }
+      this.addEvent({
+        name: 'Peut se reproduire',
+        time: this.properties.intervalBetweenReproducingPeriods,
+        action: (self) => (self.canReproduce = true)
+      });
+      this.addEvent({
+        name: 'Mort',
+        time: this.properties.longevity,
+        action: (self) => _.remove(window.animals, ['uid', self.uid])
+      });
+    } else {
+      this.addEvent({
+        name: 'Peut se reproduire',
+        time: this.properties.intervalBetweenReproducingPeriods + window.p5.random(-200, 200),
+        action: (self) => (self.canReproduce = true)
+      });
+      this.addEvent({
+        name: 'Mort',
+        time: this.properties.longevity + window.p5.random(-200, 200),
+        action: (self) => _.remove(window.animals, ['uid', self.uid])
+      });
     }
   }
 
   get canReproduce(): boolean {
-    return this.customData.canReproduce;
+    return this.properties.canReproduce;
   }
 
   set canReproduce(canReproduce: boolean) {
     if (canReproduce) {
-      this.customData.canReproduce = true;
+      this.properties.canReproduce = true;
     } else {
-      this.customData.canReproduce = false;
+      this.properties.canReproduce = false;
       this.addEvent({
         name: 'Peut se reproduire',
         time: window.time + this.intervalBetweenReproducingPeriods,
@@ -94,7 +114,7 @@ export default class Animal {
   }
 
   get events(): Event[] {
-    return this.customData.events;
+    return this.properties.events;
   }
 
   get intervalBetweenReproducingPeriods(): number {
@@ -110,11 +130,15 @@ export default class Animal {
   }
 
   get position(): p5.Vector {
-    return this.customData.position;
+    return this.properties.position;
   }
 
   set position(newValue: p5.Vector) {
-    this.customData.position = newValue;
+    this.properties.position = newValue;
+  }
+
+  get longevity(): number {
+    return this.properties.longevity;
   }
 
   get uid(): string {
@@ -130,11 +154,32 @@ export default class Animal {
   }
 
   set velocity(newV: p5.Vector) {
-    this.customData.velocity = newV;
+    this.properties.velocity = newV;
+    // this.info('La vélocité à été mise à jour');
   }
 
   get velocity(): p5.Vector {
-    return this.customData.velocity;
+    return this.properties.velocity;
+  }
+
+  get noiseOffset(): number {
+    return this.properties.noiseOffset;
+  }
+
+  set eatingInterval(newInterval: number) {
+    this.properties.eatingInterval = newInterval;
+  }
+
+  get eatingInterval() {
+    return this.properties.eatingInterval;
+  }
+
+  set hunger(newHunger: number) {
+    this.customData.hunger = newHunger;
+  }
+
+  get hunger(): number {
+    return this.customData.hunger;
   }
 
   getBreedingPartner(): Animal {
