@@ -1,20 +1,20 @@
 {
   "prey": {
     "name": "Proie",
-    "avgSpeed": 440,
-    "stdDevSpeed": 61,
-    "avgNbOfBabies": 17,
+    "avgSpeed": 400,
+    "stdDevSpeed": 40,
+    "avgNbOfBabies": 6,
     "stdDevNbOfBabies": 2,
-    "intervalBetweenReproducingPeriods": 550,
-    "renderDistance": 1937,
-    "longevity": 52975,
+    "intervalBetweenReproducingPeriods": 2000,
+    "renderDistance": 2000,
+    "longevity": 50000,
     "nbOfPlantsToEat": 3,
-    "eatingInterval": 780,
-    "startingNb": 92
+    "eatingInterval": 200,
+    "startingNb": 100
   },
   "predator": {
     "name": "Prédateur",
-    "avgSpeed": 145,
+    "avgSpeed": 0,
     "stdDevSpeed": 25,
     "avgNbOfBabies": 9,
     "stdDevNbOfBabies": 1,
@@ -23,11 +23,11 @@
     "longevity": 64270,
     "nbOfPreysToEat": 3,
     "eatingInterval": 780,
-    "startingNb": 16
+    "startingNb": 0
   },
   "plant": {
     "startingNb": 200,
-    "reproductionSpeed": 50
+    "spawnRate": 24
   },
   "size": 8000,
   "scale": 1,

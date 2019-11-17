@@ -1,27 +1,31 @@
-import './index.scss';
-import p5 from 'p5';
-import 'p5/lib/addons/p5.dom';
+import "./index.scss";
+import p5 from "p5";
+import "p5/lib/addons/p5.dom";
 import {
   getCanvasSize,
   showStatsOfAnimal,
   changeOffsets,
   centerZoom,
   createPlant
-} from './helpers';
-import { createDomElements, createAnimals, initiateGlobalVariables } from './setup';
-import Logger from './logger.class';
+} from "./helpers";
+import {
+  createDomElements,
+  createAnimals,
+  initiateGlobalVariables
+} from "./setup";
+import Logger from "./logger.class";
 
 const sketch = (p: p5) => {
   let controlPanelDiv: p5.Element;
   p.windowResized = () => {
-    Logger('info', 'windowResized')('La fenêtre a changé de dimensions');
+    Logger("info", "windowResized")("La fenêtre a changé de dimensions");
     p.resizeCanvas(getCanvasSize(), getCanvasSize());
   };
   p.mouseClicked = () => {
-    const info = Logger('info', 'mouseClicked');
-    const error = Logger('error', 'mouseClicked');
-    info('Click !');
-    if (window.isPopupActive) return error('Un popup est activé');
+    const info = Logger("info", "mouseClicked");
+    const error = Logger("error", "mouseClicked");
+    info("Click !");
+    if (window.isPopupActive) return error("Un popup est activé");
     for (let animal of window.animals) {
       if (animal.isClicked(p.mouseX, p.mouseY)) {
         info(`L'animal ${animal.uid} a été clické`);
@@ -33,9 +37,9 @@ const sketch = (p: p5) => {
   p.preload = () => initiateGlobalVariables(p);
   p.setup = () => {
     p.createCanvas(getCanvasSize(), getCanvasSize());
-    p.imageMode('center');
+    p.imageMode("center");
     p.frameRate(30);
-    controlPanelDiv = window.p5.createElement('div');
+    controlPanelDiv = window.p5.createElement("div");
     createDomElements(controlPanelDiv);
     createAnimals();
     centerZoom();
@@ -45,74 +49,80 @@ const sketch = (p: p5) => {
     // Effaçure du contenu du canvas
     p.background(0);
     // Affichage du nombre d'infos utiles
-    const nbOfPreys = window.animals.filter((a) => a.specie === 0).length;
+    const nbOfPreys = window.animals.filter(a => a.specie === 0).length;
     const nbOfPredators = window.animals.length - nbOfPreys;
+    const nbOfPlants = window.plants.length;
     p.fill(255);
     p.textSize(12);
-    p.textAlign('left');
+    p.textAlign("left");
     p.text(
-      `${Math.trunc(p.frameRate())}fps ${window.time}ut ${window.size}ue ${nbOfPreys} ${
-        window.preyConfig.name
-      }${nbOfPreys > 1 ? 's' : ''} ${nbOfPredators} ${window.predatorConfig.name}${
-        nbOfPredators > 1 ? 's' : ''
-      }`,
+      `${Math.trunc(p.frameRate())}fps ${window.time}ut ${
+        window.size
+      }ue ${nbOfPreys} ${window.preyConfig.name}${
+        nbOfPreys > 1 ? "s" : ""
+      } ${nbOfPredators} ${window.predatorConfig.name}${
+        nbOfPredators > 1 ? "s" : ""
+      } ${nbOfPlants} plante${nbOfPlants > 1 ? "s" : ""}`,
       10,
       20
     );
     // Affichage des flèches de déplacement
-    p.textAlign('center');
+    p.textAlign("center");
     p.textSize(30);
     const canSee = window.size / window.scale;
-    if (window.offsetY > 0) p.text('⬆️', getCanvasSize() / 2, 40);
-    if (window.offsetX > 0) p.text('⬅️', 30, getCanvasSize() / 2);
+    if (window.offsetY > 0) p.text("⬆️", getCanvasSize() / 2, 40);
+    if (window.offsetX > 0) p.text("⬅️", 30, getCanvasSize() / 2);
     if (window.offsetX + canSee < window.size)
-      p.text('➡️', getCanvasSize() - 40, getCanvasSize() / 2);
+      p.text("➡️", getCanvasSize() - 40, getCanvasSize() / 2);
     if (window.offsetY + canSee < window.size)
-      p.text('⬇️', getCanvasSize() / 2, getCanvasSize() - 10);
+      p.text("⬇️", getCanvasSize() / 2, getCanvasSize() - 10);
     if (p.mouseIsPressed && !window.isPopupActive) changeOffsets();
     // Redimensionnement proportionnel du canvas
     p.scale((getCanvasSize() / window.size) * window.scale);
     if (window.innerHeight <= getCanvasSize()) {
       //@ts-ignore
-      p.select('body').style('overflow-y', 'hidden');
-      controlPanelDiv.style('float', 'right');
-      controlPanelDiv.style('height', '100vh');
-      controlPanelDiv.style('overflow-y', 'scroll');
-      controlPanelDiv.style('width', `${window.innerWidth - getCanvasSize()}px`);
+      p.select("body").style("overflow-y", "hidden");
+      controlPanelDiv.style("float", "right");
+      controlPanelDiv.style("height", "100vh");
+      controlPanelDiv.style("overflow-y", "scroll");
+      controlPanelDiv.style(
+        "width",
+        `${window.innerWidth - getCanvasSize()}px`
+      );
     } else {
       //@ts-ignore
-      p.select('body').style('overflow-y', 'visible');
-      controlPanelDiv.style('float', 'left');
-      controlPanelDiv.style('height', 'initial');
-      controlPanelDiv.style('overflow-y', 'initial');
-      controlPanelDiv.style('width', `100%`);
+      p.select("body").style("overflow-y", "visible");
+      controlPanelDiv.style("float", "left");
+      controlPanelDiv.style("height", "initial");
+      controlPanelDiv.style("overflow-y", "initial");
+      controlPanelDiv.style("width", `100%`);
     }
     // Calcul de l'évolution
     for (let i = 0; i < window.speed; i++) {
-      if (window.time % window.plantConfig.reproductionSpeed === 0) createPlant();
-      window.animals.forEach((animal) => animal.update());
+      for (let i = 0; i < window.plantConfig.spawnRate; i++) createPlant();
+      window.animals.forEach(animal => animal.update());
       window.time++;
     }
     // Affichage des animaux
     window.animals
       .filter(
-        (a) =>
+        a =>
           a.position.x < canSee + window.offsetX &&
           a.position.x > window.offsetX &&
           a.position.y < canSee + window.offsetY &&
           a.position.y > window.offsetY
       )
-      .forEach((a) => a.display());
+      .forEach(a => a.display());
     // Affichage des plantes
     window.plants
       .filter(
-        (p) =>
+        p =>
           p.position.x < canSee + window.offsetX &&
           p.position.x > window.offsetX &&
           p.position.y < canSee + window.offsetY &&
           p.position.y > window.offsetY
       )
-      .forEach((p) => p.display());
+      .forEach(p => p.display());
   };
 };
 

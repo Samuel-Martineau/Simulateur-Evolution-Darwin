@@ -209,6 +209,7 @@ export const initiateGlobalVariables = (p: p5) => {
   window.plantConfig = config.plant;
   window.plants = [];
   p.randomSeed(config.seed);
+  p.noiseSeed(config.seed);
   try {
     window.p5 = p;
     window.enableLogger = enableLogger;
