@@ -44,7 +44,6 @@
     "export-to-csv": "^0.2.1",
     "lodash": "^4.17.15",
     "p5": "^0.9.0",
-    "random-color": "^1.0.1",
     "sweetalert2": "^8.17.1",
     "uid-generator": "^2.0.0"
   }

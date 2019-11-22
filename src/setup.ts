@@ -1,9 +1,10 @@
 import p5 from 'p5';
 import {
+  enableLogger,
+  disableLogger,
   updateAverageSpeed,
-  stdDev,
   showAverageSpeedChart,
-  showSpeedCurve,
+  showNbOfAnimalsByTime,
   showChangeSpeedDialog,
   showStatsOfAnimal,
   showChangeScaleDialog,
@@ -12,8 +13,8 @@ import {
 import Predator from './animal/predator.class';
 import Prey from './animal/prey.class';
 import _ from 'lodash';
-import { enableLogger, disableLogger } from './helpers';
 import Logger from './logger.class';
+import Gene from './animal/gene.interface';
 
 export const createDomElements = (controlPanelDiv: p5.Element) => {
   window.p5
@@ -22,10 +23,10 @@ export const createDomElements = (controlPanelDiv: p5.Element) => {
     .parent(controlPanelDiv)
     .mousePressed(window.showAverageSpeedChart);
   window.p5
-    .createButton("Voir la courbe du nombre d'individus selon leur vitesse")
+    .createButton("Voir le nombre d'individus selon le temps")
     .addClass('bouton bleu')
     .parent(controlPanelDiv)
-    .mousePressed(window.showSpeedCurve);
+    .mousePressed(window.showNbOfAnimalsByTime);
   window.p5
     .createButton('Changer la vitesse')
     .addClass('bouton mauve')
@@ -46,74 +47,81 @@ export const createDomElements = (controlPanelDiv: p5.Element) => {
     .addClass('bouton orange')
     .parent(controlPanelDiv)
     .mousePressed(
-      () =>
-        (location.href =
-          'https://docs.google.com/document/d/1-0XiVGQqNu3fPAFKN3vtxdBR2Abm4OA3ouX9kTg74Gk')
+      () => (location.href = 'https://docs.google.com/document/d/1-0XiVGQqNu3fPAFKN3vtxdBR2Abm4OA3ouX9kTg74Gk')
     );
   Logger('info', 'createDomElements')('Les éléments du DOM ont été créés');
 };
 
 export const createAnimals = () => {
   for (let i = 0; i < window.preyConfig.startingNb; i++) {
+    const { genes } = window.preyConfig;
+    const gs: Gene[] = [];
+    genes.forEach((g: any) => {
+      const modificator: Gene['modificator'] = g.modificator;
+      let value = 0;
+      switch (modificator) {
+        case 'constant':
+          value = g.value;
+          break;
+        case 'average':
+          value = g.avg;
+          break;
+        case 'stddev':
+          value = window.p5.randomGaussian(g.avg, g.stdDev);
+          if (value < 0) value = 0;
+          break;
+      }
+      gs.push({
+        displayName: g.displayName,
+        name: g.name,
+        value,
+        modificator,
+        displayValue() {
+          return eval(g.displayValue);
+        }
+      });
+    });
     window.animals.push(
       new Prey({
         x: window.p5.random(0, window.size),
         y: window.p5.random(0, window.size),
-        genes: [
-          {
-            displayName: 'Vitesse',
-            name: 'speed',
-            value: window.p5.randomGaussian(
-              window.preyConfig.avgSpeed,
-              window.preyConfig.stdDevSpeed
-            ),
-            modificator: (parent1Value: number, parent2Value: number) => {
-              const mean = _.mean([parent1Value, parent2Value]);
-              const std = stdDev([parent1Value, parent2Value]);
-              let val = window.p5.randomGaussian(mean, std);
-              if (val < 0) val = 0.5;
-              return val;
-            },
-            displayValue() {
-              return `${(this.value * window.ut).toFixed(2)} ${window.ueUnit} / ${window.ut} ${
-                window.utUnit
-              }`;
-            }
-          }
-        ],
-        ...window.preyConfig
+        genes: gs
       })
     );
   }
   updateAverageSpeed(0, 1);
   for (let i = 0; i < window.predatorConfig.startingNb; i++) {
+    const { genes } = window.predatorConfig;
+    const gs: Gene[] = [];
+    genes.forEach((g: any) => {
+      const modificator: Gene['modificator'] = g.modificator;
+      let value = 0;
+      switch (modificator) {
+        case 'constant':
+          value = g.value;
+          break;
+        case 'average':
+          value = g.avg;
+          break;
+        case 'stddev':
+          value = window.p5.randomGaussian(g.avg, g.stdDev);
+          break;
+      }
+      gs.push({
+        displayName: g.displayName,
+        name: g.name,
+        value,
+        modificator,
+        displayValue() {
+          return eval(g.displayValue);
+        }
+      });
+    });
     window.animals.push(
       new Predator({
         x: window.p5.random(0, window.size),
         y: window.p5.random(0, window.size),
-        genes: [
-          {
-            displayName: 'Vitesse',
-            name: 'speed',
-            value: window.p5.randomGaussian(
-              window.predatorConfig.avgSpeed,
-              window.predatorConfig.stdDevSpeed
-            ),
-            modificator: (parent1Value: number, parent2Value: number) => {
-              const mean = _.mean([parent1Value, parent2Value]);
-              const std = stdDev([parent1Value, parent2Value]);
-              let val = window.p5.randomGaussian(mean, std);
-              if (val < 0) val = 0.5;
-              return val;
-            },
-            displayValue() {
-              return `${(this.value * window.ut).toFixed(2)} ${window.ueUnit} / ${window.ut} ${
-                window.utUnit
-              }`;
-            }
-          }
-        ],
-        ...window.predatorConfig
+        genes: gs
       })
     );
   }
@@ -124,16 +132,6 @@ export const createAnimals = () => {
 export const initiateGlobalVariables = (p: p5) => {
   let config;
   let error = true;
-  const specieRequiredFields = [
-    'name',
-    'avgSpeed',
-    'stdDevSpeed',
-    'avgNbOfBabies',
-    'stdDevNbOfBabies',
-    'intervalBetweenReproducingPeriods',
-    'renderDistance',
-    'longevity'
-  ];
   while (error) {
     let configUrl;
     while (!configUrl)
@@ -147,42 +145,6 @@ export const initiateGlobalVariables = (p: p5) => {
     try {
       if (req.status !== 200) throw new Error();
       config = JSON.parse(req.responseText);
-      const {
-        prey,
-        predator,
-        size,
-        scale,
-        offsetX,
-        offsetY,
-        speed,
-        ue,
-        ueUnit,
-        ut,
-        utUnit,
-        seed,
-        plant
-      } = config;
-      if (
-        !prey ||
-        !predator ||
-        !size ||
-        !scale ||
-        !ue ||
-        !ueUnit ||
-        !ut ||
-        !utUnit ||
-        !seed ||
-        !plant ||
-        offsetX === (null || undefined) ||
-        offsetY === (null || undefined) ||
-        speed === (null || undefined)
-      )
-        throw new Error();
-      if (
-        _.difference(specieRequiredFields, Object.keys(prey)).length !== 0 ||
-        _.difference(specieRequiredFields, Object.keys(predator)).length !== 0
-      )
-        throw new Error();
       error = false;
     } catch {
       error = true;
@@ -208,6 +170,10 @@ export const initiateGlobalVariables = (p: p5) => {
   window.utUnit = config.utUnit;
   window.plantConfig = config.plant;
   window.plants = [];
+  window.nbOfAnimalsSnapshotInterval = config.nbOfAnimalsSnapshotInterval;
+  window.nbOfPlantsByTime = [];
+  window.nbOfPreysByTime = [];
+  window.nbOfPredatorsByTime = [];
   p.randomSeed(config.seed);
   p.noiseSeed(config.seed);
   try {
@@ -215,7 +181,7 @@ export const initiateGlobalVariables = (p: p5) => {
     window.enableLogger = enableLogger;
     window.disableLogger = disableLogger;
     window.showAverageSpeedChart = showAverageSpeedChart;
-    window.showSpeedCurve = showSpeedCurve;
+    window.showNbOfAnimalsByTime = showNbOfAnimalsByTime;
     window.showChangeSpeedDialog = showChangeSpeedDialog;
     window.showStatsOfAnimal = showStatsOfAnimal;
     window.showChangeScaleDialog = showChangeScaleDialog;

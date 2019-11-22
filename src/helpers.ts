@@ -12,11 +12,11 @@ export const getCanvasSize = () => {
   return window.innerHeight < window.innerWidth ? window.innerHeight : window.innerWidth;
 };
 
-export const stdDev = (arr: any[], key?: string) => {
-  if (key) arr = arr.map((val) => val[key]);
+export const stdDev = (arr: any[], map?: (el: any) => any) => {
+  if (map) arr = arr.map(map);
   let avg = _.mean(arr);
   return _.chain(arr)
-    .map((val) => Math.abs(val - avg))
+    .map(val => Math.abs(val - avg))
     .mean()
     .value();
 };
@@ -25,30 +25,27 @@ export const showAverageSpeedChart = () => {
   const speed = window.speed;
   window.isPopupActive = true;
   window.speed = 0;
-  const preyData = window.averagePreySpeed.slice();
-  const predatorData = window.averagePredatorSpeed.slice();
-  const indexes = _.range(
-    1,
-    (preyData.length > predatorData.length ? preyData.length : predatorData.length) + 1
-  );
+  const preyData = window.averagePreySpeed;
+  const predatorData = window.averagePredatorSpeed;
+  const indexes = _.range(1, (preyData.length > predatorData.length ? preyData.length : predatorData.length) + 1);
   setTimeout(() => {
     new Chart(<HTMLCanvasElement>document.getElementById('averageSpeedChart'), {
       type: 'line',
       data: {
-        labels: indexes.map((el) => el.toString()),
+        labels: indexes.map(el => el.toString()),
         datasets: [
           {
             label: `${window.preyConfig.name}s`,
             data: preyData,
-            borderColor: '#27ae60',
-            backgroundColor: '#2ecc71',
+            borderColor: '#5DBCD2',
+            backgroundColor: '#3f9faa',
             fill: false
           },
           {
             label: `${window.predatorConfig.name}s`,
             data: predatorData,
-            borderColor: '#d35400',
-            backgroundColor: '#e67e22',
+            borderColor: '#EC0000',
+            backgroundColor: '#ce0000',
             fill: false
           }
         ]
@@ -57,6 +54,11 @@ export const showAverageSpeedChart = () => {
         scales: {
           yAxes: [{ scaleLabel: { display: true, labelString: 'Vitesse moyenne' } }],
           xAxes: [{ scaleLabel: { display: true, labelString: 'Nombre de générations' } }]
+        },
+        elements: {
+          line: {
+            tension: 0
+          }
         }
       }
     });
@@ -66,110 +68,92 @@ export const showAverageSpeedChart = () => {
   Swal.fire({
     title: 'Diagramme des vitesses moyennes selon les générations',
     width: 1000,
-    html: `
-      <canvas id="averageSpeedChart"></canvas>
-    `,
+    html: '<canvas id="averageSpeedChart"></canvas>',
     allowOutsideClick: false,
     confirmButtonText: 'Parfait !'
   }).then(() => {
     window.speed = speed;
     window.isPopupActive = false;
-    Logger('info', 'showAverageSpeedChart')('Le popup a été ouvert');
+    Logger('info', 'showAverageSpeedChart')('Le popup a été fermé');
   });
 };
 
-export const showSpeedCurve = () => {
+export const showNbOfAnimalsByTime = () => {
   window.isPopupActive = true;
   const speed = window.speed;
   window.speed = 0;
-  const preys = _.filter(window.animals, ['specie', 0]);
-  const predators = _.filter(window.animals, ['specie', 1]);
-  let highestGen = (
-    <Animal>_.maxBy(_.concat(preys, predators), (a) => a.generation) || { generation: -1 }
-  ).generation;
-  let preyData: any[] = [];
-  let predatorData: any[] = [];
-  const data: any = { fox: [], hare: [], indexes: [] };
-  for (let i = 0; i < _.range(0, highestGen + 1).length; i++) {
-    const preysInGen = _.filter(preys, (a) => a.generation === i);
-    const predatorsInGen = _.filter(predators, (a) => a.generation === i);
-    const preysSpeed = preysInGen.map((a) => a.getGene('speed', 0).value);
-    const predatorsSpeed = predatorsInGen.map((a) => a.getGene('speed', 0).value);
-    const preyChunk = _.countBy(preysSpeed, Math.floor);
-    const predatorChunk = _.countBy(predatorsSpeed, Math.floor);
-    for (let num in Object.assign({}, preyChunk, predatorChunk))
-      if (!data.indexes.includes(parseInt(num))) data.indexes.push(parseInt(num));
-    preyData.push(preyChunk);
-    predatorData.push(predatorChunk);
-  }
-  for (let gen in preyData) {
-    data.prey[gen] = [];
-    data.indexes.forEach((i: number) => {
-      data.prey[gen].push(preyData[gen][i] || 0);
-    });
-  }
-  for (let gen in predatorData) {
-    data.predator[gen] = [];
-    data.indexes.forEach((i: number) => {
-      data.predator[gen].push(predatorData[gen][i] || 0);
-    });
-  }
-  data.indexes = data.indexes.sort((a: number, b: number) => a - b);
-  const chartData: Chart.ChartDataSets[] = [];
-  data.prey.forEach((gen: number[], index: number) => {
-    let t = gen.reduce((acc, curr) => acc + curr);
-    if (t === 0) return;
-    let color = randomColor(0.99, 0.99).hexString();
-    chartData.push({
-      label: `${window.preyConfig.name}${t > 1 ? 's' : ''} de génération ${index}`,
-      data: gen,
-      backgroundColor: color,
-      borderColor: color,
-      fill: false
-    });
-  });
-  data.predator.forEach((gen: number[], index: number) => {
-    let t = gen.reduce((acc, curr) => acc + curr);
-    if (t === 0) return;
-    let color = randomColor().hexString();
-    chartData.push({
-      label: `${window.predatorConfig.name}${t > 1 ? 's' : ''} de génération ${index}`,
-      data: gen,
-      backgroundColor: color,
-      borderColor: color,
-      fill: false
-    });
-  });
-  Logger('info', 'showSpeedCurve')('Les calculs ont été effectués');
+  Logger('info', 'showNbOfAnimalsByTime')('Le popup a été ouvert');
   setTimeout(() => {
-    new Chart(<HTMLCanvasElement>document.getElementById('speedGaussianCurve'), {
+    const maxNumber = 100;
+    const totalNbOfEl = window.nbOfPlantsByTime.length;
+    const keep = totalNbOfEl < maxNumber ? 1 : totalNbOfEl / maxNumber;
+    const nbOfPlantsByTime = _.chunk(window.nbOfPlantsByTime, keep)
+      .map(arr => _.mean(arr))
+      .filter(n => n !== 0);
+    const nbOfPreysByTime = _.chunk(window.nbOfPreysByTime, keep)
+      .map(arr => _.mean(arr))
+      .filter(n => n !== 0);
+    const nbOfPredatorsByTime = _.chunk(window.nbOfPredatorsByTime, keep)
+      .map(arr => _.mean(arr))
+      .filter(n => n !== 0);
+    const labels = _.chunk(_.range(0, totalNbOfEl), keep).map(arr =>
+      (_.mean(arr) * window.nbOfAnimalsSnapshotInterval).toString()
+    );
+    const datasets = [
+      {
+        label: `${window.preyConfig.name}s`,
+        data: nbOfPreysByTime,
+        borderColor: '#5DBCD2',
+        backgroundColor: '#3f9faa',
+        fill: false
+      },
+      {
+        label: `${window.predatorConfig.name}s`,
+        data: nbOfPredatorsByTime,
+        borderColor: '#EC0000',
+        backgroundColor: '#ce0000',
+        fill: false
+      },
+      {
+        label: `Plantes`,
+        data: nbOfPlantsByTime,
+        borderColor: '#3ABB44',
+        backgroundColor: '#1c9d27',
+        fill: false
+      }
+    ].filter(d => d.data.length > 0);
+    new Chart(<HTMLCanvasElement>document.getElementById('nbOfAnimalsByTimeChart'), {
       type: 'line',
       data: {
-        labels: data.indexes.map((el: number) => el.toString()),
-        datasets: chartData
+        labels,
+        datasets
       },
       options: {
         scales: {
           yAxes: [{ scaleLabel: { display: true, labelString: "Nombre d'individus" } }],
-          xAxes: [{ scaleLabel: { display: true, labelString: 'Vitesse' } }]
+          xAxes: [{ scaleLabel: { display: true, labelString: 'Temps (ut)' } }]
+        },
+        elements: {
+          line: {
+            tension: 0.4
+          }
         }
       }
     });
-    Logger('info', 'showSpeedCurve')('Le diagramme a été affiché');
+    Logger('info', 'showNbOfAnimalsByTime')('Le diagramme a été affiché');
   }, 10);
-  Logger('info', 'showSpeedCurve')('Le popup a été ouvert');
+  //@ts-ignore
   Swal.fire({
-    title: "Courbe du nombre d'individus selon leur vitesse",
+    title: "Nombre d'individus par espèce selon le temps",
     width: 1000,
-    html: `
-      <canvas id="speedGaussianCurve"></canvas>
-    `,
+    allowEscapeKey: false,
     allowOutsideClick: false,
-    confirmButtonText: 'Parfait !'
+    confirmButtonText: 'Parfait !',
+    html: '<canvas id="nbOfAnimalsByTimeChart"></canvas>'
   }).then(() => {
     window.speed = speed;
     window.isPopupActive = false;
-    Logger('info', 'showSpeedCurve')('Le popup a été fermé');
+    Logger('info', 'showNbOfAnimalsByTime')('Le popup a été fermé');
   });
 };
 
@@ -184,7 +168,7 @@ export const showChangeSpeedDialog = () => {
     input: 'range',
     inputAttributes: {
       min: 0,
-      max: 10,
+      max: 25,
       step: 1
     },
     inputValue: speed,
@@ -203,23 +187,25 @@ export const showStatsOfAnimal = (a: Animal) => {
   const speed = window.speed;
   window.speed = 0;
   let genesText = '';
-  a.genes.forEach((gene) => {
-    genesText += `<li><b>${gene.displayName}: </b>${gene.value.toFixed(
-      2
-    )} ue / ut <i>(${gene.displayValue()})</i></li>`;
+  a.genes.forEach(gene => {
+    genesText += `<li><b>${
+      gene.displayName
+    }: </b>${gene.displayValue()} <small style="font-size: 15px; color: gray; vertical-align: middle;">Type: "${
+      gene.modificator
+    }"</small></i></li>`;
   });
   let eventsText = '';
-  a.events.forEach((event) => {
+  a.events.forEach(event => {
     const time = event.time - window.time;
     const regex = /%/g;
-    let array;
     let name = event.name;
     let i = 0;
+    let array;
     //@ts-ignore
     while ((array = regex.exec(name)) !== null) name = name.replace('%', event.data[i](a));
-    eventsText += `<li><b>${name} </b> dans ${time.toFixed(2)} ue <i>: ${(time * window.ut).toFixed(
-      2
-    )} ${window.utUnit}</i> (${time / (30 * speed)} sec)</li>`;
+    eventsText += `<li><b>${name} </b> dans ${time.toFixed(2)} ue <i>: ${(time * window.ut).toFixed(2)} ${
+      window.utUnit
+    }</i> (${time / (30 * speed)} sec)</li>`;
   });
   Logger('info', 'showStatsOfAnimal')('Le popup a été ouvert');
   Swal.fire({
@@ -227,11 +213,9 @@ export const showStatsOfAnimal = (a: Animal) => {
     allowOutsideClick: false,
     width: 1000,
     html: `
-      <div style="font-size: 1.4em; display: inline-block; text-align: left;">
+      <div class="popup-content">
         <ul>
-          <li><b>Espèce: </b>${
-            a.specie === 0 ? window.preyConfig.name : window.predatorConfig.name
-          }</li>
+          <li><b>Espèce: </b>${a.specie === 0 ? window.preyConfig.name : window.predatorConfig.name}</li>
           <li><b>Position: </b>X: ${a.position.x.toFixed(2)}, Y: ${a.position.y.toFixed(2)}</li>
           <li><b>Génération: </b>${a.generation}</li>
           <li><b>Gènes: </b><ul>${genesText}</ul></li>
@@ -253,13 +237,23 @@ export const updateAverageSpeed = (specie: number, generation: number) => {
   if (!averageSpeed[generation - 1]) averageSpeed[generation - 1] = 0;
   averageSpeed[generation - 1] = _.chain(animals)
     .filter(['generation', generation])
-    .meanBy((a) => a.getGene('speed', 0).value)
+    .meanBy(a => a.getGene('speed', 0).value)
     .value();
-  Logger('info', 'updateAverageSpeed')(
+  Logger(
+    'info',
+    'updateAverageSpeed'
+  )(
     `La vitesse moyenne de la génération ${generation} de l\'espèce ${
       specie === 0 ? window.preyConfig.name : window.predatorConfig.name
     } a été mise à jour`
   );
+};
+
+export const updateNbOfAnimalsByTime = () => {
+  window.nbOfPlantsByTime.push(window.plants.length);
+  const nbOfPreys = window.animals.filter(a => a.specie === 0).length;
+  window.nbOfPreysByTime.push(nbOfPreys);
+  window.nbOfPredatorsByTime.push(window.animals.length - nbOfPreys);
 };
 
 export const showChangeScaleDialog = () => {
@@ -299,12 +293,7 @@ export const changeOffsets = () => {
   let clickedArrow = -1;
   arrowsCoordinates.forEach((coor, index) => {
     const [minX, maxX, minY, maxY] = coor;
-    if (
-      window.p5.mouseX > minX &&
-      window.p5.mouseX < maxX &&
-      window.p5.mouseY > minY &&
-      window.p5.mouseY < maxY
-    )
+    if (window.p5.mouseX > minX && window.p5.mouseX < maxX && window.p5.mouseY > minY && window.p5.mouseY < maxY)
       clickedArrow = index;
   });
   const canSee = window.size / window.scale;
@@ -343,41 +332,28 @@ export const centerZoom = () => {
 export const exportToCSV = () => {
   const allGenes: any[] = [];
   const allEvents: any[] = [];
-  window.animals.forEach((animal) => {
-    animal.genes.forEach((gene) =>
-      _.findIndex(allGenes, ['name', gene.name]) === -1 ? allGenes.push(gene) : null
-    );
-    animal.events.forEach((event) =>
+  window.animals.forEach(animal => {
+    animal.genes.forEach(gene => (_.findIndex(allGenes, ['name', gene.name]) === -1 ? allGenes.push(gene) : null));
+    animal.events.forEach(event =>
       _.findIndex(allEvents, ['name', event.name]) === -1 ? allEvents.push(event) : null
     );
   });
-  const data: any[] = window.animals.map((animal) => {
+  const data: any[] = window.animals.map(animal => {
     animal = animal.clone();
-    let {
-      uid,
-      canReproduce,
-      events,
-      intervalBetweenReproducingPeriods,
-      genes,
-      specie,
-      position,
-      generation
-    } = animal;
+    let { uid, canReproduce, events, intervalBetweenReproducingPeriods, genes, specie, position, generation } = animal;
     const { x, y } = position;
-    allGenes.forEach((gene) =>
-      _.findIndex(genes, ['name', gene.name]) === -1
-        ? genes.push(animal.getGene(gene.name, undefined))
-        : null
+    allGenes.forEach(gene =>
+      _.findIndex(genes, ['name', gene.name]) === -1 ? genes.push(animal.getGene(gene.name, undefined)) : null
     );
-    allEvents.forEach((event) =>
+    allEvents.forEach(event =>
       _.findIndex(events, ['name', event.name]) === -1
         ? events.push({ name: event.name, time: -1, action: () => null })
         : null
     );
     const genesObj: any = {};
-    genes.forEach((gene) => (genesObj[`gene:${gene.displayName}`] = gene.value));
+    genes.forEach(gene => (genesObj[`gene:${gene.displayName}`] = gene.value));
     const eventsObj: any = {};
-    events.forEach((event) => (eventsObj[`event:${event.name}`] = `${event.time}`));
+    events.forEach(event => (eventsObj[`event:${event.name}`] = `${event.time}`));
     specie = specie === 0 ? window.preyConfig.name : window.predatorConfig.name;
     return {
       uid,
@@ -417,8 +393,7 @@ export const disableLogger = (loggerName: string) => {
   if (loggerName === '*') window.enabledLoggers = [];
   else {
     const i = window.enabledLoggers.indexOf(loggerName);
-    if (i === -1)
-      return Logger('warning', 'disableLogger')(`Le logger ${loggerName} n'est pas activé`);
+    if (i === -1) return Logger('warning', 'disableLogger')(`Le logger ${loggerName} n'est pas activé`);
     window.enabledLoggers.splice(i, 1);
   }
   Logger('success', 'disableLogger')(`Le logger ${loggerName} est désactivé`);

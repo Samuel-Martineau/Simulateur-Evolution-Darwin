@@ -107,3 +107,11 @@ body {
     }
   }
 }
+
+.popup-content {
+  font-size: 1.4em;
+  display: inline-block;
+  text-align: left;
+  max-height: 60vh;
+  overflow-y: scroll;
+}

@@ -6,8 +6,8 @@ import _ from 'lodash';
 export default class Prey extends Animal {
   constructor({ ...args }: any) {
     super({ ...args, specie: 0 });
-    this.eatingInterval = window.preyConfig.eatingInterval;
-    this.hunger = window.preyConfig.nbOfPlantsToEat;
+    this.eatingInterval = this.getGene('eatingInterval', 0).value;
+    this.hunger = this.getGene('nbOfPlantsToEat', 0).value;
     this.addEvent({
       name: `Doit avoir % plante${this.hunger > 1 ? 's' : ''}`,
       time: this.eatingInterval,
@@ -19,7 +19,7 @@ export default class Prey extends Animal {
   update() {
     let v: p5.Vector | undefined;
     const predators = window.animals.filter(
-      (f) => f.specie === 1 && this.position.dist(f.position) < this.renderDistance
+      f => f.specie === 1 && this.position.dist(f.position) < this.renderDistance
     );
     if (predators.length > 0) {
       const nearestPredator = predators.sort((f1, f2) => {
@@ -35,7 +35,7 @@ export default class Prey extends Animal {
       this.info('Mouvement de proie');
     } else if (this.hunger > 0) {
       const nearestPlant = window.plants
-        .filter((p) => this.position.dist(p.position) < this.renderDistance)
+        .filter(p => this.position.dist(p.position) < this.renderDistance)
         .sort((p1, p2) => this.position.dist(p1.position) - this.position.dist(p2.position))[0];
       if (nearestPlant) {
         v = nearestPlant.position
@@ -56,9 +56,7 @@ export default class Prey extends Animal {
           .sub(this.position)
           .limit(this.getGene('speed', 0).value);
         const newPosition = this.position.copy().add(v);
-        const ps = window.animals.filter(
-          (f) => f.specie === 1 && newPosition.dist(f.position) < this.renderDistance
-        );
+        const ps = window.animals.filter(f => f.specie === 1 && newPosition.dist(f.position) < this.renderDistance);
         if (ps.length > 0) v = undefined;
         else this.info('Mouvement de reproduction');
         if (breedingPartner.position.dist(this.position) <= 18) {
@@ -92,7 +90,7 @@ export default class Prey extends Animal {
 
   checkHunger() {
     if (this.hunger <= 0) {
-      this.hunger = window.preyConfig.nbOfPlantsToEat;
+      this.hunger = this.getGene('nbOfPlantsToEat', 0).value;
       this.addEvent({
         name: `Doit avoir mangé ${this.hunger} plante${this.hunger > 1 ? 's' : ''}`,
         time: this.eatingInterval,

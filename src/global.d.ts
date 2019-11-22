@@ -20,12 +20,16 @@ interface Window {
   ueUnit: string;
   ut: number;
   utUnit: string;
+  nbOfAnimalsSnapshotInterval: number;
+  nbOfPlantsByTime: number[];
+  nbOfPreysByTime: number[];
+  nbOfPredatorsByTime: number[];
 
   exportToCSV(): void;
   showAverageSpeedChart(): void;
   showChangeSpeedDialog(): void;
   showChangeScaleDialog(): void;
-  showSpeedCurve(): void;
+  showNbOfAnimalsByTime(): void;
   showStatsOfAnimal(animal: import('./animal/animal.class').default): void;
   enableLogger(name: string): void;
   disableLogger(name: string): void;

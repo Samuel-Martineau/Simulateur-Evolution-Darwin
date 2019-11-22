@@ -6,12 +6,10 @@ import p5 from 'p5';
 export default class Predator extends Animal {
   constructor({ ...args }: any) {
     super({ ...args, specie: 1 });
-    this.eatingInterval = window.predatorConfig.eatingInterval;
-    this.hunger = window.predatorConfig.nbOfPreysToEat;
+    this.eatingInterval = this.getGene('eatingInterval', 0).value;
+    this.hunger = this.getGene('nbOfPreysToEat', 0).value;
     this.addEvent({
-      name: `Doit avoir mangé ${this.hunger} ${window.preyConfig.name}${
-        this.hunger > 1 ? 's' : ''
-      }`,
+      name: `Doit avoir mangé ${this.hunger} ${window.preyConfig.name}${this.hunger > 1 ? 's' : ''}`,
       time: this.eatingInterval,
       action: (self: Predator) => self.checkHunger(),
       data: [(self: Animal) => self.hunger]
@@ -22,12 +20,8 @@ export default class Predator extends Animal {
     let v: p5.Vector | undefined;
     let preys;
     if (this.hunger > 0) {
-      preys = window.animals.filter(
-        (a) => a.specie === 0 && this.position.dist(a.position) < this.renderDistance
-      );
-      const nearestPrey = preys.sort(
-        (a1, a2) => this.position.dist(a1.position) - this.position.dist(a2.position)
-      )[0];
+      preys = window.animals.filter(a => a.specie === 0 && this.position.dist(a.position) < this.renderDistance);
+      const nearestPrey = preys.sort((a1, a2) => this.position.dist(a1.position) - this.position.dist(a2.position))[0];
       if (nearestPrey) {
         v = nearestPrey.position
           .copy()
@@ -78,11 +72,9 @@ export default class Predator extends Animal {
 
   checkHunger() {
     if (this.hunger <= 0) {
-      this.hunger = window.predatorConfig.nbOfPreysToEat;
+      this.hunger = this.getGene('nbOfPreysToEat', 0).value;
       this.addEvent({
-        name: `Doit avoir mangé ${this.hunger} ${window.preyConfig.name}${
-          this.hunger > 1 ? 's' : ''
-        }`,
+        name: `Doit avoir mangé ${this.hunger} ${window.preyConfig.name}${this.hunger > 1 ? 's' : ''}`,
         time: this.eatingInterval,
         action: (self: Predator) => self.checkHunger()
       });

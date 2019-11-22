@@ -1,6 +1,13 @@
 {
   "prey": {
     "name": "Proie",
+    "avgNbOfBabies": 8,
+    "stdDevNbOfBabies": 2.5,
+    "intervalBetweenReproducingPeriods": 1000,
+    "renderDistance": 200,
+    "longevity": 50000,
+    "nbOfPlantsToEat": 3,
+    "eatingInterval": 200,
     "startingNb": 200,
     "genes": [
       {
@@ -57,6 +64,15 @@
   },
   "predator": {
     "name": "Prédateur",
+    "avgSpeed": 50,
+    "stdDevSpeed": 5,
+    "avgNbOfBabies": 5,
+    "stdDevNbOfBabies": 0,
+    "intervalBetweenReproducingPeriods": 5000,
+    "renderDistance": 220,
+    "longevity": 100000,
+    "nbOfPreysToEat": 1,
+    "eatingInterval": 500,
     "startingNb": 50,
     "genes": [
       {
