@@ -66,12 +66,14 @@ export default class Animal {
             if (value < 0) value = 0;
             break;
         }
-        this.properties.genes[i] = {
+        const adjustments: Gene['adjustments'] = parent1.genes[i].adjustments;
+        (<Gene>this.properties.genes[i]) = {
           name,
           displayName,
           value,
           modificator,
-          displayValue
+          displayValue,
+          adjustments
         };
       }
       this.info('Création à partir de parents');
@@ -119,7 +121,7 @@ export default class Animal {
   }
 
   get intervalBetweenReproducingPeriods(): number {
-    return this.getGene('intervalBetweenReproducingPeriods', 0).value;
+    return this.getRealGeneValue('intervalBetweenReproducingPeriods', 0);
   }
 
   get genes(): Gene[] {
@@ -140,7 +142,7 @@ export default class Animal {
   }
 
   get longevity(): number {
-    return this.getGene('longevity', 0).value;
+    return this.getRealGeneValue('longevity', 0);
   }
 
   get uid(): string {
@@ -148,7 +150,7 @@ export default class Animal {
   }
 
   get renderDistance(): number {
-    return this.getGene('renderDistance', 0).value;
+    return this.getRealGeneValue('renderDistance', 0);
   }
 
   get generation(): number {
@@ -168,12 +170,8 @@ export default class Animal {
     return this.properties.noiseOffset;
   }
 
-  set eatingInterval(newInterval: number) {
-    this.properties.eatingInterval = newInterval;
-  }
-
-  get eatingInterval() {
-    return this.properties.eatingInterval;
+  get eatingInterval(): number {
+    return this.getRealGeneValue('eatingInterval', 0);
   }
 
   set hunger(newHunger: number) {
@@ -230,9 +228,21 @@ export default class Animal {
       _.filter(this.genes, ['name', name])[0] || {
         displayName: name,
         name,
-        value: defValue
+        value: defValue,
+        adjustments: {}
       }
     );
+  }
+
+  getRealGeneValue(name: string, defValue: any): number {
+    const gene = this.getGene(name, defValue);
+    const adjustmentKeys = Object.keys(gene.adjustments);
+    let v = gene.value;
+    adjustmentKeys.forEach(key => {
+      const value = this.getRealGeneValue(key, 0);
+      v += eval(eval('`' + gene.adjustments[key] + '`'));
+    });
+    return v;
   }
 
   isClicked(mx: number, my: number): boolean {

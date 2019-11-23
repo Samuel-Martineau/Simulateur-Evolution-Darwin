@@ -188,11 +188,24 @@ export const showStatsOfAnimal = (a: Animal) => {
   window.speed = 0;
   let genesText = '';
   a.genes.forEach(gene => {
+    let adjustmentsText = '';
+    const keys = Object.keys(gene.adjustments);
+    if (keys.length > 0) {
+      adjustmentsText += `<ul><ul>`;
+      keys.forEach(k => {
+        const g = a.getGene(k, 0);
+        const value = g.value;
+        const name = g.displayName;
+        const res = eval(eval('`' + gene.adjustments[k] + '`'));
+        adjustmentsText += `<li style="font-size: 22px;">Ajustement de <u>${res}</u> par le gêne « <b>${name}</b> »</li>`;
+      });
+      adjustmentsText += '</ul></ul>';
+    }
     genesText += `<li><b>${
       gene.displayName
-    }: </b>${gene.displayValue()} <small style="font-size: 15px; color: gray; vertical-align: middle;">Type: "${
+    }: </b>${gene.displayValue()} <small style="font-size: 15px; color: gray; vertical-align: middle;">Type: « ${
       gene.modificator
-    }"</small></i></li>`;
+    } »</small></i>${adjustmentsText}</li>`;
   });
   let eventsText = '';
   a.events.forEach(event => {
@@ -203,9 +216,9 @@ export const showStatsOfAnimal = (a: Animal) => {
     let array;
     //@ts-ignore
     while ((array = regex.exec(name)) !== null) name = name.replace('%', event.data[i](a));
-    eventsText += `<li><b>${name} </b> dans ${time.toFixed(2)} ue <i>: ${(time * window.ut).toFixed(2)} ${
+    eventsText += `<li><b>${name} </b> dans <u>${time.toFixed(2)}</u> ue => <u>${Math.round(time * window.ut)}</u> ${
       window.utUnit
-    }</i> (${time / (30 * speed)} sec)</li>`;
+    }</li>`;
   });
   Logger('info', 'showStatsOfAnimal')('Le popup a été ouvert');
   Swal.fire({
@@ -297,25 +310,26 @@ export const changeOffsets = () => {
       clickedArrow = index;
   });
   const canSee = window.size / window.scale;
+  const speed = 100;
   switch (clickedArrow) {
     case 0:
       if (window.offsetY <= 0) return;
-      window.offsetY -= 20 / window.scale;
+      window.offsetY -= speed / window.scale;
       Logger('info', 'changeOffsets')('Le décalage de zoom en Y a été mis à jour');
       break;
     case 1:
       if (window.offsetY + canSee >= window.size) return;
-      window.offsetY += 20 / window.scale;
+      window.offsetY += speed / window.scale;
       Logger('info', 'changeOffsets')('Le décalage de zoom en Y a été mis à jour');
       break;
     case 2:
       if (window.offsetX <= 0) return;
-      window.offsetX -= 20 / window.scale;
+      window.offsetX -= speed / window.scale;
       Logger('info', 'changeOffsets')('Le décalage de zoom en X a été mis à jour');
       break;
     case 3:
       if (window.offsetX + canSee >= window.size) return;
-      window.offsetX += 20 / window.scale;
+      window.offsetX += speed / window.scale;
       Logger('info', 'changeOffsets')('Le décalage de zoom en X a été mis à jour');
       break;
   }

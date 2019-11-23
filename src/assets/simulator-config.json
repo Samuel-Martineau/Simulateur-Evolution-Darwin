@@ -1,7 +1,7 @@
 {
   "prey": {
     "name": "Proie",
-    "startingNb": 200,
+    "startingNb": 150,
     "genes": [
       {
         "displayName": "Vitesse",
@@ -9,49 +9,52 @@
         "modificator": "stddev",
         "avg": 40,
         "stdDev": 4,
-        "displayValue": "`${this.value.toFixed(2)} ue / ut (${(this.value * window.ut).toFixed(2)} ${window.ueUnit} / ${window.ut} ${window.utUnit})`"
+        "displayValue": "${this.value.toFixed(2)} ue / ut (${(this.value * window.ut).toFixed(2)} ${window.ueUnit} / ${window.ut} ${window.utUnit})"
       },
       {
         "displayName": "Nombre de bébés",
         "name": "nbOfBabies",
         "modificator": "constant",
         "value": 8,
-        "displayValue": "`${this.value} bébé${ this.value > 1 ? 's' : '' }`"
+        "displayValue": "${this.value} bébé${ this.value > 1 ? 's' : '' }"
       },
       {
         "displayName": "Longévité",
         "name": "longevity",
         "modificator": "constant",
         "value": 50000,
-        "displayValue": "`${this.value} ut`"
+        "displayValue": "${this.value} ut"
       },
       {
         "displayName": "Interval entre les périodes de reproduction",
         "name": "intervalBetweenReproducingPeriods",
         "modificator": "constant",
         "value": 1000,
-        "displayValue": "`${this.value} ut`"
+        "displayValue": "${this.value} ut"
       },
       {
         "displayName": "Distance de vue",
         "name": "renderDistance",
         "modificator": "constant",
         "value": 200,
-        "displayValue": "`${this.value} ue`"
+        "displayValue": "${this.value} ue"
       },
       {
         "displayName": "Nombre de plantes à manger",
         "name": "nbOfPlantsToEat",
         "modificator": "constant",
         "value": 3,
-        "displayValue": "`${this.value} plantes`"
+        "displayValue": "${this.value} plantes",
+        "adjustments": {
+          "speed": "Math.round(${value} * 0.01)"
+        }
       },
       {
         "displayName": "Temps pour manger",
         "name": "eatingInterval",
         "modificator": "constant",
         "value": 200,
-        "displayValue": "`${this.value} ue`"
+        "displayValue": "${this.value} ue"
       }
     ]
   },

@@ -2,7 +2,7 @@ body {
   padding: 0 !important;
   margin: 0;
   overflow-x: hidden;
-  font-family: 'Kalam', cursive;
+  font-family: sans-serif;
 }
 
 .swal2-actions {
@@ -10,7 +10,6 @@ body {
 }
 
 .bouton {
-  font-family: 'Kalam', cursive;
   border-radius: 15px;
   border-width: 5px;
   font-size: 1.5em;
@@ -114,4 +113,5 @@ body {
   text-align: left;
   max-height: 60vh;
   overflow-y: scroll;
+  padding: 0 20px;
 }

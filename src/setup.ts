@@ -71,14 +71,16 @@ export const createAnimals = () => {
           if (value < 0) value = 0;
           break;
       }
+      const adjustments = g.adjustments || {};
       gs.push({
         displayName: g.displayName,
         name: g.name,
         value,
         modificator,
         displayValue() {
-          return eval(g.displayValue);
-        }
+          return eval('`' + g.displayValue + '`');
+        },
+        adjustments
       });
     });
     window.animals.push(
@@ -107,14 +109,16 @@ export const createAnimals = () => {
           value = window.p5.randomGaussian(g.avg, g.stdDev);
           break;
       }
+      const adjustments = g.adjustments || {};
       gs.push({
         displayName: g.displayName,
         name: g.name,
         value,
         modificator,
         displayValue() {
-          return eval(g.displayValue);
-        }
+          return eval('`' + g.displayValue + '`');
+        },
+        adjustments
       });
     });
     window.animals.push(
@@ -141,6 +145,7 @@ export const initiateGlobalVariables = (p: p5) => {
       );
     const req = new XMLHttpRequest();
     req.open('GET', configUrl, false);
+    req.setRequestHeader('Cache-Control', 'no-cache');
     req.send(null);
     try {
       if (req.status !== 200) throw new Error();

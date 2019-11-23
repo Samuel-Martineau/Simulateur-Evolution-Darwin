@@ -4,4 +4,5 @@ export default interface Gene {
   value: number;
   modificator: 'constant' | 'average' | 'stddev';
   displayValue(): string;
+  adjustments: Record<string, string>;
 }

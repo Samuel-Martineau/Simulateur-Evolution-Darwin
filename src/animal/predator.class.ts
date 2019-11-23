@@ -6,8 +6,7 @@ import p5 from 'p5';
 export default class Predator extends Animal {
   constructor({ ...args }: any) {
     super({ ...args, specie: 1 });
-    this.eatingInterval = this.getGene('eatingInterval', 0).value;
-    this.hunger = this.getGene('nbOfPreysToEat', 0).value;
+    this.hunger = this.getRealGeneValue('nbOfPreysToEat', 0);
     this.addEvent({
       name: `Doit avoir mangé ${this.hunger} ${window.preyConfig.name}${this.hunger > 1 ? 's' : ''}`,
       time: this.eatingInterval,
@@ -72,7 +71,7 @@ export default class Predator extends Animal {
 
   checkHunger() {
     if (this.hunger <= 0) {
-      this.hunger = this.getGene('nbOfPreysToEat', 0).value;
+      this.hunger = this.getRealGeneValue('nbOfPreysToEat', 0);
       this.addEvent({
         name: `Doit avoir mangé ${this.hunger} ${window.preyConfig.name}${this.hunger > 1 ? 's' : ''}`,
         time: this.eatingInterval,

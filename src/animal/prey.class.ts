@@ -6,10 +6,9 @@ import _ from 'lodash';
 export default class Prey extends Animal {
   constructor({ ...args }: any) {
     super({ ...args, specie: 0 });
-    this.eatingInterval = this.getGene('eatingInterval', 0).value;
-    this.hunger = this.getGene('nbOfPlantsToEat', 0).value;
+    this.hunger = this.getRealGeneValue('nbOfPlantsToEat', 0);
     this.addEvent({
-      name: `Doit avoir % plante${this.hunger > 1 ? 's' : ''}`,
+      name: `Doit avoir mangé % plante${this.hunger > 1 ? 's' : ''}`,
       time: this.eatingInterval,
       action: (self: Prey) => self.checkHunger(),
       data: [(self: Animal) => self.hunger]
@@ -62,8 +61,7 @@ export default class Prey extends Animal {
         if (breedingPartner.position.dist(this.position) <= 18) {
           this.canReproduce = false;
           breedingPartner.canReproduce = false;
-          const { avgNbOfBabies, stdDevNbOfBabies } = window.preyConfig;
-          const nbOfBabies = window.p5.randomGaussian(avgNbOfBabies, stdDevNbOfBabies);
+          const nbOfBabies = this.getGene('nbOfBabies', 0).value;
           for (let i = 0; i < nbOfBabies; i++) {
             const prey = new Prey({ parent1: this, parent2: breedingPartner });
             window.animals.push(prey);
@@ -90,7 +88,7 @@ export default class Prey extends Animal {
 
   checkHunger() {
     if (this.hunger <= 0) {
-      this.hunger = this.getGene('nbOfPlantsToEat', 0).value;
+      this.hunger = this.getRealGeneValue('nbOfPlantsToEat', 0);
       this.addEvent({
         name: `Doit avoir mangé ${this.hunger} plante${this.hunger > 1 ? 's' : ''}`,
         time: this.eatingInterval,
