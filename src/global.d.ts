@@ -6,8 +6,8 @@ interface Window {
   size: number;
   speed: number;
   time: number;
-  averagePreySpeed: number[];
-  averagePredatorSpeed: number[];
+  averagePreyGenes: number[];
+  averagePredatorGenes: number[];
   scale: number;
   offsetX: number;
   offsetY: number;
@@ -26,11 +26,13 @@ interface Window {
   nbOfPredatorsByTime: number[];
 
   exportToCSV(): void;
-  showAverageSpeedChart(): void;
+  showAverageGenesChart(): void;
   showChangeSpeedDialog(): void;
   showChangeScaleDialog(): void;
   showNbOfAnimalsByTime(): void;
   showStatsOfAnimal(animal: import('./animal/animal.class').default): void;
   enableLogger(name: string): void;
   disableLogger(name: string): void;
+  showSpawn(): void;
+  showKill(): void;
 }

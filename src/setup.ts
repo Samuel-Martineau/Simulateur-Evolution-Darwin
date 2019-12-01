@@ -2,49 +2,59 @@ import p5 from 'p5';
 import {
   enableLogger,
   disableLogger,
-  updateAverageSpeed,
-  showAverageSpeedChart,
+  updateAverageGenes,
   showNbOfAnimalsByTime,
   showChangeSpeedDialog,
   showStatsOfAnimal,
   showChangeScaleDialog,
-  exportToCSV
+  exportToCSV,
+  showAverageGenesChart,
+  showSpawn,
+  showKill,
+  createAnimal
 } from './helpers';
-import Predator from './animal/predator.class';
-import Prey from './animal/prey.class';
 import _ from 'lodash';
 import Logger from './logger.class';
-import Gene from './animal/gene.interface';
 
 export const createDomElements = (controlPanelDiv: p5.Element) => {
   window.p5
-    .createButton('Voir le diagramme des vitesses moyennes selon les générations')
-    .addClass('bouton turquoise')
+    .createButton("Voir le diagramme de l'évolution moyenne d'un gêne selon les générations")
+    .addClass('bouton mauve')
     .parent(controlPanelDiv)
-    .mousePressed(window.showAverageSpeedChart);
+    .mousePressed(window.showAverageGenesChart);
   window.p5
     .createButton("Voir le nombre d'individus selon le temps")
-    .addClass('bouton bleu')
+    .addClass('bouton rouge')
     .parent(controlPanelDiv)
     .mousePressed(window.showNbOfAnimalsByTime);
   window.p5
     .createButton('Changer la vitesse')
-    .addClass('bouton mauve')
+    .addClass('bouton turquoise')
     .parent(controlPanelDiv)
     .mousePressed(window.showChangeSpeedDialog);
   window.p5
     .createButton("Changer l'échelle")
-    .addClass('bouton bleu')
+    .addClass('bouton vert')
     .parent(controlPanelDiv)
     .mousePressed(window.showChangeScaleDialog);
   window.p5
+    .createButton('Ajouter des animaux ou des plantes')
+    .addClass('bouton bleu')
+    .parent(controlPanelDiv)
+    .mousePressed(window.showSpawn);
+  window.p5
+    .createButton('Retirer des animaux ou des plantes')
+    .addClass('bouton noir')
+    .parent(controlPanelDiv)
+    .mousePressed(window.showKill);
+  window.p5
     .createButton('Exporter les données en CSV')
-    .addClass('bouton rouge')
+    .addClass('bouton orange')
     .parent(controlPanelDiv)
     .mousePressed(window.exportToCSV);
   window.p5
     .createButton('Voir le travail de recherche')
-    .addClass('bouton orange')
+    .addClass('bouton jaune')
     .parent(controlPanelDiv)
     .mousePressed(
       () => (location.href = 'https://docs.google.com/document/d/1-0XiVGQqNu3fPAFKN3vtxdBR2Abm4OA3ouX9kTg74Gk')
@@ -55,81 +65,14 @@ export const createDomElements = (controlPanelDiv: p5.Element) => {
 export const createAnimals = () => {
   for (let i = 0; i < window.preyConfig.startingNb; i++) {
     const { genes } = window.preyConfig;
-    const gs: Gene[] = [];
-    genes.forEach((g: any) => {
-      const modificator: Gene['modificator'] = g.modificator;
-      let value = 0;
-      switch (modificator) {
-        case 'constant':
-          value = g.value;
-          break;
-        case 'average':
-          value = g.avg;
-          break;
-        case 'stddev':
-          value = window.p5.randomGaussian(g.avg, g.stdDev);
-          if (value < 0) value = 0;
-          break;
-      }
-      const adjustments = g.adjustments || {};
-      gs.push({
-        displayName: g.displayName,
-        name: g.name,
-        value,
-        modificator,
-        displayValue() {
-          return eval('`' + g.displayValue + '`');
-        },
-        adjustments
-      });
-    });
-    window.animals.push(
-      new Prey({
-        x: window.p5.random(0, window.size),
-        y: window.p5.random(0, window.size),
-        genes: gs
-      })
-    );
+    createAnimal(0, genes, [window.p5.random(0, window.size), window.p5.random(0, window.size)]);
   }
-  updateAverageSpeed(0, 1);
+  updateAverageGenes(0, 1);
   for (let i = 0; i < window.predatorConfig.startingNb; i++) {
     const { genes } = window.predatorConfig;
-    const gs: Gene[] = [];
-    genes.forEach((g: any) => {
-      const modificator: Gene['modificator'] = g.modificator;
-      let value = 0;
-      switch (modificator) {
-        case 'constant':
-          value = g.value;
-          break;
-        case 'average':
-          value = g.avg;
-          break;
-        case 'stddev':
-          value = window.p5.randomGaussian(g.avg, g.stdDev);
-          break;
-      }
-      const adjustments = g.adjustments || {};
-      gs.push({
-        displayName: g.displayName,
-        name: g.name,
-        value,
-        modificator,
-        displayValue() {
-          return eval('`' + g.displayValue + '`');
-        },
-        adjustments
-      });
-    });
-    window.animals.push(
-      new Predator({
-        x: window.p5.random(0, window.size),
-        y: window.p5.random(0, window.size),
-        genes: gs
-      })
-    );
+    createAnimal(1, genes, [window.p5.random(0, window.size), window.p5.random(0, window.size)]);
   }
-  updateAverageSpeed(1, 1);
+  updateAverageGenes(1, 1);
   Logger('info', 'createAnimals')('Les animaux ont été créés');
 };
 
@@ -159,8 +102,8 @@ export const initiateGlobalVariables = (p: p5) => {
   window.preyConfig = config.prey;
   window.predatorConfig = config.predator;
   window.enabledLoggers = [];
-  window.averagePreySpeed = [];
-  window.averagePredatorSpeed = [];
+  window.averagePreyGenes = [];
+  window.averagePredatorGenes = [];
   window.animals = [];
   window.imgs = [];
   window.scale = config.scale;
@@ -181,16 +124,18 @@ export const initiateGlobalVariables = (p: p5) => {
   window.nbOfPredatorsByTime = [];
   p.randomSeed(config.seed);
   p.noiseSeed(config.seed);
+  window.p5 = p;
+  window.enableLogger = enableLogger;
+  window.disableLogger = disableLogger;
+  window.showAverageGenesChart = showAverageGenesChart;
+  window.showNbOfAnimalsByTime = showNbOfAnimalsByTime;
+  window.showChangeSpeedDialog = showChangeSpeedDialog;
+  window.showStatsOfAnimal = showStatsOfAnimal;
+  window.showChangeScaleDialog = showChangeScaleDialog;
+  window.exportToCSV = exportToCSV;
+  window.showSpawn = showSpawn;
+  window.showKill = showKill;
   try {
-    window.p5 = p;
-    window.enableLogger = enableLogger;
-    window.disableLogger = disableLogger;
-    window.showAverageSpeedChart = showAverageSpeedChart;
-    window.showNbOfAnimalsByTime = showNbOfAnimalsByTime;
-    window.showChangeSpeedDialog = showChangeSpeedDialog;
-    window.showStatsOfAnimal = showStatsOfAnimal;
-    window.showChangeScaleDialog = showChangeScaleDialog;
-    window.exportToCSV = exportToCSV;
     window.imgs.push(p.loadImage('assets/prey.png'));
     window.imgs.push(p.loadImage('assets/predator.png'));
     window.imgs.push(p.loadImage('assets/plant.png'));

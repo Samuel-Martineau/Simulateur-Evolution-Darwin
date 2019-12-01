@@ -1,18 +1,13 @@
 import Animal from './animal.class';
-import { updateAverageSpeed } from '../helpers';
+import { updateAverageGenes } from '../helpers';
 import p5 from 'p5';
 import _ from 'lodash';
 
 export default class Prey extends Animal {
   constructor({ ...args }: any) {
     super({ ...args, specie: 0 });
-    this.hunger = this.getRealGeneValue('nbOfPlantsToEat', 0);
-    this.addEvent({
-      name: `Doit avoir mangé % plante${this.hunger > 1 ? 's' : ''}`,
-      time: this.eatingInterval,
-      action: (self: Prey) => self.checkHunger(),
-      data: [(self: Animal) => self.hunger]
-    });
+    this.hunger = 0;
+    this.checkHunger('plante');
   }
 
   update() {
@@ -61,39 +56,17 @@ export default class Prey extends Animal {
         if (breedingPartner.position.dist(this.position) <= 18) {
           this.canReproduce = false;
           breedingPartner.canReproduce = false;
-          const nbOfBabies = this.getGene('nbOfBabies', 0).value;
+          const nbOfBabies = this.getRealGeneValue('nbOfBabies', 0);
           for (let i = 0; i < nbOfBabies; i++) {
             const prey = new Prey({ parent1: this, parent2: breedingPartner });
             window.animals.push(prey);
-            updateAverageSpeed(0, prey.generation);
+            updateAverageGenes(0, prey.generation);
           }
         }
       }
     }
-    if (!v) {
-      const { noise, map, createVector } = window.p5;
-      const speed = this.getGene('speed', 0).value;
-      const { x, y } = this.velocity;
-      const xToAdd = map(noise(x, window.time, -this.noiseOffset * 3), 0, 1, -speed, speed);
-      const yToAdd = map(noise(y, window.time, this.noiseOffset / 3), 0, 1, -speed, speed);
-      v = this.velocity
-        .copy()
-        .add(createVector(xToAdd, yToAdd))
-        .limit(speed);
-      this.info('Mouvement de perlin');
-    }
+    if (!v) v = this.noiseMovement();
     this.velocity = v;
     super.update();
-  }
-
-  checkHunger() {
-    if (this.hunger <= 0) {
-      this.hunger = this.getRealGeneValue('nbOfPlantsToEat', 0);
-      this.addEvent({
-        name: `Doit avoir mangé ${this.hunger} plante${this.hunger > 1 ? 's' : ''}`,
-        time: this.eatingInterval,
-        action: (self: Prey) => self.checkHunger()
-      });
-    } else _.remove(window.animals, ['uid', this.uid]);
   }
 }

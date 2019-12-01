@@ -10,14 +10,12 @@ const uidgen = new UIDGenerator();
 
 export default class Animal {
   private properties: any;
-  public customData: any;
   public info: (name: string) => void;
   public warning: (name: string) => void;
   public error: (name: string) => void;
   public success: (name: string) => void;
 
   constructor({ ...args }: any) {
-    this.customData = {};
     //@ts-ignore
     const { x, y, genes, specie, parent1, parent2 } = args;
     this.properties = {
@@ -29,7 +27,8 @@ export default class Animal {
       specie,
       uid: uidgen.generateSync(),
       generation: 1,
-      noiseOffset: window.p5.random(-300, 300)
+      noiseOffset: window.p5.random(-300, 300),
+      noiseSign: window.p5.random([-1, 1])
     };
     this.info = Logger('info', this.uid);
     this.warning = Logger('info', this.uid);
@@ -78,17 +77,17 @@ export default class Animal {
       }
       this.info('Création à partir de parents');
     } else {
-      this.customData.longevityOffset = window.p5.random(-this.longevity, 0);
-      this.customData.reproducingOffset = window.p5.random(-this.intervalBetweenReproducingPeriods, 0);
+      this.properties.longevityOffset = window.p5.random(-this.longevity, 0);
+      this.properties.reproducingOffset = window.p5.random(-this.intervalBetweenReproducingPeriods, 0);
     }
     this.addEvent({
       name: 'Peut se reproduire',
-      time: this.intervalBetweenReproducingPeriods + (this.customData.reproducingOffset || 0),
+      time: this.intervalBetweenReproducingPeriods + (this.properties.reproducingOffset || 0),
       action: self => (self.canReproduce = true)
     });
     this.addEvent({
       name: 'Mort',
-      time: this.longevity + (this.customData.longevityOffset || 0),
+      time: this.longevity + (this.properties.longevityOffset || 0),
       action: self => _.remove(window.animals, ['uid', self.uid])
     });
     for (let key in this.properties) {
@@ -170,16 +169,20 @@ export default class Animal {
     return this.properties.noiseOffset;
   }
 
+  get noiseSign(): -1 | 1 {
+    return this.properties.noiseSign;
+  }
+
   get eatingInterval(): number {
     return this.getRealGeneValue('eatingInterval', 0);
   }
 
   set hunger(newHunger: number) {
-    this.customData.hunger = newHunger;
+    this.properties.hunger = newHunger;
   }
 
   get hunger(): number {
-    return this.customData.hunger;
+    return this.properties.hunger;
   }
 
   getBreedingPartner(): Animal {
@@ -253,6 +256,33 @@ export default class Animal {
       my / proportion > this.position.y - window.offsetY - 12 &&
       my / proportion < this.position.y - window.offsetY + 12;
     return clicked;
+  }
+
+  noiseMovement(): p5.Vector {
+    const { noise, map, createVector } = window.p5;
+    const speed = this.getGene('speed', 0).value;
+    const { x, y } = this.velocity;
+    const xToAdd = map(noise(x, window.time, -this.noiseOffset * 3), 0, 1, -speed, speed);
+    const yToAdd = map(noise(y, window.time, this.noiseOffset / 3), 0, 1, -speed, speed);
+    return this.velocity
+      .copy()
+      .add(
+        createVector(xToAdd, yToAdd)
+          .mult(1.5)
+          .mult(this.noiseSign)
+      )
+      .limit(speed);
+  }
+
+  checkHunger(foodVariety: string) {
+    if (this.hunger <= 0) {
+      this.hunger = this.getRealGeneValue('hungerLevel', 0);
+      this.addEvent({
+        name: `Doit avoir mangé ${this.hunger} ${foodVariety.toLowerCase()}${this.hunger > 1 ? 's' : ''}`,
+        time: this.eatingInterval,
+        action: (self: Animal) => self.checkHunger(foodVariety)
+      });
+    } else _.remove(window.animals, ['uid', this.uid]);
   }
 
   clone(): Animal {
