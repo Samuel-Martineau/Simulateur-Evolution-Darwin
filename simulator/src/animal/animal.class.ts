@@ -4,16 +4,11 @@ import Event from './event.interface';
 import p5 from 'p5';
 import UIDGenerator from 'uid-generator';
 import { getCanvasSize, stdDev } from '../helpers';
-import Logger from '../logger.class';
 //@ts-ignore
 const uidgen = new UIDGenerator();
 
 export default class Animal {
   private properties: any;
-  public info: (name: string) => void;
-  public warning: (name: string) => void;
-  public error: (name: string) => void;
-  public success: (name: string) => void;
 
   constructor({ ...args }: any) {
     //@ts-ignore
@@ -30,10 +25,6 @@ export default class Animal {
       noiseOffset: window.p5.random(-300, 300),
       noiseSign: window.p5.random([-1, 1])
     };
-    this.info = Logger('info', this.uid);
-    this.warning = Logger('info', this.uid);
-    this.error = Logger('info', this.uid);
-    this.success = Logger('info', this.uid);
     if (!x && !y && !genes && parent1 && parent2 && parent1.properties.specie === parent2.properties.specie) {
       const parents: Animal[] = [parent1, parent2];
       let x = _.meanBy(parents, p => p.position.x);
@@ -75,7 +66,6 @@ export default class Animal {
           adjustments
         };
       }
-      this.info('Création à partir de parents');
     } else {
       this.properties.longevityOffset = window.p5.random(-this.longevity, 0);
       this.properties.reproducingOffset = window.p5.random(-this.intervalBetweenReproducingPeriods, 0);
@@ -91,8 +81,7 @@ export default class Animal {
       action: self => _.remove(window.animals, ['uid', self.uid])
     });
     for (let key in this.properties) {
-      if (this.properties[key] === (undefined || null))
-        this.error('Les arguments donnés ne correspondent pas à ceux requis');
+      if (this.properties[key] === (undefined || null)) throw new Error('WRONG ANIMAL PARAMETERS');
     }
   }
 
@@ -103,7 +92,6 @@ export default class Animal {
   set canReproduce(canReproduce: boolean) {
     if (canReproduce) {
       this.properties.canReproduce = true;
-      this.info('Peut se reproduire');
     } else {
       this.properties.canReproduce = false;
       this.addEvent({
@@ -111,7 +99,6 @@ export default class Animal {
         time: window.time + this.intervalBetweenReproducingPeriods,
         action: () => (this.canReproduce = true)
       });
-      this.info('Ne peut pas se reproduire');
     }
   }
 
@@ -137,7 +124,6 @@ export default class Animal {
 
   set position(newValue: p5.Vector) {
     this.properties.position = newValue;
-    this.info('La position a été mise à jour');
   }
 
   get longevity(): number {
@@ -223,7 +209,6 @@ export default class Animal {
   addEvent(event: Event) {
     event.time += window.time;
     this.events.push(event);
-    this.info('Un nouvel évènement a été ajouté');
   }
 
   getGene(name: string, defValue: any): Gene {
@@ -286,7 +271,6 @@ export default class Animal {
   }
 
   clone(): Animal {
-    this.info('Cloné !');
     return _.cloneDeep(this);
   }
 }

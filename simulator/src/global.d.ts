@@ -35,4 +35,9 @@ interface Window {
   disableLogger(name: string): void;
   showSpawn(): void;
   showKill(): void;
+
+  started: boolean;
+  config: any;
+  start(): void;
+  end(): void;
 }

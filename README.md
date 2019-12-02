@@ -1,8 +1,8 @@
-# Simulateur de l'évolution selon Darwin
+## Mon gabarit personnel pour créer des applications
 
-Un projet d'Expo-Science qui a pour but de simuler l'évolution naturelle selon la théorie de Charles Darwin
+### Utilisation:
 
-## Liens
-
-- [Site web principal](https://smartineau.me/simulateur-evolution-darwin)
-- [Résumé des recherches](https://docs.google.com/document/d/1-0XiVGQqNu3fPAFKN3vtxdBR2Abm4OA3ouX9kTg74Gk)
+1. `$ degit Samuel-Martineau/sveltejs-template PROJECT_NAME`
+2. `$ cd PROJECT_NAME`
+3. `$ yarn`
+4. `$ yarn run dev`

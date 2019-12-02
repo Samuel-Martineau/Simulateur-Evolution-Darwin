@@ -5,7 +5,6 @@ import Animal from './animal/animal.class';
 import { ExportToCsv } from 'export-to-csv';
 // @ts-ignore
 import randomColor from 'random-color';
-import Logger from './logger.class';
 import Plant from './plant.class';
 import Prey from './animal/prey.class';
 import Predator from './animal/predator.class';
@@ -105,7 +104,6 @@ export const showAverageGenesChart = () => {
                 }
               }
             });
-            Logger('info', 'showAverageSpeedChart')('Le diagramme a été affiché');
           }
         })
         .then(() => {
@@ -119,7 +117,6 @@ export const showNbOfAnimalsByTime = () => {
   window.isPopupActive = true;
   const speed = window.speed;
   window.speed = 0;
-  Logger('info', 'showNbOfAnimalsByTime')('Le popup a été ouvert');
   //@ts-ignore
   defaultAlert
     .fire({
@@ -178,13 +175,11 @@ export const showNbOfAnimalsByTime = () => {
             }
           }
         });
-        Logger('info', 'showNbOfAnimalsByTime')('Le diagramme a été affiché');
       }
     })
     .then(() => {
       window.speed = speed;
       window.isPopupActive = false;
-      Logger('info', 'showNbOfAnimalsByTime')('Le popup a été fermé');
     });
 };
 
@@ -192,7 +187,6 @@ export const showChangeSpeedDialog = () => {
   window.isPopupActive = true;
   const speed = window.speed;
   window.speed = 0;
-  Logger('info', 'showChangeSpeedDialog')('Le popup a été ouvert');
   defaultAlert
     .fire(
       //@ts-ignore
@@ -253,7 +247,6 @@ export const showStatsOfAnimal = (a: Animal) => {
       window.utUnit
     }</li>`;
   });
-  Logger('info', 'showStatsOfAnimal')('Le popup a été ouvert');
   defaultAlert
     .fire({
       title: `<span style="margin-top: 20px;">Propriétés de l'animal ${a.uid}</span>`,
@@ -274,7 +267,6 @@ export const showStatsOfAnimal = (a: Animal) => {
     .then(() => {
       window.speed = speed;
       window.isPopupActive = false;
-      Logger('info', 'showStatsOfAnimal')('Le popup a été fermé');
     });
 };
 
@@ -347,22 +339,18 @@ export const changeOffsets = () => {
     case 0:
       if (window.offsetY <= 0) return;
       window.offsetY -= speed / window.scale;
-      Logger('info', 'changeOffsets')('Le décalage de zoom en Y a été mis à jour');
       break;
     case 1:
       if (window.offsetY + canSee >= window.size) return;
       window.offsetY += speed / window.scale;
-      Logger('info', 'changeOffsets')('Le décalage de zoom en Y a été mis à jour');
       break;
     case 2:
       if (window.offsetX <= 0) return;
       window.offsetX -= speed / window.scale;
-      Logger('info', 'changeOffsets')('Le décalage de zoom en X a été mis à jour');
       break;
     case 3:
       if (window.offsetX + canSee >= window.size) return;
       window.offsetX += speed / window.scale;
-      Logger('info', 'changeOffsets')('Le décalage de zoom en X a été mis à jour');
       break;
   }
 };
@@ -372,7 +360,6 @@ export const centerZoom = () => {
   const offset = (window.size - canSee) / 2;
   window.offsetX = offset;
   window.offsetY = offset;
-  Logger('info', 'centerZoom')('Le zoom a été centré');
 };
 
 export const exportToCSV = () => {
@@ -427,22 +414,19 @@ export const exportToCSV = () => {
   const csvExporter = new ExportToCsv(options);
 
   csvExporter.generateCsv(data);
-  Logger('info', 'exportToCSV')('Le fichier a été téléchargé');
 };
 
 export const enableLogger = (loggerName: string) => {
   window.enabledLoggers.push(loggerName);
-  Logger('info', 'enableLogger')(`Le logger ${loggerName} est activé`);
 };
 
 export const disableLogger = (loggerName: string) => {
   if (loggerName === '*') window.enabledLoggers = [];
   else {
     const i = window.enabledLoggers.indexOf(loggerName);
-    if (i === -1) return Logger('warning', 'disableLogger')(`Le logger ${loggerName} n'est pas activé`);
+    if (i === -1) return;
     window.enabledLoggers.splice(i, 1);
   }
-  Logger('success', 'disableLogger')(`Le logger ${loggerName} est désactivé`);
 };
 
 export const createPlant = () => {

@@ -7,42 +7,85 @@ import {
   changeOffsets,
   centerZoom,
   createPlant,
-  updateNbOfAnimalsByTime
+  updateNbOfAnimalsByTime,
+  showAverageGenesChart,
+  showNbOfAnimalsByTime,
+  showChangeSpeedDialog,
+  showChangeScaleDialog,
+  exportToCSV,
+  showSpawn,
+  showKill
 } from './helpers';
 import { createDomElements, createAnimals, initiateGlobalVariables } from './setup';
-import Logger from './logger.class';
+
+window.started = false;
+window.config = {};
+window.start = () => {
+  initiateGlobalVariables();
+  createAnimals();
+  centerZoom();
+  for (let i = 0; i < window.plantConfig.startingNb; i++) createPlant();
+  window.started = true;
+};
+
+window.end = () => {
+  window.started = false;
+};
 
 const sketch = (p: p5) => {
   let controlPanelDiv: p5.Element;
   p.windowResized = () => {
-    Logger('info', 'windowResized')('La fenêtre a changé de dimensions');
     p.resizeCanvas(getCanvasSize(), getCanvasSize());
+    if (!controlPanelDiv) return;
+    if (window.innerHeight <= getCanvasSize()) {
+      //@ts-ignore
+      p.select('body').style('overflow-y', 'hidden');
+      controlPanelDiv.style('float', 'right');
+      controlPanelDiv.style('height', '100vh');
+      controlPanelDiv.style('overflow-y', 'scroll');
+      controlPanelDiv.style('width', `${window.innerWidth - getCanvasSize()}px`);
+    } else {
+      //@ts-ignore
+      p.select('body').style('overflow-y', 'visible');
+      controlPanelDiv.style('float', 'left');
+      controlPanelDiv.style('height', 'initial');
+      controlPanelDiv.style('overflow-y', 'initial');
+      controlPanelDiv.style('width', `100%`);
+    }
   };
   p.mouseClicked = () => {
-    const info = Logger('info', 'mouseClicked');
-    const error = Logger('error', 'mouseClicked');
-    info('Click !');
-    if (window.isPopupActive) return error('Un popup est activé');
+    if (window.isPopupActive || !window.started) return;
     for (let animal of window.animals) {
       if (animal.isClicked(p.mouseX, p.mouseY)) {
-        info(`L'animal ${animal.uid} a été clické`);
         showStatsOfAnimal(animal);
         break;
       }
     }
   };
   p.setup = () => {
-    initiateGlobalVariables(p);
+    window.p5 = p;
     p.createCanvas(getCanvasSize(), getCanvasSize());
     p.imageMode('center');
     p.frameRate(30);
     controlPanelDiv = window.p5.createElement('div');
     createDomElements(controlPanelDiv);
-    createAnimals();
-    centerZoom();
-    for (let i = 0; i < window.plantConfig.startingNb; i++) createPlant();
+    window.imgs = [
+      window.p5.loadImage('assets/prey.png'),
+      window.p5.loadImage('assets/predator.png'),
+      window.p5.loadImage('assets/plant.png')
+    ];
+    window.showAverageGenesChart = showAverageGenesChart;
+    window.showNbOfAnimalsByTime = showNbOfAnimalsByTime;
+    window.showChangeSpeedDialog = showChangeSpeedDialog;
+    window.showStatsOfAnimal = showStatsOfAnimal;
+    window.showChangeScaleDialog = showChangeScaleDialog;
+    window.exportToCSV = exportToCSV;
+    window.showSpawn = showSpawn;
+    window.showKill = showKill;
+    p.windowResized();
   };
   p.draw = () => {
+    if (!window.started) return;
     // Effaçure du contenu du canvas
     p.background(0);
     // Affichage du nombre d'infos utiles
@@ -72,21 +115,6 @@ const sketch = (p: p5) => {
     if (p.mouseIsPressed && !window.isPopupActive) changeOffsets();
     // Redimensionnement proportionnel du canvas
     p.scale((getCanvasSize() / window.size) * window.scale);
-    if (window.innerHeight <= getCanvasSize()) {
-      //@ts-ignore
-      p.select('body').style('overflow-y', 'hidden');
-      controlPanelDiv.style('float', 'right');
-      controlPanelDiv.style('height', '100vh');
-      controlPanelDiv.style('overflow-y', 'scroll');
-      controlPanelDiv.style('width', `${window.innerWidth - getCanvasSize()}px`);
-    } else {
-      //@ts-ignore
-      p.select('body').style('overflow-y', 'visible');
-      controlPanelDiv.style('float', 'left');
-      controlPanelDiv.style('height', 'initial');
-      controlPanelDiv.style('overflow-y', 'initial');
-      controlPanelDiv.style('width', `100%`);
-    }
     // Calcul de l'évolution
     for (let i = 0; i < window.speed; i++) {
       if (window.time % window.plantConfig.spawnInterval === 0)

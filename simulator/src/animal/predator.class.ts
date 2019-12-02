@@ -21,7 +21,6 @@ export default class Predator extends Animal {
           .copy()
           .sub(this.position)
           .limit(this.getGene('speed', 0).value);
-        this.info('Mouvement de chasse');
         if (this.position.dist(nearestPrey.position) < 18) {
           this.hunger--;
           _.remove(window.animals, ['uid', nearestPrey.uid]);
@@ -34,7 +33,6 @@ export default class Predator extends Animal {
           .copy()
           .sub(this.position)
           .limit(this.getGene('speed', 0).value);
-        this.info('Mouvement de reproduction');
         if (breedingPartner.position.dist(this.position) <= 18) {
           this.canReproduce = false;
           breedingPartner.canReproduce = false;

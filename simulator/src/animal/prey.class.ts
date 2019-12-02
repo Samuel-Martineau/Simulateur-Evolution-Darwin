@@ -26,7 +26,6 @@ export default class Prey extends Animal {
         .sub(this.position)
         .limit(this.getGene('speed', 0).value)
         .mult(-1);
-      this.info('Mouvement de proie');
     } else if (this.hunger > 0) {
       const nearestPlant = window.plants
         .filter(p => this.position.dist(p.position) < this.renderDistance)
@@ -36,7 +35,6 @@ export default class Prey extends Animal {
           .copy()
           .sub(this.position)
           .limit(this.getGene('speed', 0).value);
-        this.info("Mouvement d'alimentation");
         if (this.position.dist(nearestPlant.position) < 18) {
           this.hunger--;
           _.remove(window.plants, ['uid', nearestPlant.uid]);
@@ -52,7 +50,6 @@ export default class Prey extends Animal {
         const newPosition = this.position.copy().add(v);
         const ps = window.animals.filter(f => f.specie === 1 && newPosition.dist(f.position) < this.renderDistance);
         if (ps.length > 0) v = undefined;
-        else this.info('Mouvement de reproduction');
         if (breedingPartner.position.dist(this.position) <= 18) {
           this.canReproduce = false;
           breedingPartner.canReproduce = false;

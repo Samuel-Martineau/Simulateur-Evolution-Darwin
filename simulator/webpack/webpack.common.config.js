@@ -9,8 +9,8 @@ module.exports = {
     index: './src/index.ts'
   },
   output: {
-    filename: '[name].bundle.js',
-    path: path.resolve(__dirname, '../dist')
+    filename: '[name].simulator.js',
+    path: path.resolve(__dirname, '../../public')
   },
   resolve: { extensions: ['.js', '.ts'] },
   module: {
@@ -45,7 +45,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      filename: 'index.html',
+      filename: 'simulator.html',
       template: './src/index.html',
       inject: false,
       minify: {
@@ -54,9 +54,9 @@ module.exports = {
       }
     }),
     new MiniCssExtractPlugin({
-      filename: '[name].bundle.css'
+      filename: '[name].simulator.css'
     }),
-    new CopyWebpackPlugin([{ from: './src/assets', to: 'assets' }]),
-    new CleanWebpackPlugin()
+    new CopyWebpackPlugin([{ from: './src/assets', to: 'assets' }])
+    // new CleanWebpackPlugin()
   ]
 };

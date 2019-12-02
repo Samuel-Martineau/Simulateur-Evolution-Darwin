@@ -5,7 +5,7 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = merge(webpackBaseConfig, {
   plugins: [
     new HtmlWebpackPlugin({
-      filename: 'index.html',
+      filename: 'simulator.html',
       template: './src/index.html',
       inject: false,
       minify: {
@@ -14,5 +14,5 @@ module.exports = merge(webpackBaseConfig, {
       }
     })
   ],
-  devtool: 'inline-source-map'
+  devtool: 'source-map'
 });
