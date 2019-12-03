@@ -1,10 +1,186 @@
 <script>
   import '../node_modules/bulma/css/bulma.min.css';
   import EditConfig from './EditConfig.svelte';
+  import downloadFile from 'js-file-download';
   import Sidebar from './Sidebar.svelte';
   import Navbar from './Navbar.svelte';
   import Modal from './Modal.svelte';
   import uuid from 'uuid-random';
+
+  const defaultConfig = {
+    name: 'Nouvelle configuration',
+    id: uuid(),
+    prey: {
+      name: '',
+      startingNb: 0,
+      genes: [
+        {
+          displayName: 'Vitesse',
+          name: 'speed',
+          modificator: '',
+          avg: 0,
+          stdDev: 0,
+          value: 0,
+          displayValue:
+            '${this.value.toFixed(2)} ue / ut (${(this.value * window.ut).toFixed(2)} ${window.ueUnit} / ${window.ut} ${window.utUnit})',
+          adjustments: {},
+        },
+        {
+          displayName: 'Nombre de bébés',
+          name: 'nbOfBabies',
+          modificator: '',
+          avg: 0,
+          stdDev: 0,
+          value: 0,
+          displayValue: "${this.value} bébé${ this.value > 1 ? 's' : '' }",
+          adjustments: {},
+        },
+        {
+          displayName: 'Longévité',
+          name: 'longevity',
+          modificator: '',
+          avg: 0,
+          stdDev: 0,
+          value: 0,
+          displayValue: '${this.value} ut',
+          adjustments: {},
+        },
+        {
+          displayName: 'Interval entre les périodes de reproduction',
+          name: 'intervalBetweenReproducingPeriods',
+          modificator: '',
+          avg: 0,
+          stdDev: 0,
+          value: 0,
+          displayValue: '${this.value} ut',
+          adjustments: {},
+        },
+        {
+          displayName: 'Distance de vue',
+          name: 'renderDistance',
+          modificator: '',
+          avg: 0,
+          stdDev: 0,
+          value: 0,
+          displayValue: '${this.value} ue',
+          adjustments: {},
+        },
+        {
+          displayName: 'Nombre de plantes à manger',
+          name: 'hungerLevel',
+          modificator: '',
+          avg: 0,
+          stdDev: 0,
+          value: 0,
+          displayValue: '${this.value} plantes',
+          adjustments: {},
+        },
+        {
+          displayName: 'Temps pour manger',
+          name: 'eatingInterval',
+          modificator: '',
+          avg: 0,
+          stdDev: 0,
+          value: 0,
+          displayValue: '${this.value} ue',
+          adjustments: {},
+        },
+      ],
+    },
+    predator: {
+      name: '',
+      startingNb: 0,
+      genes: [
+        {
+          displayName: 'Vitesse',
+          name: 'speed',
+          modificator: '',
+          avg: 0,
+          stdDev: 0,
+          value: 0,
+          displayValue:
+            '${(this.value * window.ut).toFixed(2)} ${window.ueUnit} / ${window.ut} ${window.utUnit}',
+          adjustments: {},
+        },
+        {
+          displayName: 'Nombre de bébés',
+          name: 'nbOfBabies',
+          modificator: '',
+          avg: 0,
+          stdDev: 0,
+          value: 0,
+          displayValue: "${this.value} bébé${ this.value > 1 ? 's' : '' }",
+          adjustments: {},
+        },
+        {
+          displayName: 'Longévité',
+          name: 'longevity',
+          modificator: '',
+          avg: 0,
+          stdDev: 0,
+          value: 0,
+          displayValue: '${this.value} ut',
+          adjustments: {},
+        },
+        {
+          displayName: 'Interval entre les périodes de reproduction',
+          name: 'intervalBetweenReproducingPeriods',
+          modificator: '',
+          avg: 0,
+          stdDev: 0,
+          value: 0,
+          displayValue: '${this.value} ut',
+          adjustments: {},
+        },
+        {
+          displayName: 'Distance de vue',
+          name: 'renderDistance',
+          modificator: '',
+          avg: 0,
+          stdDev: 0,
+          value: 0,
+          displayValue: '${this.value} ue',
+          adjustments: {},
+        },
+        {
+          displayName: 'Nombre de proies à manger',
+          name: 'hungerLevel',
+          modificator: '',
+          avg: 0,
+          stdDev: 0,
+          value: 0,
+          displayValue: '${this.value} proie',
+          adjustments: {},
+        },
+        {
+          displayName: 'Temps pour manger',
+          name: 'eatingInterval',
+          modificator: '',
+          avg: 0,
+          stdDev: 0,
+          value: 0,
+          displayValue: '${this.value} ue',
+          adjustments: {},
+        },
+      ],
+    },
+    plant: {
+      startingNb: 0,
+      spawnRate: 0,
+      spawnInterval: 0,
+    },
+    size: 8000,
+    scale: 1,
+    offsetX: 0,
+    offsetY: 0,
+    speed: 1,
+    ue: 20,
+    ueUnit: 'cm',
+    ut: 10,
+    utUnit: 'min',
+    seed: Math.floor(Math.random() * 100000000),
+    nbOfAnimalsSnapshotInterval: 50,
+  };
 
   let configs = loadConfigs();
   let currConfig = configs[0] || undefined;
@@ -24,169 +200,7 @@
   }
 
   function newConfig() {
-    let config = {
-      name: 'Nouvelle configuration',
-      id: uuid(),
-      prey: {
-        name: '',
-        startingNb: 0,
-        genes: [
-          {
-            displayName: 'Vitesse',
-            name: 'speed',
-            modificator: '',
-            avg: 0,
-            stdDev: 0,
-            value: 0,
-            displayValue:
-              '${this.value.toFixed(2)} ue / ut (${(this.value * window.ut).toFixed(2)} ${window.ueUnit} / ${window.ut} ${window.utUnit})',
-          },
-          {
-            displayName: 'Nombre de bébés',
-            name: 'nbOfBabies',
-            modificator: '',
-            avg: 0,
-            stdDev: 0,
-            value: 0,
-            displayValue: "${this.value} bébé${ this.value > 1 ? 's' : '' }",
-          },
-          {
-            displayName: 'Longévité',
-            name: 'longevity',
-            modificator: '',
-            avg: 0,
-            stdDev: 0,
-            value: 0,
-            displayValue: '${this.value} ut',
-          },
-          {
-            displayName: 'Interval entre les périodes de reproduction',
-            name: 'intervalBetweenReproducingPeriods',
-            modificator: '',
-            avg: 0,
-            stdDev: 0,
-            value: 0,
-            displayValue: '${this.value} ut',
-          },
-          {
-            displayName: 'Distance de vue',
-            name: 'renderDistance',
-            modificator: '',
-            avg: 0,
-            stdDev: 0,
-            value: 0,
-            displayValue: '${this.value} ue',
-          },
-          {
-            displayName: 'Nombre de plantes à manger',
-            name: 'hungerLevel',
-            modificator: '',
-            avg: 0,
-            stdDev: 0,
-            value: 0,
-            displayValue: '${this.value} plantes',
-            adjustments: {
-              speed: 'Math.round(${value} * 0.05)',
-            },
-          },
-          {
-            displayName: 'Temps pour manger',
-            name: 'eatingInterval',
-            modificator: '',
-            avg: 0,
-            stdDev: 0,
-            value: 0,
-            displayValue: '${this.value} ue',
-          },
-        ],
-      },
-      predator: {
-        name: '',
-        startingNb: 0,
-        genes: [
-          {
-            displayName: 'Vitesse',
-            name: 'speed',
-            modificator: '',
-            avg: 0,
-            stdDev: 0,
-            value: 0,
-            displayValue:
-              '${(this.value * window.ut).toFixed(2)} ${window.ueUnit} / ${window.ut} ${window.utUnit}',
-          },
-          {
-            displayName: 'Nombre de bébés',
-            name: 'nbOfBabies',
-            modificator: '',
-            avg: 0,
-            stdDev: 0,
-            value: 0,
-            displayValue: "${this.value} bébé${ this.value > 1 ? 's' : '' }",
-          },
-          {
-            displayName: 'Longévité',
-            name: 'longevity',
-            modificator: '',
-            avg: 0,
-            stdDev: 0,
-            value: 0,
-            displayValue: '${this.value} ut',
-          },
-          {
-            displayName: 'Interval entre les périodes de reproduction',
-            name: 'intervalBetweenReproducingPeriods',
-            modificator: '',
-            avg: 0,
-            stdDev: 0,
-            value: 0,
-            displayValue: '${this.value} ut',
-          },
-          {
-            displayName: 'Distance de vue',
-            name: 'renderDistance',
-            modificator: '',
-            avg: 0,
-            stdDev: 0,
-            value: 0,
-            displayValue: '${this.value} ue',
-          },
-          {
-            displayName: 'Nombre de proies à manger',
-            name: 'hungerLevel',
-            modificator: '',
-            avg: 0,
-            stdDev: 0,
-            value: 0,
-            displayValue: '${this.value} proie',
-          },
-          {
-            displayName: 'Temps pour manger',
-            name: 'eatingInterval',
-            modificator: '',
-            avg: 0,
-            stdDev: 0,
-            value: 0,
-            displayValue: '${this.value} ue',
-          },
-        ],
-      },
-      plant: {
-        startingNb: 0,
-        spawnRate: 0,
-        spawnInterval: 0,
-      },
-      size: 8000,
-      scale: 1,
-      offsetX: 0,
-      offsetY: 0,
-      speed: 1,
-      ue: 20,
-      ueUnit: 'cm',
-      ut: 10,
-      utUnit: 'min',
-      seed: Math.floor(Math.random() * 100000000),
-      nbOfAnimalsSnapshotInterval: 50,
-    };
+    let config = JSON.parse(JSON.stringify(defaultConfig));
     configs = [...configs, config];
     editConfig({ detail: config.id });
   }
@@ -234,7 +248,10 @@
     showUploadModal = false;
     let reader = new FileReader();
     reader.onload = e => {
-      const newConfig = JSON.parse(e.target.result);
+      const newConfig = Object.assign(
+        JSON.parse(e.target.result),
+        JSON.parse(JSON.stringify(defaultConfig))
+      );
       newConfig.name = 'Configuration téléversée';
       newConfig.id = uuid();
       configs = [...configs, newConfig];
@@ -252,6 +269,13 @@
     else if (iframe.mozRequestFullScreen) iframe.mozRequestFullScreen();
     else if (iframe.webkitRequestFullscreen) iframe.webkitRequestFullscreen();
     else if (iframe.msRequestFullscreen) iframe.msRequestFullscreen();
+  }
+
+  function downloadConfig() {
+    downloadFile(
+      JSON.stringify(currConfig, null, 2),
+      currConfig.name + '.json'
+    );
   }
 </script>
 
@@ -286,7 +310,7 @@
 
 <svelte:head>
   <title>Simulateur d'évolution selon Darwin</title>
-  <link rel="stylesheet" href="/bulma.css" />
+  <link rel="stylesheet" href="bulma.css" />
 </svelte:head>
 
 <Navbar />
@@ -301,7 +325,8 @@
     on:execute={executeConfig}
     on:newconfig={newConfig}
     on:uploadconfig={uploadConfig}
-    on:editconfig={editConfig} />
+    on:editconfig={editConfig}
+    on:download={downloadConfig} />
   {#if currConfig}
     <EditConfig bind:config={currConfig} />
   {/if}

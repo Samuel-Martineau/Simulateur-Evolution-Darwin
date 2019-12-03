@@ -4,7 +4,9 @@
 </script>
 
 <div class="field">
-  <label class="label">{label}</label>
+  {#if label}
+    <label class="label">{label}</label>
+  {/if}
   <div class="control">
     <input type="text" class="input" {label} bind:value />
   </div>

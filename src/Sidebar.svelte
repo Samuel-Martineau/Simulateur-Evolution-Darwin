@@ -43,6 +43,11 @@
             Exécuter cette configuration
           </a>
         </li>
+        <li>
+          <a href="##" on:click={() => dispatch('download')}>
+            Télécharger cette configuration
+          </a>
+        </li>
       {/if}
       <li>
         <a href="##" on:click={() => dispatch('newconfig')}>
