@@ -201,6 +201,7 @@
 
   function newConfig() {
     let config = JSON.parse(JSON.stringify(defaultConfig));
+    config.id = uuid();
     configs = [...configs, config];
     editConfig({ detail: config.id });
   }
@@ -249,10 +250,10 @@
     let reader = new FileReader();
     reader.onload = e => {
       const newConfig = Object.assign(
-        JSON.parse(e.target.result),
-        JSON.parse(JSON.stringify(defaultConfig))
+        JSON.parse(JSON.stringify(defaultConfig)),
+        JSON.parse(e.target.result)
       );
-      newConfig.name = 'Configuration téléversée';
+      newConfig.name = newConfig.name || 'Configuration téléversée';
       newConfig.id = uuid();
       configs = [...configs, newConfig];
       currConfig = newConfig;

@@ -36,6 +36,7 @@
   <TextInput bind:value={config.prey.name} label="Nom de l'espèce des proies" />
   <NumberInput bind:value={config.prey.startingNb} label="Nombre de départ" />
   {#each config.prey.genes as gene}
+    {console.log((gene.adjustments = gene.adjustments || {})) || ''}
     <h1 class="title is-5">Gêne de {gene.displayName.toLowerCase()}</h1>
     <Select label="Modificateur" bind:value={gene.modificator}>
       <option value="stddev">Écart Type</option>
@@ -69,6 +70,7 @@
         </span>
       </p>
       <p class="control is-expanded">
+        {console.log((gene.selectedAdjustmentGeneName = gene.selectedAdjustmentGeneName || '')) || ''}
         {console.log((gene.adjustments[gene.selectedAdjustmentGeneName] = gene.adjustments[gene.selectedAdjustmentGeneName] || '')) || ''}
         <input
           class="input"
