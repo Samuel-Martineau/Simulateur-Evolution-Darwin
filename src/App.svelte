@@ -230,6 +230,16 @@
 
   function executeConfig() {
     showSimulatorModal = true;
+    currConfig.prey.genes.forEach(g => {
+      for (let key in g.adjustments) {
+        if (!g.adjustments[key]) delete g.adjustments[key];
+      }
+    });
+    currConfig.predator.genes.forEach(g => {
+      for (let key in g.adjustments) {
+        if (!g.adjustments[key]) delete g.adjustments[key];
+      }
+    });
     if (!loaded) {
       setTimeout(executeConfig, 0);
     } else {

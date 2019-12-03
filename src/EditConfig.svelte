@@ -5,12 +5,6 @@
   import copy from 'copy-to-clipboard';
 
   export let config;
-
-  // config = config.prey.genes.map(g => {
-  //   config.prey.genes.forEach(a => {
-  //     if (!g.adjustments[a.name]) g.adjustments[a.name] = '';
-  //   });
-  // });
 </script>
 
 <style lang="scss">
@@ -63,6 +57,7 @@
       <p class="control">
         <span class="select">
           <select bind:value={gene.selectedAdjustmentGeneName}>
+            <option value="" disabled default>Veuillez choisir un gêne</option>
             {#each config.prey.genes as g}
               <option value={g.name}>{g.displayName}</option>
             {/each}
@@ -73,6 +68,7 @@
         {console.log((gene.selectedAdjustmentGeneName = gene.selectedAdjustmentGeneName || '')) || ''}
         {console.log((gene.adjustments[gene.selectedAdjustmentGeneName] = gene.adjustments[gene.selectedAdjustmentGeneName] || '')) || ''}
         <input
+          disabled={gene.selectedAdjustmentGeneName === ''}
           class="input"
           type="text"
           placeholder="Formule pour ledit gêne"
@@ -89,6 +85,7 @@
     bind:value={config.predator.startingNb}
     label="Nombre de départ" />
   {#each config.predator.genes as gene}
+    {console.log((gene.adjustments = gene.adjustments || {})) || ''}
     <h1 class="title is-5">Gêne de {gene.displayName.toLowerCase()}</h1>
     <Select label="Modificateur" bind:value={gene.modificator}>
       <option value="stddev">Écart Type</option>
@@ -101,6 +98,38 @@
     {:else if gene.modificator !== ''}
       <NumberInput label="Valeur" bind:value={gene.value} />
     {/if}
+    <label class="label">
+      Ajustements
+      <i>
+        ( Ex:
+        <code on:click={() => copy('Math.round(${value} * 0.05)')}>
+          {'Math.round(${value} * 0.05)'}
+        </code>
+        )
+      </i>
+    </label>
+    <div class="field has-addons">
+      <p class="control">
+        <span class="select">
+          <select bind:value={gene.selectedAdjustmentGeneName}>
+            <option value="" disabled default>Veuillez choisir un gêne</option>
+            {#each config.prey.genes as g}
+              <option value={g.name}>{g.displayName}</option>
+            {/each}
+          </select>
+        </span>
+      </p>
+      <p class="control is-expanded">
+        {console.log((gene.selectedAdjustmentGeneName = gene.selectedAdjustmentGeneName || '')) || ''}
+        {console.log((gene.adjustments[gene.selectedAdjustmentGeneName] = gene.adjustments[gene.selectedAdjustmentGeneName] || '')) || ''}
+        <input
+          disabled={gene.selectedAdjustmentGeneName === ''}
+          class="input"
+          type="text"
+          placeholder="Formule pour ledit gêne"
+          bind:value={gene.adjustments[gene.selectedAdjustmentGeneName]} />
+      </p>
+    </div>
   {/each}
 
   <h1 class="title is-4">Plantes</h1>
