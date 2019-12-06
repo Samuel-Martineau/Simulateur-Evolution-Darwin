@@ -1,16 +1,19 @@
 <script>
   export let label;
   export let value;
+  export let unit = '';
 </script>
 
-<div class="field">
-  {#if label}
-    <label class="label">{label}</label>
-  {/if}
-  <div class="control">
-    <input type="number" class="input" {label} bind:value />
+{#if label}
+  <label class="label">{label}</label>
+{/if}
+<div class="field has-addons">
+  <div class="control is-expanded">
+    <input type="number" class="input" bind:value placeholder={label} />
   </div>
-  {#if isNaN(parseInt(value))}
-    <p class="help is-danger">Veuillez entrer un nombre</p>
+  {#if unit}
+    <div class="control">
+      <button type="submit" class="button is-static">{unit}</button>
+    </div>
   {/if}
 </div>

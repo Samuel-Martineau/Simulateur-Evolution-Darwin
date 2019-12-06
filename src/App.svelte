@@ -174,10 +174,6 @@
     offsetX: 0,
     offsetY: 0,
     speed: 1,
-    ue: 20,
-    ueUnit: 'cm',
-    ut: 10,
-    utUnit: 'min',
     seed: Math.floor(Math.random() * 100000000),
     nbOfAnimalsSnapshotInterval: 50,
   };

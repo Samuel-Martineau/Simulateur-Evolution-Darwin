@@ -98,7 +98,7 @@ const sketch = (p: p5) => {
     p.text(
       `${Math.trunc(p.frameRate())}fps ${window.time}ut ${window.size}ue ${nbOfPreys} ${window.preyConfig.name}${
         nbOfPreys > 1 ? 's' : ''
-      } ${nbOfPredators} ${window.predatorConfig.name}${nbOfPredators > 1 ? 's' : ''} ${nbOfPlants} plante${
+      } ${nbOfPredators} ${window.predatorConfig.name}${nbOfPredators > 1 ? 's' : ''} ${nbOfPlants} Plante${
         nbOfPlants > 1 ? 's' : ''
       }`,
       10,

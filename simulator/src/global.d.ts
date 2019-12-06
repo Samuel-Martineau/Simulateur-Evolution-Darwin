@@ -16,10 +16,6 @@ interface Window {
   preyConfig: any;
   predatorConfig: any;
   plantConfig: any;
-  ue: number;
-  ueUnit: string;
-  ut: number;
-  utUnit: string;
   nbOfAnimalsSnapshotInterval: number;
   nbOfPlantsByTime: number[];
   nbOfPreysByTime: number[];

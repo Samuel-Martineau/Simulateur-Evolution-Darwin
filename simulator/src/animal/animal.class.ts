@@ -46,9 +46,6 @@ export default class Animal {
           case 'constant':
             value = parent1.genes[i].value;
             break;
-          case 'average':
-            value = _.meanBy(parents, p => p.genes[i].value);
-            break;
           case 'stddev':
             const mean = _.meanBy(parents, p => p.genes[i].value);
             const stddev = stdDev(parents, p => p.genes[i].value);

@@ -28,13 +28,15 @@
 
   <h1 class="title is-4">Proies</h1>
   <TextInput bind:value={config.prey.name} label="Nom de l'espèce des proies" />
-  <NumberInput bind:value={config.prey.startingNb} label="Nombre de départ" />
+  <NumberInput
+    bind:value={config.prey.startingNb}
+    label="Nombre de départ"
+    unit="proie(s)" />
   {#each config.prey.genes as gene}
     {console.log((gene.adjustments = gene.adjustments || {})) || ''}
     <h1 class="title is-5">Gêne de {gene.displayName.toLowerCase()}</h1>
     <Select label="Modificateur" bind:value={gene.modificator}>
       <option value="stddev">Écart Type</option>
-      <option value="average">Moyenne</option>
       <option value="constant">Constant</option>
     </Select>
     {#if gene.modificator === 'stddev'}
@@ -83,13 +85,13 @@
     label="Nom de l'espèce des prédateurs" />
   <NumberInput
     bind:value={config.predator.startingNb}
-    label="Nombre de départ" />
+    label="Nombre de départ"
+    unit="prédateur(s)" />
   {#each config.predator.genes as gene}
     {console.log((gene.adjustments = gene.adjustments || {})) || ''}
     <h1 class="title is-5">Gêne de {gene.displayName.toLowerCase()}</h1>
     <Select label="Modificateur" bind:value={gene.modificator}>
       <option value="stddev">Écart Type</option>
-      <option value="average">Moyenne</option>
       <option value="constant">Constant</option>
     </Select>
     {#if gene.modificator === 'stddev'}
@@ -133,16 +135,24 @@
   {/each}
 
   <h1 class="title is-4">Plantes</h1>
-  <NumberInput bind:value={config.plant.startingNb} label="Nombre de départ" />
+  <NumberInput
+    bind:value={config.plant.startingNb}
+    label="Nombre de départ"
+    unit="plantes" />
   <NumberInput
     bind:value={config.plant.spawnInterval}
-    label="Vitesse d'apparition des plantes" />
+    label="Interval entre les vagues d'appartion des plantes"
+    unit="ut" />
   <NumberInput
     bind:value={config.plant.spawnRate}
-    label="Nombre de plantes par vague d'apparition" />
+    label="Nombre de plantes par vague d'apparition"
+    unit="plantes" />
 
   <h1 class="title is-4">Autres</h1>
-  <NumberInput bind:value={config.size} label="Taille de la carte" />
+  <NumberInput bind:value={config.size} label="Taille de la carte" unit="ue" />
   <NumberInput bind:value={config.seed} label="SEED" />
-
+  <NumberInput
+    bind:value={config.nbOfAnimalsSnapshotInterval}
+    label="Interval entre les recensement des populations"
+    unit="ut" />
 </form>

@@ -34,7 +34,12 @@ export const showAverageGenesChart = () => {
   window.isPopupActive = true;
   window.speed = 0;
 
-  const genes: any[] = <any[]>_.intersectionBy(window.preyConfig.genes, window.predatorConfig.genes, 'name');
+  const genes: any[] = <any[]>_.intersectionBy(window.preyConfig.genes, window.predatorConfig.genes, 'name').map(
+    (g: any) => {
+      if (g.displayName === 'Nombre de plantes à manger') g.displayName = 'Nombre de plantes / proies à manger';
+      return g;
+    }
+  );
   const options: any = {};
   genes.forEach(g => (options[g.name] = g.displayName));
   //@ts-ignore
@@ -53,20 +58,21 @@ export const showAverageGenesChart = () => {
       }
     })
     //@ts-ignore
-    .then(({ value: gene, dismiss: reason }) => {
+    .then(({ value: geneName, dismiss: reason }) => {
       if (reason) {
         window.speed = speed;
         window.isPopupActive = false;
         return;
       }
       //@ts-ignore
-      const preyData = window.averagePreyGenes.map(a => a[gene]);
+      const preyData = window.averagePreyGenes.map(a => a[geneName]);
       //@ts-ignore
-      const predatorData = window.averagePredatorGenes.map(a => a[gene]);
+      const predatorData = window.averagePredatorGenes.map(a => a[geneName]);
       const indexes = _.range(1, (preyData.length > predatorData.length ? preyData.length : predatorData.length) + 1);
+      let gene = genes.find(g => g.name === geneName);
       defaultAlert
         .fire({
-          title: '<span style="margin-top: 20px;">Diagramme des vitesses moyennes selon les générations</span>',
+          title: `<span style="margin-top: 20px;">${gene.displayName} moyen(ne) selon les générations</span>`,
           width: 1000,
           html: '<canvas id="averageSpeedChart"></canvas>',
           showCancelButton: false,
@@ -94,7 +100,7 @@ export const showAverageGenesChart = () => {
               },
               options: {
                 scales: {
-                  yAxes: [{ scaleLabel: { display: true, labelString: 'Vitesse moyenne' } }],
+                  yAxes: [{ scaleLabel: { display: true, labelString: `${gene.displayName} moyen(ne)` } }],
                   xAxes: [{ scaleLabel: { display: true, labelString: 'Nombre de générations' } }]
                 },
                 elements: {
@@ -243,9 +249,7 @@ export const showStatsOfAnimal = (a: Animal) => {
     let array;
     //@ts-ignore
     while ((array = regex.exec(name)) !== null) name = name.replace('%', event.data[i](a));
-    eventsText += `<li><b>${name} </b> dans <u>${time.toFixed(2)}</u> ue => <u>${Math.round(time * window.ut)}</u> ${
-      window.utUnit
-    }</li>`;
+    eventsText += `<li><b>${name} </b> dans ${Math.round(time)} ut</li>`;
   });
   defaultAlert
     .fire({
@@ -444,9 +448,6 @@ export const createAnimal = (specie: 0 | 1, genes: any, coordinates: [number, nu
       case 'constant':
         value = g.value;
         break;
-      case 'average':
-        value = g.value;
-        break;
       case 'stddev':
         if (g.avg && g.stdDev) value = window.p5.randomGaussian(g.avg, g.stdDev);
         else value = g.value;
@@ -480,6 +481,7 @@ export const spawnAnimals = (specie: 0 | 1, nb: number, method: 'average' | 'con
     if (method === 'config') {
       const { genes } = specie === 0 ? window.preyConfig : window.predatorConfig;
       createAnimal(specie, genes, coor);
+      updateAverageGenes(specie, 1);
     } else {
       const averages: any = _.last(specie === 0 ? window.averagePreyGenes : window.averagePredatorGenes);
       const genes = (specie === 0 ? window.preyConfig : window.predatorConfig).genes.map((g: any) => ({
@@ -490,6 +492,7 @@ export const spawnAnimals = (specie: 0 | 1, nb: number, method: 'average' | 'con
         displayValue: g.displayValue
       }));
       createAnimal(specie, genes, coor);
+      updateAverageGenes(specie, (specie === 0 ? window.averagePreyGenes : window.averagePredatorGenes).length);
     }
   }
 };

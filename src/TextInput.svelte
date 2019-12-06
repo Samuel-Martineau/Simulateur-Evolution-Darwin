@@ -3,14 +3,11 @@
   export let value;
 </script>
 
+{#if label}
+  <label class="label">{label}</label>
+{/if}
 <div class="field">
-  {#if label}
-    <label class="label">{label}</label>
-  {/if}
   <div class="control">
-    <input type="text" class="input" {label} bind:value />
+    <input type="text" class="input" placeholder={label} bind:value />
   </div>
-  {#if !value}
-    <p class="help is-danger">Veuillez entrer une chaîne de charactère</p>
-  {/if}
 </div>

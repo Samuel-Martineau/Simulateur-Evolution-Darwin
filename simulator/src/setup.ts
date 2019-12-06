@@ -62,27 +62,6 @@ export const createAnimals = () => {
 
 export const initiateGlobalVariables = () => {
   let config = window.config;
-  // let error = true;
-  // while (error) {
-  //   let configUrl;
-  //   while (!configUrl)
-  //     configUrl = prompt(
-  //       "Indiquez l'URL de la configuration que vous voulez utiliser pour le simulateur",
-  //       window.location.href + 'assets/simulator-config.json'
-  //     );
-  //   const req = new XMLHttpRequest();
-  //   req.open('GET', configUrl, false);
-  //   req.setRequestHeader('Cache-Control', 'no-cache');
-  //   req.send(null);
-  //   try {
-  //     if (req.status !== 200) throw new Error();
-  //     config = JSON.parse(req.responseText);
-  //     error = false;
-  //   } catch {
-  //     error = true;
-  //   }
-  // }
-
   window.preyConfig = config.prey;
   window.predatorConfig = config.predator;
   window.enabledLoggers = [];
@@ -95,10 +74,6 @@ export const initiateGlobalVariables = () => {
   window.speed = config.speed;
   window.time = 0;
   window.size = config.size;
-  window.ue = config.ue;
-  window.ueUnit = config.ueUnit;
-  window.ut = config.ut;
-  window.utUnit = config.utUnit;
   window.plantConfig = config.plant;
   window.plants = [];
   window.nbOfAnimalsSnapshotInterval = config.nbOfAnimalsSnapshotInterval;
