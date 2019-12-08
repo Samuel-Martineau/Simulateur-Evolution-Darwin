@@ -26,17 +26,19 @@
 
   <TextInput bind:value={config.name} label="Nom de la configuration" />
 
-  <h1 class="title is-4">Proies</h1>
-  <TextInput bind:value={config.prey.name} label="Nom de l'espèce des proies" />
+  <h1 class="title is-4">Herbivores</h1>
+  <TextInput
+    bind:value={config.prey.name}
+    label="Nom de l'espèce des herbivores" />
   <NumberInput
     bind:value={config.prey.startingNb}
     label="Nombre de départ"
-    unit="proie(s)" />
+    unit="herbivore(s)" />
   {#each config.prey.genes as gene}
     {console.log((gene.adjustments = gene.adjustments || {})) || ''}
     <h1 class="title is-5">Gêne de {gene.displayName.toLowerCase()}</h1>
     <Select label="Modificateur" bind:value={gene.modificator}>
-      <option value="stddev">Écart Type</option>
+      <option value="stddev">Écart type</option>
       <option value="constant">Constant</option>
     </Select>
     {#if gene.modificator === 'stddev'}
@@ -79,19 +81,19 @@
     </div>
   {/each}
 
-  <h1 class="title is-4">Prédateurs</h1>
+  <h1 class="title is-4">Carnivores</h1>
   <TextInput
     bind:value={config.predator.name}
-    label="Nom de l'espèce des prédateurs" />
+    label="Nom de l'espèce des carnivores" />
   <NumberInput
     bind:value={config.predator.startingNb}
     label="Nombre de départ"
-    unit="prédateur(s)" />
+    unit="carnivore(s)" />
   {#each config.predator.genes as gene}
     {console.log((gene.adjustments = gene.adjustments || {})) || ''}
     <h1 class="title is-5">Gêne de {gene.displayName.toLowerCase()}</h1>
     <Select label="Modificateur" bind:value={gene.modificator}>
-      <option value="stddev">Écart Type</option>
+      <option value="stddev">Écart type</option>
       <option value="constant">Constant</option>
     </Select>
     {#if gene.modificator === 'stddev'}
