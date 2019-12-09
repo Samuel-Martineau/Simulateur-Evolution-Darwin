@@ -21,8 +21,7 @@
           avg: 0,
           stdDev: 0,
           value: 0,
-          displayValue:
-            '${this.value.toFixed(2)} ue / ut (${(this.value * window.ut).toFixed(2)} ${window.ueUnit} / ${window.ut} ${window.utUnit})',
+          displayValue: '${this.value.toFixed(2)} ue / ut',
           adjustments: {},
         },
         {
@@ -32,7 +31,8 @@
           avg: 0,
           stdDev: 0,
           value: 0,
-          displayValue: "${this.value} bébé${ this.value > 1 ? 's' : '' }",
+          displayValue:
+            "${Math.round(this.value)} bébé${ this.value > 1 ? 's' : '' }",
           adjustments: {},
         },
         {
@@ -42,17 +42,17 @@
           avg: 0,
           stdDev: 0,
           value: 0,
-          displayValue: '${this.value} ut',
+          displayValue: '${this.value.toFixed(2)} ut',
           adjustments: {},
         },
         {
-          displayName: 'Interval entre les périodes de reproduction',
+          displayName: 'Intervalle entre les périodes de reproduction',
           name: 'intervalBetweenReproducingPeriods',
           modificator: '',
           avg: 0,
           stdDev: 0,
           value: 0,
-          displayValue: '${this.value} ut',
+          displayValue: '${this.value.toFixed(2)} ut',
           adjustments: {},
         },
         {
@@ -62,7 +62,7 @@
           avg: 0,
           stdDev: 0,
           value: 0,
-          displayValue: '${this.value} ue',
+          displayValue: '${this.value.toFixed(2)} ue',
           adjustments: {},
         },
         {
@@ -72,7 +72,7 @@
           avg: 0,
           stdDev: 0,
           value: 0,
-          displayValue: '${this.value} plantes',
+          displayValue: '${Math.round(this.value)} plantes',
           adjustments: {},
         },
         {
@@ -82,7 +82,7 @@
           avg: 0,
           stdDev: 0,
           value: 0,
-          displayValue: '${this.value} ue',
+          displayValue: '${this.value.toFixed(2)} ue',
           adjustments: {},
         },
       ],
@@ -98,8 +98,7 @@
           avg: 0,
           stdDev: 0,
           value: 0,
-          displayValue:
-            '${(this.value * window.ut).toFixed(2)} ${window.ueUnit} / ${window.ut} ${window.utUnit}',
+          displayValue: '${this.value.toFixed(2)} ue / ut',
           adjustments: {},
         },
         {
@@ -109,7 +108,8 @@
           avg: 0,
           stdDev: 0,
           value: 0,
-          displayValue: "${this.value} bébé${ this.value > 1 ? 's' : '' }",
+          displayValue:
+            "${Math.round(this.value)} bébé${ this.value > 1 ? 's' : '' }",
           adjustments: {},
         },
         {
@@ -119,17 +119,17 @@
           avg: 0,
           stdDev: 0,
           value: 0,
-          displayValue: '${this.value} ut',
+          displayValue: '${this.value.toFixed(2)} ut',
           adjustments: {},
         },
         {
-          displayName: 'Interval entre les périodes de reproduction',
+          displayName: 'Intervalle entre les périodes de reproduction',
           name: 'intervalBetweenReproducingPeriods',
           modificator: '',
           avg: 0,
           stdDev: 0,
           value: 0,
-          displayValue: '${this.value} ut',
+          displayValue: '${this.value.toFixed(2)} ut',
           adjustments: {},
         },
         {
@@ -139,17 +139,17 @@
           avg: 0,
           stdDev: 0,
           value: 0,
-          displayValue: '${this.value} ue',
+          displayValue: '${this.value.toFixed(2)} ue',
           adjustments: {},
         },
         {
-          displayName: 'Nombre de proies à manger',
+          displayName: "Nombre d'herbivores à manger",
           name: 'hungerLevel',
           modificator: '',
           avg: 0,
           stdDev: 0,
           value: 0,
-          displayValue: '${this.value} proie',
+          displayValue: '${Math.round(this.value)} herbivores',
           adjustments: {},
         },
         {
@@ -159,7 +159,7 @@
           avg: 0,
           stdDev: 0,
           value: 0,
-          displayValue: '${this.value} ue',
+          displayValue: '${this.value.toFixed(2)} ue',
           adjustments: {},
         },
       ],
@@ -190,6 +190,7 @@
   let chosenFile = '';
 
   $: if (currConfig) configs = configs;
+  $: configs = configs.sort((a, b) => a.name > b.name);
 
   function save() {
     localStorage.setItem('configs', JSON.stringify(configs));

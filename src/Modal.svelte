@@ -12,6 +12,7 @@
   };
 
   document.body.style.height = '100vh';
+  document.addEventListener('keyup', e => (show = show && e.key !== 'Escape'));
 
   $: if (show) {
     document.body.style.overflow = 'hidden';

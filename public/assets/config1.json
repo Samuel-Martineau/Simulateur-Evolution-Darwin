@@ -1,0 +1,210 @@
+{
+  "name": "Écosystème ➡️ Herbivores + Plantes",
+  "id": "7afe32e0-c6fc-4aa5-a16a-0886d51197e9",
+  "prey": {
+    "name": "Herbivore",
+    "startingNb": 35,
+    "genes": [
+      {
+        "displayName": "Vitesse",
+        "name": "speed",
+        "modificator": "stddev",
+        "avg": 40,
+        "stdDev": 4,
+        "value": 0,
+        "displayValue": "${this.value.toFixed(2)} ue / ut (${(this.value * window.ut).toFixed(2)} ${window.ueUnit} / ${window.ut} ${window.utUnit})",
+        "adjustments": {
+          "": ""
+        },
+        "selectedAdjustmentGeneName": ""
+      },
+      {
+        "displayName": "Nombre de bébés",
+        "name": "nbOfBabies",
+        "modificator": "stddev",
+        "avg": 3,
+        "value": 0,
+        "displayValue": "${this.value} bébé${ this.value > 1 ? 's' : '' }",
+        "adjustments": {
+          "": ""
+        },
+        "selectedAdjustmentGeneName": "",
+        "stdDev": 1
+      },
+      {
+        "displayName": "Longévité",
+        "name": "longevity",
+        "modificator": "stddev",
+        "avg": 15000,
+        "stdDev": 200,
+        "value": 0,
+        "displayValue": "${this.value} ut",
+        "adjustments": {
+          "": ""
+        },
+        "selectedAdjustmentGeneName": ""
+      },
+      {
+        "displayName": "Interval entre les périodes de reproduction",
+        "name": "intervalBetweenReproducingPeriods",
+        "modificator": "stddev",
+        "avg": 1000,
+        "stdDev": 55,
+        "value": 0,
+        "displayValue": "${this.value} ut",
+        "adjustments": {
+          "": ""
+        },
+        "selectedAdjustmentGeneName": ""
+      },
+      {
+        "displayName": "Distance de vue",
+        "name": "renderDistance",
+        "modificator": "stddev",
+        "avg": 200,
+        "stdDev": 20,
+        "value": 0,
+        "displayValue": "${this.value} ue",
+        "adjustments": {
+          "": ""
+        },
+        "selectedAdjustmentGeneName": ""
+      },
+      {
+        "displayName": "Nombre de plantes / proies à manger",
+        "name": "hungerLevel",
+        "modificator": "stddev",
+        "avg": 3,
+        "value": 0,
+        "displayValue": "${this.value} plantes",
+        "adjustments": {
+          "speed": "Math.round(${value} * 0.05)"
+        },
+        "selectedAdjustmentGeneName": "speed",
+        "stdDev": 1
+      },
+      {
+        "displayName": "Temps pour manger",
+        "name": "eatingInterval",
+        "modificator": "stddev",
+        "avg": 200,
+        "stdDev": 15,
+        "value": 0,
+        "displayValue": "${this.value} ue",
+        "adjustments": {
+          "": ""
+        },
+        "selectedAdjustmentGeneName": ""
+      }
+    ]
+  },
+  "predator": {
+    "name": "Carnivores",
+    "startingNb": 0,
+    "genes": [
+      {
+        "displayName": "Vitesse",
+        "name": "speed",
+        "modificator": "",
+        "avg": 0,
+        "stdDev": 0,
+        "value": 0,
+        "displayValue": "${(this.value * window.ut).toFixed(2)} ${window.ueUnit} / ${window.ut} ${window.utUnit}",
+        "adjustments": {
+          "": ""
+        },
+        "selectedAdjustmentGeneName": ""
+      },
+      {
+        "displayName": "Nombre de bébés",
+        "name": "nbOfBabies",
+        "modificator": "",
+        "avg": 0,
+        "stdDev": 0,
+        "value": 0,
+        "displayValue": "${this.value} bébé${ this.value > 1 ? 's' : '' }",
+        "adjustments": {
+          "": ""
+        },
+        "selectedAdjustmentGeneName": ""
+      },
+      {
+        "displayName": "Longévité",
+        "name": "longevity",
+        "modificator": "",
+        "avg": 0,
+        "stdDev": 0,
+        "value": 0,
+        "displayValue": "${this.value} ut",
+        "adjustments": {
+          "": ""
+        },
+        "selectedAdjustmentGeneName": ""
+      },
+      {
+        "displayName": "Interval entre les périodes de reproduction",
+        "name": "intervalBetweenReproducingPeriods",
+        "modificator": "",
+        "avg": 0,
+        "stdDev": 0,
+        "value": 0,
+        "displayValue": "${this.value} ut",
+        "adjustments": {
+          "": ""
+        },
+        "selectedAdjustmentGeneName": ""
+      },
+      {
+        "displayName": "Distance de vue",
+        "name": "renderDistance",
+        "modificator": "",
+        "avg": 0,
+        "stdDev": 0,
+        "value": 0,
+        "displayValue": "${this.value} ue",
+        "adjustments": {
+          "": ""
+        },
+        "selectedAdjustmentGeneName": ""
+      },
+      {
+        "displayName": "Nombre de proies à manger",
+        "name": "hungerLevel",
+        "modificator": "",
+        "avg": 0,
+        "stdDev": 0,
+        "value": 0,
+        "displayValue": "${this.value} proie",
+        "adjustments": {
+          "": ""
+        },
+        "selectedAdjustmentGeneName": ""
+      },
+      {
+        "displayName": "Temps pour manger",
+        "name": "eatingInterval",
+        "modificator": "",
+        "avg": 0,
+        "stdDev": 0,
+        "value": 0,
+        "displayValue": "${this.value} ue",
+        "adjustments": {
+          "": ""
+        },
+        "selectedAdjustmentGeneName": ""
+      }
+    ]
+  },
+  "plant": {
+    "startingNb": 200,
+    "spawnRate": 20,
+    "spawnInterval": 15
+  },
+  "size": 8000,
+  "scale": 1,
+  "offsetX": 0,
+  "offsetY": 0,
+  "speed": 1,
+  "seed": 43726269,
+  "nbOfAnimalsSnapshotInterval": 50
+}

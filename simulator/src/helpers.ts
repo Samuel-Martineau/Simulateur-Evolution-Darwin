@@ -36,8 +36,9 @@ export const showAverageGenesChart = () => {
 
   const genes: any[] = <any[]>_.intersectionBy(window.preyConfig.genes, window.predatorConfig.genes, 'name').map(
     (g: any) => {
-      if (g.displayName === 'Nombre de plantes à manger') g.displayName = 'Nombre de plantes / proies à manger';
-      return g;
+      let gene = Object.assign({}, g);
+      if (gene.displayName === 'Nombre de plantes à manger') gene.displayName = 'Nombre de plantes / proies à manger';
+      return gene;
     }
   );
   const options: any = {};
@@ -46,14 +47,14 @@ export const showAverageGenesChart = () => {
   defaultAlert
     .mixin()
     .fire({
-      title: '<span style="margin-top: 20px;">De quel gêne voulez-vous voir l\'évolution?</span>',
+      title: '<span style="margin-top: 20px;">De quel gène voulez-vous voir l\'évolution?</span>',
       width: 1000,
-      confirmButtonText: "Voir l'évolution du gêne",
+      confirmButtonText: "Voir l'évolution du gène",
       inputOptions: options,
       input: 'select',
-      inputPlaceholder: 'Choisissez un gêne',
+      inputPlaceholder: 'Choisissez un gène',
       inputValidator(v) {
-        if (!v) return 'Veuillez choisir un gêne!';
+        if (!v) return 'Veuillez choisir un gène!';
         else return;
       }
     })
@@ -230,7 +231,7 @@ export const showStatsOfAnimal = (a: Animal) => {
         const value = g.value;
         const name = g.displayName;
         const res = eval(eval('`' + gene.adjustments[k] + '`'));
-        adjustmentsText += `<li style="font-size: 22px;">Ajustement de <u>${res}</u> par le gêne « <b>${name}</b> »</li>`;
+        adjustmentsText += `<li style="font-size: 22px;">Ajustement de <u>${res}</u> par le gène « <b>${name}</b> »</li>`;
       });
       adjustmentsText += '</ul></ul>';
     }
@@ -247,8 +248,11 @@ export const showStatsOfAnimal = (a: Animal) => {
     let name = event.name;
     let i = 0;
     let array;
-    //@ts-ignore
-    while ((array = regex.exec(name)) !== null) name = name.replace('%', event.data[i](a));
+    while ((array = regex.exec(name)) !== null) {
+      //@ts-ignore
+      name = name.replace('%', event.data[i](a));
+      i++;
+    }
     eventsText += `<li><b>${name} </b> dans ${Math.round(time)} ut</li>`;
   });
   defaultAlert

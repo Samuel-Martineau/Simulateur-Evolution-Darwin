@@ -36,7 +36,7 @@
     unit="herbivore(s)" />
   {#each config.prey.genes as gene}
     {console.log((gene.adjustments = gene.adjustments || {})) || ''}
-    <h1 class="title is-5">Gêne de {gene.displayName.toLowerCase()}</h1>
+    <h1 class="title is-5">Gène « {gene.displayName} »</h1>
     <Select label="Modificateur" bind:value={gene.modificator}>
       <option value="stddev">Écart type</option>
       <option value="constant">Constant</option>
@@ -61,7 +61,7 @@
       <p class="control">
         <span class="select">
           <select bind:value={gene.selectedAdjustmentGeneName}>
-            <option value="" disabled default>Veuillez choisir un gêne</option>
+            <option value="" disabled default>Veuillez choisir un gène</option>
             {#each config.prey.genes as g}
               <option value={g.name}>{g.displayName}</option>
             {/each}
@@ -75,7 +75,7 @@
           disabled={gene.selectedAdjustmentGeneName === ''}
           class="input"
           type="text"
-          placeholder="Formule pour ledit gêne"
+          placeholder="Formule pour ledit gène"
           bind:value={gene.adjustments[gene.selectedAdjustmentGeneName]} />
       </p>
     </div>
@@ -91,7 +91,7 @@
     unit="carnivore(s)" />
   {#each config.predator.genes as gene}
     {console.log((gene.adjustments = gene.adjustments || {})) || ''}
-    <h1 class="title is-5">Gêne de {gene.displayName.toLowerCase()}</h1>
+    <h1 class="title is-5">Gène de {gene.displayName.toLowerCase()}</h1>
     <Select label="Modificateur" bind:value={gene.modificator}>
       <option value="stddev">Écart type</option>
       <option value="constant">Constant</option>
@@ -116,7 +116,7 @@
       <p class="control">
         <span class="select">
           <select bind:value={gene.selectedAdjustmentGeneName}>
-            <option value="" disabled default>Veuillez choisir un gêne</option>
+            <option value="" disabled default>Veuillez choisir un gène</option>
             {#each config.prey.genes as g}
               <option value={g.name}>{g.displayName}</option>
             {/each}
@@ -130,7 +130,7 @@
           disabled={gene.selectedAdjustmentGeneName === ''}
           class="input"
           type="text"
-          placeholder="Formule pour ledit gêne"
+          placeholder="Formule pour ledit gène"
           bind:value={gene.adjustments[gene.selectedAdjustmentGeneName]} />
       </p>
     </div>

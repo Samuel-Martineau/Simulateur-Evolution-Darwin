@@ -260,9 +260,10 @@ export default class Animal {
     if (this.hunger <= 0) {
       this.hunger = this.getRealGeneValue('hungerLevel', 0);
       this.addEvent({
-        name: `Doit avoir mangé ${this.hunger} ${foodVariety.toLowerCase()}${this.hunger > 1 ? 's' : ''}`,
+        name: `Doit avoir mangé % ${foodVariety.toLowerCase()}%`,
         time: this.eatingInterval,
-        action: (self: Animal) => self.checkHunger(foodVariety)
+        action: (self: Animal) => self.checkHunger(foodVariety),
+        data: [self => Math.round(self.hunger), self => (self.hunger > 1 ? 's' : '')]
       });
     } else _.remove(window.animals, ['uid', this.uid]);
   }

@@ -4,7 +4,7 @@ import _ from 'lodash';
 
 export const createDomElements = (controlPanelDiv: p5.Element) => {
   window.p5
-    .createButton("Voir le diagramme de l'évolution moyenne d'un gêne selon les générations")
+    .createButton("Voir le diagramme de l'évolution moyenne d'un gène selon les générations")
     .addClass('bouton mauve')
     .parent(controlPanelDiv)
     .mousePressed(() => window.showAverageGenesChart());
