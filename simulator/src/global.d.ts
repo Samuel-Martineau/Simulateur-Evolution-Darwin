@@ -12,7 +12,6 @@ interface Window {
   offsetX: number;
   offsetY: number;
   isPopupActive: boolean;
-  enabledLoggers: string[];
   preyConfig: any;
   predatorConfig: any;
   plantConfig: any;
@@ -27,8 +26,6 @@ interface Window {
   showChangeScaleDialog(): void;
   showNbOfAnimalsByTime(): void;
   showStatsOfAnimal(animal: import('./animal/animal.class').default): void;
-  enableLogger(name: string): void;
-  disableLogger(name: string): void;
   showSpawn(): void;
   showKill(): void;
 

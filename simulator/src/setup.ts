@@ -1,5 +1,5 @@
 import p5 from 'p5';
-import { enableLogger, disableLogger, updateAverageGenes, createAnimal } from './helpers';
+import { updateAverageGenes, createAnimal } from './helpers';
 import _ from 'lodash';
 
 export const createDomElements = (controlPanelDiv: p5.Element) => {
@@ -64,7 +64,6 @@ export const initiateGlobalVariables = () => {
   let config = window.config;
   window.preyConfig = config.prey;
   window.predatorConfig = config.predator;
-  window.enabledLoggers = [];
   window.averagePreyGenes = [];
   window.averagePredatorGenes = [];
   window.animals = [];
@@ -82,6 +81,4 @@ export const initiateGlobalVariables = () => {
   window.nbOfPredatorsByTime = [];
   window.p5.randomSeed(config.seed);
   window.p5.noiseSeed(config.seed);
-  window.enableLogger = enableLogger;
-  window.disableLogger = disableLogger;
 };

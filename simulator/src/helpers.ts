@@ -424,19 +424,6 @@ export const exportToCSV = () => {
   csvExporter.generateCsv(data);
 };
 
-export const enableLogger = (loggerName: string) => {
-  window.enabledLoggers.push(loggerName);
-};
-
-export const disableLogger = (loggerName: string) => {
-  if (loggerName === '*') window.enabledLoggers = [];
-  else {
-    const i = window.enabledLoggers.indexOf(loggerName);
-    if (i === -1) return;
-    window.enabledLoggers.splice(i, 1);
-  }
-};
-
 export const createPlant = () => {
   const { random } = window.p5;
   const { size } = window;

@@ -26,7 +26,7 @@
         "displayValue": "${this.value} ut"
       },
       {
-        "displayName": "Interval entre les périodes de reproduction",
+        "displayName": "Intervalle entre les périodes de reproduction",
         "name": "intervalBetweenReproducingPeriods",
         "modificator": "constant",
         "value": 1000,
@@ -85,7 +85,7 @@
         "displayValue": "`${this.value} ut`"
       },
       {
-        "displayName": "Interval entre les périodes de reproduction",
+        "displayName": "Intervalle entre les périodes de reproduction",
         "name": "intervalBetweenReproducingPeriods",
         "modificator": "constant",
         "value": 2000,

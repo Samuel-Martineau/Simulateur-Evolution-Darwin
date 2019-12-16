@@ -91,7 +91,7 @@
     unit="carnivore(s)" />
   {#each config.predator.genes as gene}
     {console.log((gene.adjustments = gene.adjustments || {})) || ''}
-    <h1 class="title is-5">Gène de {gene.displayName.toLowerCase()}</h1>
+    <h1 class="title is-5">Gène « {gene.displayName} »</h1>
     <Select label="Modificateur" bind:value={gene.modificator}>
       <option value="stddev">Écart type</option>
       <option value="constant">Constant</option>
@@ -143,7 +143,7 @@
     unit="plantes" />
   <NumberInput
     bind:value={config.plant.spawnInterval}
-    label="Interval entre les vagues d'appartion des plantes"
+    label="Intervalle entre les vagues d'appartion des plantes"
     unit="ut" />
   <NumberInput
     bind:value={config.plant.spawnRate}
@@ -155,6 +155,6 @@
   <NumberInput bind:value={config.seed} label="SEED" />
   <NumberInput
     bind:value={config.nbOfAnimalsSnapshotInterval}
-    label="Interval entre les recensement des populations"
+    label="Intervalle entre les recensement des populations"
     unit="ut" />
 </form>

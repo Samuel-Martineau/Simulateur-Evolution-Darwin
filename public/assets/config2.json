@@ -45,7 +45,7 @@
         "selectedAdjustmentGeneName": ""
       },
       {
-        "displayName": "Interval entre les périodes de reproduction",
+        "displayName": "Intervalle entre les périodes de reproduction",
         "name": "intervalBetweenReproducingPeriods",
         "modificator": "stddev",
         "avg": 1000,
@@ -99,7 +99,7 @@
     ]
   },
   "predator": {
-    "name": "Carnivores",
+    "name": "Carnivore",
     "startingNb": 20,
     "genes": [
       {
@@ -142,7 +142,7 @@
         "selectedAdjustmentGeneName": ""
       },
       {
-        "displayName": "Interval entre les périodes de reproduction",
+        "displayName": "Intervalle entre les périodes de reproduction",
         "name": "intervalBetweenReproducingPeriods",
         "modificator": "stddev",
         "avg": 3000,
