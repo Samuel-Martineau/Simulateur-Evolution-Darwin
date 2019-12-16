@@ -2,4 +2,8 @@
 node_modules/
 yarn-error.log
 public/bundle.*
+public/simulator.*
 public/index.simulator.*
+public/simulator.*.*
+public/bundle.*.map
+public/bulma.css
