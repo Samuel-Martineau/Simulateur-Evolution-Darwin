@@ -12,7 +12,7 @@
         "avg": 40,
         "stdDev": 4,
         "value": 0,
-        "displayValue": "${this.value.toFixed(2)} ue / ut (${(this.value * window.ut).toFixed(2)} ${window.ueUnit} / ${window.ut} ${window.utUnit})",
+        "displayValue": "${this.value.toFixed(2)} ue / ut",
         "adjustments": {
           "": ""
         },
@@ -109,7 +109,7 @@
         "avg": 60,
         "stdDev": 5,
         "value": 0,
-        "displayValue": "${(this.value * window.ut).toFixed(2)} ${window.ueUnit} / ${window.ut} ${window.utUnit}",
+        "displayValue": "${(this.value * window.ut).toFixed(2)}",
         "adjustments": {
           "": ""
         },
