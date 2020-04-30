@@ -5,7 +5,9 @@
   "scripts": {
     "start": "webpack-dev-server --mode development --host 0.0.0.0",
     "dev": "webpack --mode development",
-    "prod": "webpack --mode production"
+    "prod": "webpack --mode production",
+    "snyk-protect": "snyk protect",
+    "prepublish": "npm run snyk-protect"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
@@ -45,6 +47,8 @@
     "lodash": "^4.17.15",
     "p5": "^0.9.0",
     "sweetalert2": "^8.17.1",
-    "uid-generator": "^2.0.0"
-  }
+    "uid-generator": "^2.0.0",
+    "snyk": "^1.316.1"
+  },
+  "snyk": true
 }
