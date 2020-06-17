@@ -25,6 +25,7 @@
   },
   "scripts": {
     "build": "rollup -c && cd simulator && npm run prod",
+    "prod": "npm i && rollup -c && cd simulator && npm i && npm run prod",
     "autobuild": "rollup -c -w",
     "dev": "run-p start:dev autobuild",
     "start": "sirv public --single",
