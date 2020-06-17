@@ -13,7 +13,7 @@ import Gene from 'animal/gene.interface';
 const defaultAlert = Swal.mixin({
   cancelButtonText: '❌',
   showCancelButton: true,
-  confirmButtonText: '👍'
+  confirmButtonText: '👍',
 });
 
 export const getCanvasSize = () => {
@@ -24,7 +24,7 @@ export const stdDev = (arr: any[], map?: (el: any) => any) => {
   if (map) arr = arr.map(map);
   let avg = _.mean(arr);
   return _.chain(arr)
-    .map(val => Math.abs(val - avg))
+    .map((val) => Math.abs(val - avg))
     .mean()
     .value();
 };
@@ -42,7 +42,7 @@ export const showAverageGenesChart = () => {
     }
   );
   const options: any = {};
-  genes.forEach(g => (options[g.name] = g.displayName));
+  genes.forEach((g) => (options[g.name] = g.displayName));
   //@ts-ignore
   defaultAlert
     .mixin()
@@ -56,7 +56,7 @@ export const showAverageGenesChart = () => {
       inputValidator(v) {
         if (!v) return 'Veuillez choisir un gène!';
         else return;
-      }
+      },
     })
     //@ts-ignore
     .then(({ value: geneName, dismiss: reason }) => {
@@ -66,11 +66,11 @@ export const showAverageGenesChart = () => {
         return;
       }
       //@ts-ignore
-      const preyData = window.averagePreyGenes.map(a => a[geneName]);
+      const preyData = window.averagePreyGenes.map((a) => a[geneName]);
       //@ts-ignore
-      const predatorData = window.averagePredatorGenes.map(a => a[geneName]);
+      const predatorData = window.averagePredatorGenes.map((a) => a[geneName]);
       const indexes = _.range(1, (preyData.length > predatorData.length ? preyData.length : predatorData.length) + 1);
-      let gene = genes.find(g => g.name === geneName);
+      let gene = genes.find((g) => g.name === geneName);
       defaultAlert
         .fire({
           title: `<span style="margin-top: 20px;">${gene.displayName} moyen(ne) selon les générations</span>`,
@@ -81,37 +81,37 @@ export const showAverageGenesChart = () => {
             new Chart(<HTMLCanvasElement>document.getElementById('averageSpeedChart'), {
               type: 'line',
               data: {
-                labels: indexes.map(el => el.toString()),
+                labels: indexes.map((el) => el.toString()),
                 datasets: [
                   {
                     label: `${window.preyConfig.name}s`,
                     data: preyData,
                     borderColor: '#5DBCD2',
                     backgroundColor: '#3f9faa',
-                    fill: false
+                    fill: false,
                   },
                   {
                     label: `${window.predatorConfig.name}s`,
                     data: predatorData,
                     borderColor: '#EC0000',
                     backgroundColor: '#ce0000',
-                    fill: false
-                  }
-                ]
+                    fill: false,
+                  },
+                ],
               },
               options: {
                 scales: {
                   yAxes: [{ scaleLabel: { display: true, labelString: `${gene.displayName} moyen(ne)` } }],
-                  xAxes: [{ scaleLabel: { display: true, labelString: 'Nombre de générations' } }]
+                  xAxes: [{ scaleLabel: { display: true, labelString: 'Nombre de générations' } }],
                 },
                 elements: {
                   line: {
-                    tension: 0
-                  }
-                }
-              }
+                    tension: 0,
+                  },
+                },
+              },
             });
-          }
+          },
         })
         .then(() => {
           window.speed = speed;
@@ -135,10 +135,10 @@ export const showNbOfAnimalsByTime = () => {
         const maxNumber = 100;
         const totalNbOfEl = window.nbOfPlantsByTime.length;
         const keep = totalNbOfEl < maxNumber ? 1 : totalNbOfEl / maxNumber;
-        const nbOfPlantsByTime = _.chunk(window.nbOfPlantsByTime, keep).map(arr => _.mean(arr));
-        const nbOfPreysByTime = _.chunk(window.nbOfPreysByTime, keep).map(arr => _.mean(arr));
-        const nbOfPredatorsByTime = _.chunk(window.nbOfPredatorsByTime, keep).map(arr => _.mean(arr));
-        const labels = _.chunk(_.range(0, totalNbOfEl), keep).map(arr =>
+        const nbOfPlantsByTime = _.chunk(window.nbOfPlantsByTime, keep).map((arr) => _.mean(arr));
+        const nbOfPreysByTime = _.chunk(window.nbOfPreysByTime, keep).map((arr) => _.mean(arr));
+        const nbOfPredatorsByTime = _.chunk(window.nbOfPredatorsByTime, keep).map((arr) => _.mean(arr));
+        const labels = _.chunk(_.range(0, totalNbOfEl), keep).map((arr) =>
           (_.mean(arr) * window.nbOfAnimalsSnapshotInterval).toString()
         );
         const datasets = [
@@ -147,42 +147,42 @@ export const showNbOfAnimalsByTime = () => {
             data: nbOfPreysByTime,
             borderColor: '#5DBCD2',
             backgroundColor: '#3f9faa',
-            fill: false
+            fill: false,
           },
           {
             label: `${window.predatorConfig.name}s`,
             data: nbOfPredatorsByTime,
             borderColor: '#EC0000',
             backgroundColor: '#ce0000',
-            fill: false
+            fill: false,
           },
           {
             label: `Plantes`,
             data: nbOfPlantsByTime,
             borderColor: '#3ABB44',
             backgroundColor: '#1c9d27',
-            fill: false
-          }
-        ].filter(d => d.data.length > 0);
+            fill: false,
+          },
+        ].filter((d) => d.data.length > 0);
         new Chart(<HTMLCanvasElement>document.getElementById('nbOfAnimalsByTimeChart'), {
           type: 'line',
           data: {
             labels,
-            datasets
+            datasets,
           },
           options: {
             scales: {
               yAxes: [{ scaleLabel: { display: true, labelString: "Nombre d'individus" } }],
-              xAxes: [{ scaleLabel: { display: true, labelString: 'Temps (ut)' } }]
+              xAxes: [{ scaleLabel: { display: true, labelString: 'Temps (ut)' } }],
             },
             elements: {
               line: {
-                tension: 0.4
-              }
-            }
-          }
+                tension: 0.4,
+              },
+            },
+          },
         });
-      }
+      },
     })
     .then(() => {
       window.speed = speed;
@@ -203,10 +203,10 @@ export const showChangeSpeedDialog = () => {
         inputAttributes: {
           min: 0,
           max: 25,
-          step: 1
+          step: 1,
         },
         inputValue: speed,
-        width: 1000
+        width: 1000,
       }
     )
     .then(({ value, dismiss: reason }: any) => {
@@ -221,12 +221,12 @@ export const showStatsOfAnimal = (a: Animal) => {
   const speed = window.speed;
   window.speed = 0;
   let genesText = '';
-  a.genes.forEach(gene => {
+  a.genes.forEach((gene) => {
     let adjustmentsText = '';
     const keys = Object.keys(gene.adjustments);
     if (keys.length > 0) {
       adjustmentsText += `<ul><ul>`;
-      keys.forEach(k => {
+      keys.forEach((k) => {
         const g = a.getGene(k, 0);
         const value = g.value;
         const name = g.displayName;
@@ -242,7 +242,7 @@ export const showStatsOfAnimal = (a: Animal) => {
     } »</small></i>${adjustmentsText}</li>`;
   });
   let eventsText = '';
-  a.events.forEach(event => {
+  a.events.forEach((event) => {
     const time = event.time - window.time;
     const regex = /%/g;
     let name = event.name;
@@ -270,7 +270,7 @@ export const showStatsOfAnimal = (a: Animal) => {
           <li><b>Évènements: </b><ul>${eventsText}</ul></li>
         </ul>
       </div>
-    `
+    `,
     })
     .then(() => {
       window.speed = speed;
@@ -280,21 +280,18 @@ export const showStatsOfAnimal = (a: Animal) => {
 
 export const updateAverageGenes = (specie: 0 | 1, generation: number) => {
   const genes: string[] = (<any[]>_.intersectionBy(window.preyConfig.genes, window.predatorConfig.genes, 'name')).map(
-    g => g.name
+    (g) => g.name
   );
-  const animals = _.chain(window.animals)
-    .filter(['specie', specie])
-    .filter(['generation', generation])
-    .value();
+  const animals = _.chain(window.animals).filter(['specie', specie]).filter(['generation', generation]).value();
   const averageGenes: any = {};
-  genes.forEach(name => (averageGenes[name] = _.meanBy(animals, a => a.getRealGeneValue(name, 0))));
+  genes.forEach((name) => (averageGenes[name] = _.meanBy(animals, (a) => a.getRealGeneValue(name, 0))));
   const generationsAverages = specie === 0 ? window.averagePreyGenes : window.averagePredatorGenes;
   generationsAverages[generation - 1] = averageGenes;
 };
 
 export const updateNbOfAnimalsByTime = () => {
   window.nbOfPlantsByTime.push(window.plants.length);
-  const nbOfPreys = window.animals.filter(a => a.specie === 0).length;
+  const nbOfPreys = window.animals.filter((a) => a.specie === 0).length;
   window.nbOfPreysByTime.push(nbOfPreys);
   window.nbOfPredatorsByTime.push(window.animals.length - nbOfPreys);
 };
@@ -313,10 +310,10 @@ export const showChangeScaleDialog = () => {
         inputAttributes: {
           min: 1,
           max: 10,
-          step: 1
+          step: 1,
         },
         inputValue: window.scale,
-        width: 1000
+        width: 1000,
       }
     )
     .then(({ value, dismiss: reason }: any) => {
@@ -333,7 +330,7 @@ export const changeOffsets = () => {
     [getCanvasSize() / 2 - 20, getCanvasSize() / 2 + 20, 0, 50],
     [getCanvasSize() / 2 - 20, getCanvasSize() / 2 + 20, getCanvasSize() - 40, getCanvasSize()],
     [0, 50, getCanvasSize() / 2 - 25, getCanvasSize() / 2 + 25],
-    [getCanvasSize() - 57, getCanvasSize(), getCanvasSize() / 2 - 30, getCanvasSize() / 2 + 25]
+    [getCanvasSize() - 57, getCanvasSize(), getCanvasSize() / 2 - 30, getCanvasSize() / 2 + 25],
   ];
   let clickedArrow = -1;
   arrowsCoordinates.forEach((coor, index) => {
@@ -373,28 +370,28 @@ export const centerZoom = () => {
 export const exportToCSV = () => {
   const allGenes: any[] = [];
   const allEvents: any[] = [];
-  window.animals.forEach(animal => {
-    animal.genes.forEach(gene => (_.findIndex(allGenes, ['name', gene.name]) === -1 ? allGenes.push(gene) : null));
-    animal.events.forEach(event =>
+  window.animals.forEach((animal) => {
+    animal.genes.forEach((gene) => (_.findIndex(allGenes, ['name', gene.name]) === -1 ? allGenes.push(gene) : null));
+    animal.events.forEach((event) =>
       _.findIndex(allEvents, ['name', event.name]) === -1 ? allEvents.push(event) : null
     );
   });
-  const data: any[] = window.animals.map(animal => {
+  const data: any[] = window.animals.map((animal) => {
     animal = animal.clone();
     let { uid, canReproduce, events, intervalBetweenReproducingPeriods, genes, specie, position, generation } = animal;
     const { x, y } = position;
-    allGenes.forEach(gene =>
+    allGenes.forEach((gene) =>
       _.findIndex(genes, ['name', gene.name]) === -1 ? genes.push(animal.getGene(gene.name, undefined)) : null
     );
-    allEvents.forEach(event =>
+    allEvents.forEach((event) =>
       _.findIndex(events, ['name', event.name]) === -1
         ? events.push({ name: event.name, time: -1, action: () => null })
         : null
     );
     const genesObj: any = {};
-    genes.forEach(gene => (genesObj[`gene:${gene.displayName}`] = gene.value));
+    genes.forEach((gene) => (genesObj[`gene:${gene.displayName}`] = gene.value));
     const eventsObj: any = {};
-    events.forEach(event => (eventsObj[`event:${event.name}`] = `${event.time}`));
+    events.forEach((event) => (eventsObj[`event:${event.name}`] = `${event.time}`));
     specie = specie === 0 ? window.preyConfig.name : window.predatorConfig.name;
     return {
       uid,
@@ -405,7 +402,7 @@ export const exportToCSV = () => {
       canReproduce,
       intervalBetweenReproducingPeriods,
       ...eventsObj,
-      ...genesObj
+      ...genesObj,
     };
   });
 
@@ -416,7 +413,7 @@ export const exportToCSV = () => {
     showLabels: true,
     filename: `DONNEES_ANIMAUX_${new Date().toString().toUpperCase()}`,
     useBom: true,
-    useKeysAsHeaders: true
+    useKeysAsHeaders: true,
   };
 
   const csvExporter = new ExportToCsv(options);
@@ -454,14 +451,14 @@ export const createAnimal = (specie: 0 | 1, genes: any, coordinates: [number, nu
       displayValue() {
         return eval('`' + g.displayValue + '`');
       },
-      adjustments
+      adjustments,
     });
   });
   window.animals.push(
     new (specie === 0 ? Prey : Predator)({
       x: coordinates[0],
       y: coordinates[1],
-      genes: gs
+      genes: gs,
     })
   );
 };
@@ -480,7 +477,7 @@ export const spawnAnimals = (specie: 0 | 1, nb: number, method: 'average' | 'con
         name: g.name,
         modificator: g.modificator,
         value: averages[g.name],
-        displayValue: g.displayValue
+        displayValue: g.displayValue,
       }));
       createAnimal(specie, genes, coor);
       updateAverageGenes(specie, (specie === 0 ? window.averagePreyGenes : window.averagePredatorGenes).length);
@@ -501,22 +498,23 @@ export const showSpawn = () => {
         inputOptions: {
           0: window.preyConfig.name,
           1: window.predatorConfig.name,
-          2: 'Plante'
+          2: 'Plante',
         },
         inputPlaceholder: 'Choisissez une espèce',
         inputValidator(v) {
-          if (!v) return 'Veuillez choisir une espèce!';
-          else return;
-        }
+          if (!v) return <any>'Veuillez choisir une espèce!';
+          else return <any>undefined;
+        },
       },
       //@ts-ignore
       {
         title: 'Combien voulez-vous en faire apparaître?',
         input: 'number',
-        inputValue: 1,
-        inputValidator(v: number) {
-          if (!v || v < 1) return 'Veuillez entrer un nombre plus grand ou égal à 1';
-        }
+        inputValue: <any>1,
+        inputValidator(v: any) {
+          if (!v || v < 1) return <any>'Veuillez entrer un nombre plus grand ou égal à 1';
+          else return <any>undefined;
+        },
       },
       //@ts-ignore
       {
@@ -524,14 +522,14 @@ export const showSpawn = () => {
         input: 'select',
         inputOptions: {
           average: 'À partir de la moyenne de la génération la plus récente',
-          config: 'À partir de la configuration de départ'
+          config: 'À partir de la configuration de départ',
         },
         inputPlaceholder: 'Choisissez une des deux options',
-        inputValidator(v) {
-          if (!v) return 'Veuillez choisir une des deux options!';
-          else return;
-        }
-      }
+        inputValidator(v: any) {
+          if (!v) return <any>'Veuillez choisir une des deux options!';
+          else return <any>undefined;
+        },
+      },
     ])
     .then(({ value: answers, dismiss: reason }: any) => {
       window.speed = speed;
@@ -550,7 +548,7 @@ export const kill = (specie: 0 | 1 | 2, nb: number) => {
     if (specie === 2) {
       _.remove(window.plants, ['uid', window.p5.random(window.plants).uid]);
     } else {
-      const animals = window.animals.filter(a => a.specie === specie);
+      const animals = window.animals.filter((a) => a.specie === specie);
       _.remove(window.animals, ['uid', window.p5.random(animals).uid]);
     }
   }
@@ -562,8 +560,8 @@ export const showKill = () => {
   window.speed = 0;
   const inputOptions: any = {};
   if (window.plants.length > 0) inputOptions[2] = 'Plante';
-  if (window.animals.filter(a => a.specie === 1).length > 0) inputOptions[1] = window.predatorConfig.name;
-  if (window.animals.filter(a => a.specie === 0).length > 0) inputOptions[0] = window.preyConfig.name;
+  if (window.animals.filter((a) => a.specie === 1).length > 0) inputOptions[1] = window.predatorConfig.name;
+  if (window.animals.filter((a) => a.specie === 0).length > 0) inputOptions[0] = window.preyConfig.name;
   //@ts-ignore
   defaultAlert
     .fire({
@@ -574,7 +572,7 @@ export const showKill = () => {
       inputValidator(v) {
         if (!v) return 'Veuillez choisir une espèce!';
         else return;
-      }
+      },
     })
     .then(({ value: specie, dismiss: reason }: any) => {
       if (reason) {
@@ -590,10 +588,10 @@ export const showKill = () => {
               input: 'range',
               inputAttributes: {
                 min: 1,
-                max: specie === 2 ? window.plants.length : window.animals.filter(a => a.specie === specie).length,
-                step: 1
+                max: specie === 2 ? window.plants.length : window.animals.filter((a) => a.specie === specie).length,
+                step: 1,
               },
-              inputValue: 1
+              inputValue: 1,
             }
           )
           .then(({ value: nb, dismiss: reason }: any) => {
