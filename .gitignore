@@ -1,6 +1,12 @@
 .DS_Store
 node_modules/
 yarn-error.log
-public/*
+public/bulma.css
+public/bundle.*
+public/bundle.*.*
+public/simulator.*
+public/index.simulator.*
+public/index.simulator.*.*
+public/assets/**
 # Local Netlify folder
 .netlify
