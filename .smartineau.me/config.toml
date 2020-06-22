@@ -1,7 +1,7 @@
 # Ce dossier est utilisé pour afficher ce projet sur mon site web (https://smartineau.me)
 # This folder is used to display this project on my website (https://smartineau.me)
 titre = "Simulateur d'évolution selon Darwin"
-etiquettes = ["ts", "p5", "svelte", "expo-sciences"]
+etiquettes = ["expo-sciences", "ts", "p5", "svelte"]
 dossier = "expo-sciences"
 url_site_web = "https://simulateur-evolution-darwin.netlify.app"
 contenu = "/README.md"
