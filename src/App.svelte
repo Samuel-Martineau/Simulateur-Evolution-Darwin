@@ -1,11 +1,11 @@
 <script>
+  import downloadFile from 'js-file-download';
+  import uuid from 'uuid-random';
   import '../node_modules/bulma/css/bulma.min.css';
   import EditConfig from './EditConfig.svelte';
-  import downloadFile from 'js-file-download';
-  import Sidebar from './Sidebar.svelte';
-  import Navbar from './Navbar.svelte';
   import Modal from './Modal.svelte';
-  import uuid from 'uuid-random';
+  import Navbar from './Navbar.svelte';
+  import Sidebar from './Sidebar.svelte';
 
   const defaultConfig = {
     name: 'Nouvelle configuration',
@@ -204,18 +204,18 @@
   }
 
   function editConfig({ detail: id }) {
-    currConfig = configs.filter(c => c.id === id)[0];
+    currConfig = configs.filter((c) => c.id === id)[0];
   }
 
   function deleteConfig() {
-    const i = configs.findIndex(c => c.id === currConfig.id);
-    configs = configs.filter(c => c.id !== currConfig.id);
+    const i = configs.findIndex((c) => c.id === currConfig.id);
+    configs = configs.filter((c) => c.id !== currConfig.id);
     if (i > 0) currConfig = configs[i - 1];
     else currConfig = undefined;
   }
 
   function duplicateConfig() {
-    const i = configs.findIndex(c => c.id === currConfig.id);
+    const i = configs.findIndex((c) => c.id === currConfig.id);
     const part1 = configs.slice(0, i + 1);
     const part2 = configs.slice(i + 1);
     const newConfig = JSON.parse(JSON.stringify(currConfig));
@@ -227,12 +227,12 @@
 
   function executeConfig() {
     showSimulatorModal = true;
-    currConfig.prey.genes.forEach(g => {
+    currConfig.prey.genes.forEach((g) => {
       for (let key in g.adjustments) {
         if (!g.adjustments[key]) delete g.adjustments[key];
       }
     });
-    currConfig.predator.genes.forEach(g => {
+    currConfig.predator.genes.forEach((g) => {
       for (let key in g.adjustments) {
         if (!g.adjustments[key]) delete g.adjustments[key];
       }
@@ -255,7 +255,7 @@
     if (!chosenFile) return;
     showUploadModal = false;
     let reader = new FileReader();
-    reader.onload = e => {
+    reader.onload = (e) => {
       const newConfig = Object.assign(
         JSON.parse(JSON.stringify(defaultConfig)),
         JSON.parse(e.target.result)
@@ -372,7 +372,7 @@
         class="file-input"
         type="file"
         accept="application/json"
-        on:change={e => (chosenFile = e.target.files[0])} />
+        on:change={(e) => setTimeout(() => (chosenFile = e.target.files[0]), 0)} />
       <span class="file-cta">
         <span class="file-label">⬆️ Choisissez un fichier ⬆️</span>
       </span>

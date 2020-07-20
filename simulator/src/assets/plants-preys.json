@@ -1,29 +1,119 @@
 {
   "prey": {
     "name": "Proie",
-    "avgSpeed": 40,
-    "stdDevSpeed": 4,
-    "avgNbOfBabies": 8,
-    "stdDevNbOfBabies": 2.5,
-    "intervalBetweenReproducingPeriods": 1000,
-    "renderDistance": 200,
-    "longevity": 50000,
-    "nbOfPlantsToEat": 3,
-    "eatingInterval": 200,
-    "startingNb": 200
+    "startingNb": 200,
+    "genes": [
+      {
+        "displayName": "Vitesse",
+        "name": "speed",
+        "modificator": "stddev",
+        "avg": 40,
+        "stdDev": 4,
+        "displayValue": "${this.value.toFixed(2)} ue / ut (${(this.value * window.ut).toFixed(2)} ${window.ueUnit} / ${window.ut} ${window.utUnit})"
+      },
+      {
+        "displayName": "Nombre de bébés",
+        "name": "nbOfBabies",
+        "modificator": "stddev",
+        "avg": 8,
+        "stdDev": 2.5,
+        "displayValue": "${this.value} bébé${ this.value > 1 ? 's' : '' }"
+      },
+      {
+        "displayName": "Intervalle entre les périodes de reproduction",
+        "name": "intervalBetweenReproducingPeriods",
+        "modificator": "constant",
+        "value": 1000,
+        "displayValue": "${this.value} ut"
+      },
+      {
+        "displayName": "Distance de vue",
+        "name": "renderDistance",
+        "modificator": "constant",
+        "value": 200,
+        "displayValue": "${this.value} ue"
+      },
+      {
+        "displayName": "Longévité",
+        "name": "longevity",
+        "modificator": "constant",
+        "value": 50000,
+        "displayValue": "${this.value} ut"
+      },
+      {
+        "displayName": "Nombre de plantes à manger",
+        "name": "nbOfPlantsToEat",
+        "modificator": "constant",
+        "value": 3,
+        "displayValue": "${this.value} plantes",
+        "adjustments": {
+          "speed": "Math.round(${value} * 0.05)"
+        }
+      },
+      {
+        "displayName": "Temps pour manger",
+        "name": "eatingInterval",
+        "modificator": "constant",
+        "value": 200,
+        "displayValue": "${this.value} ue"
+      }
+    ]
   },
   "predator": {
     "name": "Prédateur",
-    "avgSpeed": 50,
-    "stdDevSpeed": 5,
-    "avgNbOfBabies": 1,
-    "stdDevNbOfBabies": 0,
-    "intervalBetweenReproducingPeriods": 5000,
-    "renderDistance": 220,
-    "longevity": 100000,
-    "nbOfPreysToEat": 1,
-    "eatingInterval": 500,
-    "startingNb": 0
+    "startingNb": 0,
+    "genes": [
+      {
+        "displayName": "Vitesse",
+        "name": "speed",
+        "modificator": "stddev",
+        "avg": 50,
+        "stdDev": 5,
+        "displayValue": "`${(this.value * window.ut).toFixed(2)} ${window.ueUnit} / ${window.ut} ${window.utUnit}`"
+      },
+      {
+        "displayName": "Nombre de bébés",
+        "name": "nbOfBabies",
+        "modificator": "constant",
+        "value": 1,
+        "displayValue": "`${this.value} bébé${ this.value > 1 ? 's' : '' }`"
+      },
+      {
+        "displayName": "Longévité",
+        "name": "longevity",
+        "modificator": "constant",
+        "value": 50000,
+        "displayValue": "`${this.value} ut`"
+      },
+      {
+        "displayName": "Intervalle entre les périodes de reproduction",
+        "name": "intervalBetweenReproducingPeriods",
+        "modificator": "constant",
+        "value": 2000,
+        "displayValue": "`${this.value} ut`"
+      },
+      {
+        "displayName": "Distance de vue",
+        "name": "renderDistance",
+        "modificator": "constant",
+        "value": 200,
+        "displayValue": "`${this.value} ue`"
+      },
+      {
+        "displayName": "Nombre de proies à manger",
+        "name": "nbOfPreysToEat",
+        "modificator": "constant",
+        "value": 1,
+        "displayValue": "`${this.value} proie`"
+      },
+      {
+        "displayName": "Temps pour manger",
+        "name": "eatingInterval",
+        "modificator": "constant",
+        "value": 700,
+        "displayValue": "`${this.value} ue`"
+      }
+    ]
   },
   "plant": {
     "startingNb": 200,
