@@ -40,7 +40,7 @@
   },
   "author": "Samuel Martineau",
   "dependencies": {
-    "chart.js": "^2.9.3",
+    "chart.js": "^2.9.4",
     "export-to-csv": "^0.2.1",
     "lodash": "^4.17.20",
     "p5": "^0.9.0",
