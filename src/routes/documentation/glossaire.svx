@@ -1,0 +1,98 @@
+<script lang="ts">
+  import { onMount } from "svelte";
+  import ConfigurationFormDocumentationTable from "../../components/configuration-form-documentation-table.svelte";
+  import {
+    generalConfigurationFormInputData,
+    plantsSpecieConfigurationFormInputData,
+    getAnimalSpeciesConfigurationFormInputData,
+  } from "../../data/configuration-form-input-data";
+  import { sourceCodeURL } from "../../data/general";
+  import { scrollIntoView } from "../../utils";
+
+  onMount(() => {
+    const fragment = decodeURIComponent(window.location.hash);
+    if (fragment && fragment.startsWith("#configuration-")) {
+      scrollIntoView(fragment, window, 50);
+      const element = document.querySelector(fragment);
+      element.classList.add("selected");
+    }
+  });
+</script>
+
+<style lang="scss">
+  @import "src/styles/theme.scss";
+  @import "src/styles/variables.scss";
+
+  :global(.selected) {
+    animation: fadeSelected 2s;
+    border-radius: 5px;
+  }
+
+  @keyframes fadeSelected {
+    0%,
+    50% {
+      background-color: $palegreen;
+      color: white;
+    }
+
+    100% {
+      background-color: inherit;
+      color: inherit;
+    }
+  }
+</style>
+
+<svelte:head>
+
+  <title>Simulateur d'évolution - Glossaire</title>
+</svelte:head>
+
+## Table des matières
+
+# Glossaire
+
+## Unités
+
+### UE
+
+**UE** veut dire **U**nité d'**E**space. Le simulateur n'utilise pas d'unités réelles de longueur.
+
+### UT
+
+**UT** veut dire **U**nité de **T**emps. Le simulateur n'utilise pas d'unités réelles de temps.
+
+<br>
+
+## Configuration
+
+### Général
+
+<ConfigurationFormDocumentationTable configurationFormInputData={generalConfigurationFormInputData} />
+
+<br>
+
+### Espèce des plantes
+
+<ConfigurationFormDocumentationTable configurationFormInputData={plantsSpecieConfigurationFormInputData} />
+
+<br>
+
+### Espèces animales (proies et prédateurs)
+
+<ConfigurationFormDocumentationTable configurationFormInputData={getAnimalSpeciesConfigurationFormInputData('prey')} />
+
+<br>
+
+---
+
+# FAQ
+
+## Est-ce que j'ai besoin de sauvegarder mes configurations pour ne pas les perdre?
+
+**Non**, car l'éditeur de configurations les sauvegarde automatiquement
+
+<br>
+
+## Est-ce qu'il est possible de voir le code source de ce projet?
+
+**Oui**, il est disponible <a href={sourceCodeURL} target="_blank">ici</a>

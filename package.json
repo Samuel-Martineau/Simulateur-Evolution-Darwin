@@ -1,0 +1,66 @@
+{
+  "name": "simulateur-evolution",
+  "description": "Un simulateur d'évolution en ligne simple pour mieux comprendre ce complexe phénomène",
+  "version": "2.0.0",
+  "license": "MIT",
+  "author": {
+    "name": "Samuel Martineau",
+    "email": "samumartineau@gmail.com",
+    "url": "https://smartineau.me"
+  },
+  "repository": {
+    "url": "https://github.com/Samuel-Martineau/Simulateur-Evolution-Darwin"
+  },
+  "scripts": {
+    "dev": "sapper dev --no-hot --ext '.svelte .svx'",
+    "build": "sapper build --ext '.svelte .svx'",
+    "export": "sapper export --ext '.svelte .svx'",
+    "start": "node __sapper__/build",
+    "validate": "svelte-check --ignore src/node_modules/@sapper"
+  },
+  "dependencies": {
+    "compression": "^1.7.1",
+    "cookie-parser": "^1.4.5",
+    "express": "^4.17.1",
+    "github-slugger": "^1.3.0",
+    "is-mobile": "^2.2.2",
+    "lodash": "^4.17.20",
+    "ms": "^2.1.2",
+    "sirv": "^1.0.0",
+    "uuid": "^8.3.1"
+  },
+  "devDependencies": {
+    "@tsconfig/svelte": "^1.0.10",
+    "@types/compression": "^1.7.0",
+    "@types/cookie-parser": "^1.4.2",
+    "@types/express": "^4.17.9",
+    "@types/github-slugger": "^1.3.0",
+    "@types/lodash": "^4.14.165",
+    "@types/ms": "^0.7.31",
+    "@types/node": "^14.11.1",
+    "@types/uuid": "^8.3.0",
+    "autoprefixer": "^10.0.4",
+    "file-loader": "^6.0.0",
+    "mdsvex": "^0.8.9",
+    "postcss": "^8.1.10",
+    "postcss-load-config": "^3.0.0",
+    "rehype-autolink-headings": "^5.0.1",
+    "rehype-slug": "^4.0.1",
+    "rehype-urls": "^1.1.1",
+    "remark-toc": "^7.0.0",
+    "sapper": "^0.28.0",
+    "sass": "^1.30.0",
+    "svelte": "^3.17.3",
+    "svelte-check": "^1.0.46",
+    "svelte-loader": "^2.9.0",
+    "svelte-preprocess": "^4.3.0",
+    "ts-loader": "^8.0.4",
+    "tslib": "^2.0.1",
+    "typescript": "^4.0.3",
+    "unist-builder": "^2.0.3",
+    "unist-util-flatmap": "^1.0.0",
+    "webpack": "^4.7.0",
+    "webpack-modules": "^1.0.0",
+    "worker-loader": "^3.0.5"
+  }
+}

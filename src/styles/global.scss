@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
+@import './variables.scss';
+@import './theme.scss';
+
+* {
+  padding: 0;
+  margin: 0;
+  font-family: 'Varela Round', sans-serif;
+}
+
+body,
+html {
+  width: 100%;
+  height: 100%;
+}
+
+hr {
+  border: gray dashed 2px;
+  margin: 15px 0;
+}
+
+a {
+  color: $blue;
+}
+
+ul,
+ol {
+  list-style-position: inside;
+  padding-left: 15px;
+}
+
+@each $tag, $size in $headings {
+  #{$tag} {
+    font-size: $size;
+  }
+}

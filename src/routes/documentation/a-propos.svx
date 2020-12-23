@@ -1,0 +1,38 @@
+<script lang="ts">
+  import { dependencies, devDependencies, licenseURL } from '../../data/general';
+  import DependencyList from '../../components/dependency-list.svelte';
+</script>
+
+<svelte:head>
+
+  <title>Simulateur d'évolution - À propos</title>
+  
+</svelte:head>
+
+## Table des matières
+
+# À propos
+
+## Sources et outils
+
+- [Figma](https://www.figma.com/)
+- [OpenMoji](https://openmoji.org/) - _The open-source emoji and icon project_ - [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/#)
+- [FontAwesome](https://fontawesome.com/) - _Get vector icons and social logos on your website with Font Awesome, theweb's most popular icon set and toolkit._ - [Font Awesome License](https://fontawesome.com/license)
+- [Color Hunt](https://colorhunt.co/palette/219738)
+- [Flat UI Colors](https://flatuicolors.com/)
+
+---
+
+## Dépendances
+
+### De production
+
+<DependencyList dependencies={dependencies} />
+
+### De développement
+
+<DependencyList dependencies={devDependencies} />
+
+## License
+
+&copy; [Samuel Martineau](mailto:samumartineau@gmail.com) et Mélodie Zhou. <a href={licenseURL} target="_blank">License</a>
