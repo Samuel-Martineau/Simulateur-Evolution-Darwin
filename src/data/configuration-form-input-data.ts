@@ -4,6 +4,9 @@ import type {
   SimulatorConfiguration,
   Specie,
 } from '../types/simulator-configuration';
+import ShuffleIcon from 'images/shuffle.svg';
+import { v4 as uuidv4 } from 'uuid';
+import { getRandomSeed } from '../utils';
 
 const alwaysEnabled = () => false as const;
 const enabledIfSpecieExists = (specie: Specie) => (
@@ -23,22 +26,26 @@ export const generalConfigurationFormInputData: ConfigurationFormInputData[] = [
     disabled: alwaysEnabled,
   },
   {
-    type: 'text',
-    name: 'SEED',
+    type: 'number',
+    name: '« SEED »',
     glossaryId: 'configuration-seed',
     description:
-      'La SEED utilisée par le simulateur pour générer les nombres aléatoires. Cela permet d’avoir des résultats identiques à chaque fois que l’on roule la configuration. Pour obtenir de nouveaux nombres, il suffit donc de regénérer une nouvelle SEED.',
+      'La SEED utilisée par le simulateur pour générer les nombres aléatoires. Cela permet d’avoir des résultats identiques à chaque fois que l’on roule la configuration. Pour obtenir de nouveaux nombres, il suffit donc de regénérer une nouvelle SEED',
     required: true,
     shownInGlossary: true,
     fieldPath: 'seed',
     disabled: alwaysEnabled,
+    action: {
+      iconUrl: ShuffleIcon,
+      onClick: () => getRandomSeed(),
+    },
   },
   {
     type: 'number',
     name: 'Taille du côté de la carte',
     glossaryId: 'configuration-taille-côté-carte',
     description:
-      'La taille de l’écosystème dans lequel les espèces vont évoluer. Le monde est en forme de carré.',
+      'La taille de l’écosystème dans lequel les espèces vont évoluer. Le monde est en forme de carré',
     unit: 'UE',
     min: 1,
     required: true,
@@ -95,7 +102,7 @@ export const plantsSpecieConfigurationFormInputData: ConfigurationFormInputData[
     min: 0,
     required: true,
     shownInGlossary: true,
-    fieldPath: 'species.plant.spawnRate',
+    fieldPath: 'species.plant.spawnAmount',
     disabled: enabledIfSpecieExists('plant'),
   },
 ];

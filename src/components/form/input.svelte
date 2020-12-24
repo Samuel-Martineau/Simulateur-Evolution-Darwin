@@ -1,33 +1,32 @@
 <script lang="ts">
   import { createEventDispatcher, getContext, hasContext } from "svelte";
-  import type {
-    ConfigurationFormInputData,
-    InputSelectOptions,
-  } from "../../interfaces/configuration-form-input-data";
+  import type { InputSelectOptions } from "../../types/configuration-form-input-data";
   import { contextKey } from "./input-group.svelte";
   import type GithubSlugger from "github-slugger";
-  import { goto } from "@sapper/app";
   import HelpButton from "./help-button.svelte";
+  import { pluralize } from "../../utils";
 
-  export let type: Exclude<ConfigurationFormInputData["type"], "group"> =
-    "text";
+  export let type: "text" | "number" | "checkbox" | "select" | "file" = "text";
+  export let name: string;
+  export let accept: string = "";
+  export let files: FileList | undefined = undefined;
+  export let multiple: boolean = false;
   export let options: InputSelectOptions | undefined = undefined;
   export let step: number | undefined = undefined;
   export let max: number | undefined = undefined;
   export let min: number | undefined = undefined;
   export let disabled: boolean = false;
   export let required: boolean = false;
-  export let name: string;
   export let shownInGlossary: boolean = false;
   export let glossaryId: string | undefined = undefined;
   export let value: any;
+  export let actionButtonIconUrl: string | undefined = undefined;
 
   const dispatch = createEventDispatcher();
   const slugger = getContext("slugger") as GithubSlugger;
   const slug = slugger.slug(
     hasContext(contextKey) ? `${getContext(contextKey)} - ${name}` : name
   );
-  const hasActionButton = !!$$props.$$slots;
 
   $: dispatch("newValue", value);
 
@@ -50,13 +49,32 @@
 </script>
 
 <style lang="scss">
-  @import "src/styles/theme.scss";
   @import "src/styles/variables.scss";
 
   $input-font-size: 20px;
   $input-padding: 5px;
 
-  div {
+  @mixin general-input {
+    border-radius: 5px;
+    font-size: $input-font-size;
+    border: none;
+    background-color: map-get($colors, lightgray);
+    padding: $input-padding;
+    width: 100%;
+    border-color: transparent;
+    border-width: 3px;
+    border-style: solid;
+    box-sizing: border-box;
+    transition: all 125ms ease-in-out;
+    margin-bottom: 10px;
+
+    &:focus {
+      border-color: map-get($colors, green);
+      outline: none;
+    }
+  }
+
+  div.input-wrapper {
     display: flex;
     position: relative;
   }
@@ -68,41 +86,12 @@
     vertical-align: middle;
 
     &[data-disabled="true"] {
-      color: $darkgray;
+      color: map-get($colors, darkgray);
       transition: all 125ms ease-in-out;
     }
 
-    // img {
-    //   float: right;
-    //   position: relative;
-    //   width: 20px;
-    //   height: 100%;
-    //   bottom: 2px;
-    //   filter: contrast(0.5);
-    //   transition: filter 125ms;
-    //   &:hover {
-    //     filter: contrast(1);
-    //   }
-    // }
-  }
-
-  @mixin general-input {
-    border-radius: 5px;
-    font-size: $input-font-size;
-    border: none;
-    background-color: $lightgray;
-    padding: $input-padding;
-    width: 100%;
-    border-color: transparent;
-    border-width: 3px;
-    border-style: solid;
-    box-sizing: border-box;
-    transition: all 125ms ease-in-out;
-    margin-bottom: 10px;
-
-    &:focus {
-      border-color: $green;
-      outline: none;
+    div.file-input {
+      @include general-input;
     }
   }
 
@@ -110,7 +99,7 @@
     @include general-input;
 
     &:disabled {
-      color: $darkgray;
+      color: map-get($colors, darkgray);
     }
   }
 
@@ -118,16 +107,20 @@
     @include general-input;
 
     &:read-only {
-      color: $darkgray;
+      color: map-get($colors, darkgray);
 
       &:focus {
-        border-color: $blue;
+        border-color: map-get($colors, blue);
       }
     }
 
     &:invalid {
       box-shadow: none;
-      border-color: red;
+      border-color: map-get($colors, red);
+    }
+
+    &[type="file"] {
+      display: none;
     }
 
     &[type="checkbox"] {
@@ -137,7 +130,7 @@
       appearance: none;
 
       &:checked {
-        background-color: $green;
+        background-color: map-get($colors, green);
 
         &:after {
           content: "\2713";
@@ -154,19 +147,24 @@
   button {
     @include general-input;
 
-    margin-left: 10px;
-    width: 60px;
-    font-size: $input-font-size;
+    margin-left: 5px;
     padding: $input-padding;
-
-    color: darken($lightgray, 35);
+    width: min-content;
 
     &:focus,
     &:hover {
-      border-color: $blue;
+      border-color: map-get($colors, blue);
       outline: none;
+    }
 
-      color: $blue;
+    &:active {
+      background-color: transparentize(map-get($colors, blue), 0.75);
+    }
+
+    img {
+      height: 20px;
+      display: block;
+      pointer-events: none;
     }
   }
 </style>
@@ -174,31 +172,55 @@
 <label for={slug} data-disabled={disabled}>
   {name}
   {#if shownInGlossary}
-    <HelpButton {glossaryId} id={slug} size="20px" />
+    <HelpButton {glossaryId} id={slug} />
+  {/if}
+  {#if type === 'file'}
+    <div class="file-input">
+      <b>{pluralize('Fichier', multiple)}
+        {pluralize('sélectionné', multiple)}:
+      </b>
+      {files ? Array.from(files)
+            .map((f) => f.name)
+            .join(', ') : 'Sélectonné un fichier'}
+    </div>
   {/if}
 </label>
 
-<div>
+<div class="input-wrapper">
   {#if type === 'select'}
     <select id={slug} {disabled} {required} bind:value>
       {#each Object.entries(options || {}) as [optionValue, optionName]}
         <option value={optionValue}>{optionName}</option>
       {/each}
     </select>
+  {:else if type === 'file'}
+    <input
+      id={slug}
+      type="file"
+      {required}
+      readonly={disabled}
+      {accept}
+      {multiple}
+      bind:files />
   {:else}
     <input
+      id={slug}
       {type}
       {min}
       {max}
       {step}
       {required}
       readonly={disabled}
-      id={slug}
       {value}
       checked={value}
       on:input={handleInput} />
   {/if}
-  {#if hasActionButton}
-    <button on:click type="button"><slot /></button>
+  {#if actionButtonIconUrl}
+    <button
+      on:click
+      type="button"
+      on:click={dispatch.bind(undefined, 'actionClicked')}>
+      <img src={actionButtonIconUrl} alt="action-button" />
+    </button>
   {/if}
 </div>

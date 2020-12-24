@@ -22,21 +22,25 @@ export interface AnimalSpecieConfiguration {
   };
 }
 
+export interface PlantSpecieConfiguration {
+  exists: boolean;
+  startingNumber: number;
+  spawnAmount: number;
+  spawnInterval: number;
+}
+
 export interface SimulatorConfiguration {
+  version: '2';
+
   id: string;
   title: string;
 
-  seed: string;
+  seed: number;
   mapSideSize: number;
 
   species: {
+    plant: PlantSpecieConfiguration;
     prey: AnimalSpecieConfiguration;
     predator: AnimalSpecieConfiguration;
-    plant: {
-      exists: boolean;
-      startingNumber: number;
-      spawnRate: number;
-      spawnInterval: number;
-    };
   };
 }

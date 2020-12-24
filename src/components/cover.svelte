@@ -1,8 +1,14 @@
 <style lang="scss">
-  @import 'src/styles/theme.scss';
+  @use 'sass:map';
+
+  @import "src/styles/variables.scss";
 
   #page {
-    background: linear-gradient(to top right, $green, $yellow);
+    background: linear-gradient(
+      to top right,
+      map-get($colors, green),
+      map-get($colors, yellow)
+    );
     width: 100%;
     height: 100%;
   }
@@ -19,7 +25,7 @@
   }
 
   h1 {
-    color: $green;
+    color: map-get($colors, green);
     font-size: 100px;
   }
 

@@ -24,11 +24,10 @@
 <style lang="scss">
   @use 'sass:map';
 
-  @import "src/styles/theme.scss";
   @import "src/styles/variables.scss";
 
   main {
-    background-color: $lightgray;
+    background-color: map-get($colors, lightgray);
     border-radius: 25px;
     margin: 25px;
     padding: 25px;

@@ -1,47 +1,101 @@
 <script lang="ts">
+  import { createEventDispatcher } from "svelte";
+
   /** @restProps {a | button} */
   export let href: string | undefined = undefined;
-  export let color: 'green' | 'yellow';
+  export let color:
+    | "green"
+    | "palegreen"
+    | "yellow"
+    | "beige"
+    | "lightgray"
+    | "darkgray"
+    | "blue"
+    | "red"
+    | "purple";
+  export let type: "inline" | "full" = "full";
+  export let disabled = false;
+
+  const dispatch = createEventDispatcher();
+
+  function handleClick() {
+    if (disabled) return;
+    dispatch("click");
+  }
 </script>
 
 <style lang="scss">
-  @import 'src/styles/theme.scss';
+  @use 'sass:color';
+
+  @import "src/styles/variables.scss";
 
   .button {
     cursor: pointer;
     display: inline-block;
-    border-radius: 15px;
     user-select: none;
-    padding: 15px;
-    margin: 10px;
-    transition: transform 125ms ease-in-out;
+    margin: 5px;
+    transition: all 250ms ease-in-out;
     text-decoration: none;
     box-sizing: border-box;
     text-align: center;
     box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.25);
 
-    &.yellow {
-      color: black;
-      background-color: $yellow;
+    &.full {
+      border-radius: 15px;
+      padding: 15px;
     }
 
-    &.green {
-      color: white;
-      background-color: $green;
+    &.inline {
+      border-radius: 5px;
+      padding: 6px;
+    }
+
+    @each $name, $color in $colors {
+      &.#{"" + $name} {
+        background-color: $color;
+        @if color.lightness($color) <= 70 {
+          color: white;
+        } @else {
+          color: black;
+        }
+      }
     }
 
     &:hover {
-      transform: scale(110%);
+      transform: scale(1.05);
+    }
+
+    &:active {
+      transform: scale(0.95);
+    }
+
+    &[data-disabled="true"] {
+      filter: grayscale(0.2) contrast(0.8);
+      box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.25);
+
+      &:hover,
+      &:active {
+        transform: scale(1);
+      }
     }
   }
 </style>
 
 {#if href}
-  <a {href} class="button {color}" {...$$restProps}>
+  <a
+    href={disabled ? '' : href}
+    class="button {color} {type}"
+    data-disabled={disabled}
+    {...$$restProps}>
     <slot />
   </a>
 {:else}
-  <div on:click class="button {color}" {...$$restProps}>
+  <div
+    on:click={handleClick}
+    class="button {color} {type}"
+    {disabled}
+    data-disabled={disabled}
+    {...$$restProps}>
     <slot />
   </div>
 {/if}

@@ -1,5 +1,6 @@
 $navbar-height: 100px;
 $sidebar-width: max(20vw, 300px);
+$main-padding: 20px;
 $headings: (
   h1: 32px,
   h2: 26px,
@@ -7,4 +8,15 @@ $headings: (
   h4: 16px,
   h5: 13.28px,
   h6: 10.72px,
+);
+$colors: (
+  green: #61b15a,
+  palegreen: #adce74,
+  yellow: #fff76a,
+  beige: #ffce89,
+  lightgray: #f0f0f0,
+  darkgray: #757575,
+  blue: #1e90ff,
+  red: #e74c3c,
+  purple: #8e44ad,
 );

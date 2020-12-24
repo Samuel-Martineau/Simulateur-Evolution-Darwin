@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { dependencies, devDependencies, licenseURL } from '../../data/general';
+  import { dependencies, devDependencies, licenseURL, sourceCodeURL } from '../../data/general';
   import DependencyList from '../../components/dependency-list.svelte';
 </script>
 
@@ -32,6 +32,20 @@
 ### De développement
 
 <DependencyList dependencies={devDependencies} />
+
+---
+
+## FAQ
+
+### Est-ce que j'ai besoin de sauvegarder mes configurations pour ne pas les perdre?
+
+**Non**, car l'éditeur de configurations les sauvegarde automatiquement
+
+### Est-ce qu'il est possible de voir le code source de ce projet?
+
+**Oui**, il est disponible <a href={sourceCodeURL} target="_blank">ici</a>
+
+---
 
 ## License
 

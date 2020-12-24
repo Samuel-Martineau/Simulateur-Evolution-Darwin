@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { Dependency } from "../interfaces/dependency";
+  import type { Dependency } from "../types/dependency";
 
   export let dependencies: Dependency[];
 </script>

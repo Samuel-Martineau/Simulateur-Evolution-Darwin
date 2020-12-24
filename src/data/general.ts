@@ -1,5 +1,4 @@
 import { parseDependency } from '../utils';
-
 import pkg from '../../package.json';
 
 export const dependencies = Object.entries(pkg.dependencies).map(

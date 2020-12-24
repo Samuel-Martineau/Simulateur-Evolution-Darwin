@@ -22,11 +22,12 @@
 </script>
 
 <style lang="scss">
-  @import "src/styles/theme.scss";
+  @use "sass:map";
+
   @import "src/styles/variables.scss";
 
   fieldset {
-    border: 2px dotted $darkgray;
+    border: 2px dotted map-get($colors, darkgray);
     padding: 0 10px;
     box-sizing: border-box;
     margin: 10px 0;
@@ -44,7 +45,7 @@
     <summary id={slug}>
       {displayName}
       {#if shownInGlossary}
-        <HelpButton {glossaryId} id={slug} size="20px" />
+        <HelpButton {glossaryId} id={slug} />
       {/if}
     </summary>
     <slot />

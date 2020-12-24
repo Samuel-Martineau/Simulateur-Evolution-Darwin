@@ -1,5 +1,5 @@
 <script lang="ts">
-  import type { ConfigurationFormInputData } from "../interfaces/configuration-form-input-data";
+  import type { ConfigurationFormInputData } from "../types/configuration-form-input-data";
   import * as _ from "lodash";
 
   export let configurationFormInputData: ConfigurationFormInputData[];

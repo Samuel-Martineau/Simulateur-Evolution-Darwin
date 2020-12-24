@@ -1,6 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher } from "svelte";
-  import type { SimulatorConfiguration } from "../interfaces/simulator-configuration";
+  import type { SimulatorConfiguration } from "../types/simulator-configuration";
   import { toFactory } from "../utils";
   import Button from "./button.svelte";
 
@@ -8,16 +8,19 @@
   export let selectedConfiguration: SimulatorConfiguration;
 
   const dispatch = createEventDispatcher();
+
+  const buttonStyles = "width: 95%; margin: inherit auto;";
 </script>
 
 <style lang="scss">
-  @import "src/styles/theme.scss";
+  @use "sass:map";
+
   @import "src/styles/variables.scss";
 
   aside {
     width: $sidebar-width;
     height: calc(100vh - #{$navbar-height});
-    background-color: $palegreen;
+    background-color: map-get($colors, palegreen);
     box-shadow: 4px 0px 4px rgba(0, 0, 0, 0.35);
     box-sizing: border-box;
     padding: 15px;
@@ -34,7 +37,7 @@
   ul {
     list-style: none;
     padding: 0;
-    background-color: $yellow;
+    background-color: map-get($colors, yellow);
     border-radius: 15px;
     padding: 10px;
     box-shadow: inset 4px 4px 4px rgba(0, 0, 0, 0.25);
@@ -42,7 +45,7 @@
     margin: 15px 0;
     flex: 1;
 
-    $thumbBG: $green;
+    $thumbBG: map-get($colors, green);
     $scrollbarBG: transparent;
     scrollbar-width: thin;
     scrollbar-color: $thumbBG $scrollbarBG;
@@ -65,7 +68,7 @@
 
       &[data-selected="true"] {
         box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.35);
-        background-color: $palegreen;
+        background-color: map-get($colors, palegreen);
         color: white;
       }
 
@@ -86,6 +89,7 @@
     {#each configurations as configuration (configuration.id)}
       <li
         data-selected={selectedConfiguration === configuration}
+        on:click
         on:click={() => (selectedConfiguration = configuration)}>
         {#if configuration.title}
           {configuration.title}
@@ -96,10 +100,17 @@
       <Button color="green">Télécharger les configurations d'exemple</Button>
     {/each}
   </ul>
+
   <Button
     color="green"
-    style="margin: 0 auto; width: 95%;"
+    style={buttonStyles}
     on:click={toFactory(dispatch, 'create-configuration')}>
     Créer une nouvelle configuration
+  </Button>
+  <Button
+    color="green"
+    style={buttonStyles}
+    on:click={toFactory(dispatch, 'upload-configuration')}>
+    Téléverser une configuration
   </Button>
 </aside>

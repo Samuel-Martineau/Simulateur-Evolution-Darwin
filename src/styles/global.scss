@@ -1,6 +1,5 @@
 @import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
 @import './variables.scss';
-@import './theme.scss';
 
 * {
   padding: 0;
@@ -20,7 +19,7 @@ hr {
 }
 
 a {
-  color: $blue;
+  color: map-get($colors, blue);
 }
 
 ul,

@@ -22,9 +22,15 @@ export type ConfigurationFormInputData = {
     | ({
         fieldPath: string;
         disabled: (configuration: SimulatorConfiguration) => boolean;
+        action?: {
+          iconUrl: string;
+        };
       } & (
         | {
             type: 'text';
+            action?: {
+              onClick: (configuration: SimulatorConfiguration) => string;
+            };
           }
         | {
             type: 'number';
@@ -32,13 +38,22 @@ export type ConfigurationFormInputData = {
             max?: number;
             min?: number;
             unit?: string;
+            action?: {
+              onClick: (configuration: SimulatorConfiguration) => number;
+            };
           }
         | {
             type: 'checkbox';
+            action?: {
+              onClick: (configuration: SimulatorConfiguration) => boolean;
+            };
           }
         | {
             type: 'select';
             options: InputSelectOptions;
+            action?: {
+              onClick: (configuration: SimulatorConfiguration) => string;
+            };
           }
       ))
   );

@@ -1,10 +1,10 @@
 <script lang="ts">
   import { LocalStorageKeys } from "../../types/localstorage-keys";
+  import RedQuestionMarkIcon from "images/red-question-mark.svg";
   import { goto } from "@sapper/app";
 
   export let glossaryId: string;
   export let id: string;
-  export let size: string;
 
   function handleClick() {
     localStorage.setItem(LocalStorageKeys.HelpRequestFromElement, `#${id}`);
@@ -14,21 +14,16 @@
 
 <style lang="scss">
   img {
+    z-index: 2;
     float: right;
     position: relative;
-    width: var(--size);
-    bottom: 2px;
-    transition: filter 125ms;
-    filter: contrast(0.5);
+    height: 20px;
+    transition: all 125ms;
 
     &:hover {
-      filter: contrast(1);
+      transform: scale(1.5);
     }
   }
 </style>
 
-<img
-  src="1F198.svg"
-  alt="sos-button"
-  on:click={handleClick}
-  style="--size: {size};" />
+<img src={RedQuestionMarkIcon} alt="sos-button" on:click={handleClick} />
