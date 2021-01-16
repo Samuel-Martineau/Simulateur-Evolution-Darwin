@@ -10,7 +10,7 @@ export type ConfigurationFormInputData = {
   | {
       shownInGlossary: true;
       description: string;
-      glossaryId: string;
+      glossaryId: `configuration-${string}`;
     }
 ) &
   (

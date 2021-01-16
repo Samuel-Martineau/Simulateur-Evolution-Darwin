@@ -8,5 +8,5 @@ export const devDependencies = Object.entries(pkg.devDependencies).map(
   parseDependency,
 );
 
-export const licenseURL = `${pkg.repository.url}/blob/master/LICENSE`;
+export const licenseURL = pkg.licenses[0].url;
 export const sourceCodeURL = pkg.repository.url;

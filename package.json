@@ -12,7 +12,10 @@
     "url": "https://github.com/Samuel-Martineau/Simulateur-Evolution-Darwin"
   },
   "licenses": [
-    "MIT"
+    {
+      "type": "MIT",
+      "url": "https://github.com/Samuel-Martineau/Simulateur-Evolution-Darwin/blob/master/LICENSE"
+    }
   ],
   "scripts": {
     "dev": "sapper dev --no-hot --ext '.svelte .svx'",
@@ -33,6 +36,7 @@
     "uuid": "^8.3.1"
   },
   "devDependencies": {
+    "@crownframework/svelte-error-boundary": "^1.0.3",
     "@tsconfig/svelte": "^1.0.10",
     "@types/compression": "^1.7.0",
     "@types/cookie-parser": "^1.4.2",
