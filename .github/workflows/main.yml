@@ -1,0 +1,51 @@
+name: Construction et publication de l'image Docker
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "README.md"
+
+jobs:
+  build-image:
+    name: Construction de l'image Docker
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - name: Get version
+        id: version
+        uses: notiz-dev/github-action-json-property@release
+        with:
+          path: package.json
+          prop_path: version
+      - name: Docker Login - DockerHub
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Docker Login - Github Container Registry
+        run: docker login -u ${{ github.repository_owner }} -p ${{ secrets.GH_CR_PAT }} ghcr.io
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.version.outputs.prop }}
+          release_name: Release ${{ steps.version.outputs.prop }}
+          body: ${{ github.event.head_commit.message }}
+          draft: false
+          prerelease: false
+      - name: Docker Build
+        run: docker build -t simulateur-evolution-darwin .
+      - name: Tags
+        run: |
+          docker tag simulateur-evolution-darwin ${{ secrets.DOCKERHUB_USERNAME }}/simulateur-evolution-darwin:latest
+          docker tag simulateur-evolution-darwin ${{ secrets.DOCKERHUB_USERNAME }}/simulateur-evolution-darwin:${{ steps.version.outputs.prop }}
+          docker tag simulateur-evolution-darwin ghcr.io/samuel-martineau/simulateur-evolution-darwin:latest
+          docker tag simulateur-evolution-darwin ghcr.io/samuel-martineau/simulateur-evolution-darwin:${{ steps.version.outputs.prop }}
+      - name: Push
+        run: |
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/simulateur-evolution-darwin:latest
+          docker push ${{ secrets.DOCKERHUB_USERNAME }}/simulateur-evolution-darwin:${{ steps.version.outputs.prop }}
+          docker push ghcr.io/samuel-martineau/simulateur-evolution-darwin:latest
+          docker push ghcr.io/samuel-martineau/simulateur-evolution-darwin:${{ steps.version.outputs.prop }}
