@@ -26,17 +26,7 @@
     "postinstall": "./postinstall.sh",
     "lint": "eslint src/**/*.*",
     "lint:fix": "eslint src/**/*.* --fix",
-    "prettier": "prettier src/**/*.* --write",
-    "lint:staged": "lint-staged"
-  },
-  "lint-staged": {
-    "*.{js,ts}": [
-      "prettier --fix",
-      "eslint --fix --config .eslintrc"
-    ],
-    "*.{svelte}": [
-      "prettier --fix"
-    ]
+    "prettier": "prettier src/**/*.* --write"
   },
   "dependencies": {
     "compression": "^1.7.1",

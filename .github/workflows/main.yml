@@ -3,7 +3,7 @@ name: Construction et publication de l'image Docker
 on:
   push:
     branches:
-      - main
+      - v2
     paths-ignore:
       - "README.md"
 
