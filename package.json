@@ -26,7 +26,7 @@
     "postinstall": "./postinstall.sh",
     "lint": "eslint src/**/*.*",
     "lint:fix": "eslint src/**/*.* --fix",
-    "prettier": "prettier src/**/*.* --write"
+    "prettier": "prettier src/**/*.* README.md --write"
   },
   "dependencies": {
     "compression": "^1.7.1",
