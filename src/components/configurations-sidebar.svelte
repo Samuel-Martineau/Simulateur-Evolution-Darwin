@@ -20,7 +20,7 @@
   aside {
     width: $sidebar-width;
     height: calc(100vh - #{$navbar-height});
-    background-color: map-get($colors, palegreen);
+    background-color: map-get($colors, "palegreen");
     box-shadow: 4px 0px 4px rgba(0, 0, 0, 0.35);
     box-sizing: border-box;
     padding: 15px;
@@ -36,7 +36,7 @@
 
   ul {
     list-style: none;
-    background-color: map-get($colors, yellow);
+    background-color: map-get($colors, "yellow");
     border-radius: 15px;
     padding: 10px;
     box-shadow: inset 4px 4px 4px rgba(0, 0, 0, 0.25);
@@ -44,7 +44,7 @@
     margin: 15px 0;
     flex: 1;
 
-    $thumbBG: map-get($colors, green);
+    $thumbBG: map-get($colors, "green");
     $scrollbarBG: transparent;
     scrollbar-width: thin;
     scrollbar-color: $thumbBG $scrollbarBG;
@@ -67,7 +67,7 @@
 
       &[data-selected="true"] {
         box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.35);
-        background-color: map-get($colors, palegreen);
+        background-color: map-get($colors, "palegreen");
         color: white;
       }
 

@@ -25,8 +25,8 @@
     {/if}
   </span>
   <span slot="actions">
-    <Button color="green" style="font-size: 25px" href="/">
-      Retour à la page principale
-    </Button>
+    <Button color="green" style="font-size: 25px" href="/"
+      >Retour à la page principale</Button
+    >
   </span>
 </Cover>

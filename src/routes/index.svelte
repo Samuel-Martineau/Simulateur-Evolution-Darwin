@@ -16,8 +16,8 @@
   <span slot="title">Simuler l'évolution</span>
   <span slot="description">{description}</span>
   <span slot="actions">
-    <Button color="green" style="font-size: 25px" href="/demarrer">
-      Démarrer
-    </Button>
+    <Button color="green" style="font-size: 25px" href="/demarrer"
+      >Démarrer</Button
+    >
   </span>
 </Cover>

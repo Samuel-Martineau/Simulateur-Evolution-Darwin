@@ -10,7 +10,7 @@ const pkg = require("./package.json");
 
 const mode = config.dev ? "development" : "production";
 const dev = mode === "development";
-// const prod = mode === 'production';
+const prod = mode === "production";
 const websiteHost = dev ? "localhost:3000" : "expo.smartineau.me";
 
 const alias = { svelte: path.resolve("node_modules", "svelte") };

@@ -58,7 +58,7 @@
     border-radius: 5px;
     font-size: $input-font-size;
     border: none;
-    background-color: map-get($colors, lightgray);
+    background-color: map-get($colors, "lightgray");
     padding: $input-padding;
     width: 100%;
     border-color: transparent;
@@ -69,7 +69,7 @@
     margin-bottom: 10px;
 
     &:focus {
-      border-color: map-get($colors, green);
+      border-color: map-get($colors, "green");
       outline: none;
     }
   }
@@ -86,7 +86,7 @@
     vertical-align: middle;
 
     &[data-disabled="true"] {
-      color: map-get($colors, darkgray);
+      color: map-get($colors, "darkgray");
       transition: all 125ms ease-in-out;
     }
 
@@ -99,7 +99,7 @@
     @include general-input;
 
     &:disabled {
-      color: map-get($colors, darkgray);
+      color: map-get($colors, "darkgray");
     }
   }
 
@@ -107,16 +107,16 @@
     @include general-input;
 
     &:read-only {
-      color: map-get($colors, darkgray);
+      color: map-get($colors, "darkgray");
 
       &:focus {
-        border-color: map-get($colors, blue);
+        border-color: map-get($colors, "blue");
       }
     }
 
     &:invalid {
       box-shadow: none;
-      border-color: map-get($colors, red);
+      border-color: map-get($colors, "red");
     }
 
     &[type="file"] {
@@ -130,7 +130,7 @@
       appearance: none;
 
       &:checked {
-        background-color: map-get($colors, green);
+        background-color: map-get($colors, "green");
 
         &:after {
           content: "\2713";
@@ -153,12 +153,12 @@
 
     &:focus,
     &:hover {
-      border-color: map-get($colors, blue);
+      border-color: map-get($colors, "blue");
       outline: none;
     }
 
     &:active {
-      background-color: transparentize(map-get($colors, blue), 0.75);
+      background-color: transparentize(map-get($colors, "blue"), 0.75);
     }
 
     img {
@@ -174,26 +174,29 @@
   {#if shownInGlossary}
     <HelpButton {glossaryId} id={slug} />
   {/if}
-  {#if type === 'file'}
+  {#if type === "file"}
     <div class="file-input">
-      <b>{pluralize('Fichier', multiple)}
-        {pluralize('sélectionné', multiple)}:
+      <b
+        >{pluralize("Fichier", multiple)}
+        {pluralize("sélectionné", multiple)}:
       </b>
-      {files ? Array.from(files)
+      {files
+        ? Array.from(files)
             .map((f) => f.name)
-            .join(', ') : 'Sélectonné un fichier'}
+            .join(", ")
+        : "Sélectonné un fichier"}
     </div>
   {/if}
 </label>
 
 <div class="input-wrapper">
-  {#if type === 'select'}
+  {#if type === "select"}
     <select id={slug} {disabled} {required} bind:value>
       {#each Object.entries(options || {}) as [optionValue, optionName]}
         <option value={optionValue}>{optionName}</option>
       {/each}
     </select>
-  {:else if type === 'file'}
+  {:else if type === "file"}
     <input
       id={slug}
       type="file"
@@ -201,7 +204,8 @@
       readonly={disabled}
       {accept}
       {multiple}
-      bind:files />
+      bind:files
+    />
   {:else}
     <input
       id={slug}
@@ -213,13 +217,14 @@
       readonly={disabled}
       {value}
       checked={value}
-      on:input={handleInput} />
+      on:input={handleInput}
+    />
   {/if}
   {#if actionButtonIconUrl}
     <button
       on:click
       type="button"
-      on:click={dispatch.bind(undefined, 'actionClicked')}>
+      on:click={dispatch.bind(undefined, "actionClicked")}>
       <img src={actionButtonIconUrl} alt="action-button" />
     </button>
   {/if}

@@ -6,8 +6,8 @@
   #page {
     background: linear-gradient(
       to top right,
-      map-get($colors, green),
-      map-get($colors, yellow)
+      map-get($colors, "green"),
+      map-get($colors, "yellow")
     );
     width: 100%;
     height: 100%;
@@ -25,7 +25,7 @@
   }
 
   h1 {
-    color: map-get($colors, green);
+    color: map-get($colors, "green");
     font-size: 100px;
   }
 

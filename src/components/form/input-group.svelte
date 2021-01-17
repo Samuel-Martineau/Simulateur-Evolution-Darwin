@@ -27,7 +27,7 @@
   @import "src/styles/variables.scss";
 
   fieldset {
-    border: 2px dotted map-get($colors, darkgray);
+    border: 2px dotted map-get($colors, "darkgray");
     padding: 0 10px;
     box-sizing: border-box;
     margin: 10px 0;

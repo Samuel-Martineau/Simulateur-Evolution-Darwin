@@ -29,7 +29,7 @@
 
 <h1>Simulateur</h1>
 <iframe
-  src="simulator.html"
+  src="simulator-core/simulator.html"
   frameborder="0"
   title="simulateur"
   on:load={() => (loaded = true)}

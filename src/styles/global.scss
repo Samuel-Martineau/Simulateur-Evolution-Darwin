@@ -19,7 +19,7 @@ hr {
 }
 
 a {
-  color: map-get($colors, blue);
+  color: map-get($colors, "blue");
 }
 
 ul,

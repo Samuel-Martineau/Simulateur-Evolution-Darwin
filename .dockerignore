@@ -1,0 +1,9 @@
+/node_modules/
+/src/node_modules/@sapper/
+/simulator-core/node_modules/
+/__sapper__/
+/.idea/
+.DS_Store
+yarn-error.log
+README.md
+Dockerfile

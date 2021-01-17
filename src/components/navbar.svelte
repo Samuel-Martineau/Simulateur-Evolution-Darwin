@@ -3,13 +3,11 @@
 </script>
 
 <style lang="scss">
-  @use "sass:map";
-
   @import "src/styles/variables.scss";
 
   nav {
     position: relative;
-    background-color: map-get($colors, green);
+    background-color: map-get($colors, "green");
     padding: 10px;
     color: white;
     display: flex;
@@ -35,7 +33,7 @@
     align-items: center;
 
     &:last-child {
-      background-color: darken(map.get($colors, green), 10);
+      background-color: darken(map-get($colors, "green"), 10);
       border-radius: 15px;
       padding: 5px;
       box-shadow: inset 4px 4px 4px rgba(0, 0, 0, 0.25);

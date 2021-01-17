@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "moduleResolution": "node",
+    "strict": true,
+    "esModuleInterop": true,
+    "baseUrl": "./src",
+    "sourceMap": true,
+    "outDir": "./dist/"
+  },
+  "exclude": ["generateur-de-configurations"]
+}

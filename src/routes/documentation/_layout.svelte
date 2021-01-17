@@ -27,7 +27,7 @@
   @import "src/styles/variables.scss";
 
   main {
-    background-color: map-get($colors, lightgray);
+    background-color: map-get($colors, "lightgray");
     border-radius: 25px;
     margin: 25px;
     padding: 25px;
