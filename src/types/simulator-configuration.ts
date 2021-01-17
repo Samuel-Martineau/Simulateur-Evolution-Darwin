@@ -1,8 +1,8 @@
-export type AnimalSpecie = 'prey' | 'predator';
-export type Specie = AnimalSpecie | 'plant';
+export type AnimalSpecie = "prey" | "predator";
+export type Specie = AnimalSpecie | "plant";
 
 export interface GeneConfiguration {
-  modificator: 'constant' | 'evolutionary';
+  modificator: "constant" | "evolutionary";
   value: number;
   average: number;
   standardDeviation: number;
@@ -30,7 +30,7 @@ export interface PlantSpecieConfiguration {
 }
 
 export interface SimulatorConfiguration {
-  version: '2';
+  version: "2";
 
   id: string;
   title: string;

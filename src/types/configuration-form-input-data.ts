@@ -1,4 +1,4 @@
-import type { SimulatorConfiguration } from './simulator-configuration';
+import type { SimulatorConfiguration } from "./simulator-configuration";
 
 export type InputSelectOptions = { [key: string]: string };
 
@@ -15,7 +15,7 @@ export type ConfigurationFormInputData = {
 ) &
   (
     | {
-        type: 'group';
+        type: "group";
         children: ConfigurationFormInputData[];
         unit?: string;
       }
@@ -27,13 +27,13 @@ export type ConfigurationFormInputData = {
         };
       } & (
         | {
-            type: 'text';
+            type: "text";
             action?: {
               onClick: (configuration: SimulatorConfiguration) => string;
             };
           }
         | {
-            type: 'number';
+            type: "number";
             step?: number;
             max?: number;
             min?: number;
@@ -43,13 +43,13 @@ export type ConfigurationFormInputData = {
             };
           }
         | {
-            type: 'checkbox';
+            type: "checkbox";
             action?: {
               onClick: (configuration: SimulatorConfiguration) => boolean;
             };
           }
         | {
-            type: 'select';
+            type: "select";
             options: InputSelectOptions;
             action?: {
               onClick: (configuration: SimulatorConfiguration) => string;

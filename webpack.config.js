@@ -1,46 +1,46 @@
-const webpack = require('webpack');
-const WebpackModules = require('webpack-modules');
-const ImageMinimizerPlugin = require('image-minimizer-webpack-plugin');
-const sveltePreprocess = require('svelte-preprocess');
-const { mdsvex } = require('mdsvex');
-const path = require('path');
+const webpack = require("webpack");
+const WebpackModules = require("webpack-modules");
+const ImageMinimizerPlugin = require("image-minimizer-webpack-plugin");
+const sveltePreprocess = require("svelte-preprocess");
+const { mdsvex } = require("mdsvex");
+const path = require("path");
 
-const config = require('sapper/config/webpack.js');
-const pkg = require('./package.json');
+const config = require("sapper/config/webpack.js");
+const pkg = require("./package.json");
 
-const mode = config.dev ? 'development' : 'production';
-const dev = mode === 'development';
-const prod = mode === 'production';
-const websiteHost = dev ? 'localhost:3000' : 'expo.smartineau.me';
+const mode = config.dev ? "development" : "production";
+const dev = mode === "development";
+// const prod = mode === 'production';
+const websiteHost = dev ? "localhost:3000" : "expo.smartineau.me";
 
-const alias = { svelte: path.resolve('node_modules', 'svelte') };
-const extensions = ['.mjs', '.js', '.ts', '.json', '.svelte', '.html', '.svx'];
-const mainFields = ['svelte', 'module', 'browser', 'main'];
+const alias = { svelte: path.resolve("node_modules", "svelte") };
+const extensions = [".mjs", ".js", ".ts", ".json", ".svelte", ".html", ".svx"];
+const mainFields = ["svelte", "module", "browser", "main"];
 const preprocessors = [
   sveltePreprocess(),
   mdsvex({
     remarkPlugins: [
       [
-        require('remark-toc'),
+        require("remark-toc"),
         {
-          heading: 'Table des matières',
+          heading: "Table des matières",
           tight: true,
         },
       ],
     ],
     rehypePlugins: [
-      require('rehype-slug'),
+      require("rehype-slug"),
       [
-        require('rehype-autolink-headings'),
+        require("rehype-autolink-headings"),
         {
-          behavior: 'wrap',
+          behavior: "wrap",
         },
       ],
       [
-        require('rehype-urls'),
+        require("rehype-urls"),
         function (url, node) {
           if (url.host && url.host !== websiteHost)
-            node.properties.target = '_blank';
+            node.properties.target = "_blank";
         },
       ],
     ],
@@ -49,22 +49,22 @@ const preprocessors = [
 
 const tsLoaderRule = {
   test: /\.ts$/,
-  loader: 'ts-loader',
+  loader: "ts-loader",
 };
 const fileLoaderRule = {
   test: /\.(png|jpe?g|gif|svg)$/i,
   use: [
-    'file-loader',
+    "file-loader",
     {
       loader: ImageMinimizerPlugin.loader,
       options: {
         minimizerOptions: {
           plugins: [
-            ['gifsicle', { interlaced: true }],
-            ['jpegtran', { progressive: true }],
-            ['optipng', { optimizationLevel: 5 }],
+            ["gifsicle", { interlaced: true }],
+            ["jpegtran", { progressive: true }],
+            ["optipng", { optimizationLevel: 5 }],
             [
-              'svgo',
+              "svgo",
               {
                 plugins: [
                   {
@@ -83,7 +83,7 @@ const fileLoaderRule = {
 module.exports = {
   client: {
     entry: {
-      main: config.client.entry().main.replace(/\.js$/, '.ts'),
+      main: config.client.entry().main.replace(/\.js$/, ".ts"),
     },
     output: config.client.output(),
     resolve: {
@@ -97,7 +97,7 @@ module.exports = {
         {
           test: /\.(svelte|html|svx)$/,
           use: {
-            loader: 'svelte-loader',
+            loader: "svelte-loader",
             options: {
               dev,
               hydratable: true,
@@ -110,13 +110,13 @@ module.exports = {
         {
           test: /\.css$/i,
           use: [
-            'style-loader',
-            'css-loader',
+            "style-loader",
+            "css-loader",
             {
-              loader: 'postcss-loader',
+              loader: "postcss-loader",
               options: {
                 postcssOptions: {
-                  plugins: [require('autoprefixer')],
+                  plugins: [require("autoprefixer")],
                 },
               },
             },
@@ -128,35 +128,35 @@ module.exports = {
     mode,
     plugins: [
       new webpack.DefinePlugin({
-        'process.browser': true,
-        'process.env.NODE_ENV': JSON.stringify(mode),
+        "process.browser": true,
+        "process.env.NODE_ENV": JSON.stringify(mode),
       }),
     ],
-    devtool: dev && 'inline-source-map',
+    devtool: dev && "inline-source-map",
   },
 
   server: {
     entry: {
-      server: config.server.entry().server.replace(/\.js$/, '.ts'),
+      server: config.server.entry().server.replace(/\.js$/, ".ts"),
     },
     output: config.server.output(),
-    target: 'node',
+    target: "node",
     resolve: {
       alias,
       extensions,
       mainFields,
     },
-    externals: Object.keys(pkg.dependencies).concat('encoding'),
+    externals: Object.keys(pkg.dependencies).concat("encoding"),
     module: {
       rules: [
         tsLoaderRule,
         {
           test: /\.(svelte|html|svx)$/,
           use: {
-            loader: 'svelte-loader',
+            loader: "svelte-loader",
             options: {
               css: false,
-              generate: 'ssr',
+              generate: "ssr",
               hydratable: true,
               preprocess: preprocessors,
               dev,
@@ -169,8 +169,8 @@ module.exports = {
     mode,
     plugins: [
       new webpack.DefinePlugin({
-        'process.browser': false,
-        'process.env.NODE_ENV': JSON.stringify(mode),
+        "process.browser": false,
+        "process.env.NODE_ENV": JSON.stringify(mode),
       }),
       new WebpackModules(),
     ],
@@ -181,9 +181,9 @@ module.exports = {
 
   serviceworker: {
     entry: {
-      'service-worker': config.serviceworker
+      "service-worker": config.serviceworker
         .entry()
-        ['service-worker'].replace(/\.js$/, '.ts'),
+        ["service-worker"].replace(/\.js$/, ".ts"),
     },
     output: config.serviceworker.output(),
     resolve: {
@@ -197,10 +197,10 @@ module.exports = {
     mode,
     plugins: [
       new webpack.DefinePlugin({
-        'process.browser': true,
-        'process.env.NODE_ENV': JSON.stringify(mode),
+        "process.browser": true,
+        "process.env.NODE_ENV": JSON.stringify(mode),
       }),
     ],
-    devtool: dev && 'inline-source-map',
+    devtool: dev && "inline-source-map",
   },
 };

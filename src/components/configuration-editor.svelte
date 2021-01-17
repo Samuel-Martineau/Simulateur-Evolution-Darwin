@@ -46,27 +46,27 @@
     <Button
       color="green"
       type="inline"
-      on:click={dispatch.bind(undefined, 'duplicate')}>
-      Dupliquer
-    </Button>
+      on:click={dispatch.bind(undefined, "duplicate")}
+    >Dupliquer</Button
+    >
     <Button
       color="blue"
       type="inline"
-      on:click={dispatch.bind(undefined, 'download')}>
-      Télécharger
-    </Button>
+      on:click={dispatch.bind(undefined, "download")}
+    >Télécharger</Button
+    >
     <Button
       color="red"
       type="inline"
-      on:click={dispatch.bind(undefined, 'delete')}>
-      Supprimer
-    </Button>
+      on:click={dispatch.bind(undefined, "delete")}
+    >Supprimer</Button
+    >
     <Button
       color="purple"
       type="inline"
-      on:click={dispatch.bind(undefined, 'run')}>
-      Exécuter
-    </Button>
+      on:click={dispatch.bind(undefined, "run")}
+    >Exécuter</Button
+    >
   </div>
 
   {#each generalConfigurationFormInputData as data}
@@ -80,13 +80,13 @@
   </InputGroup>
 
   <InputGroup displayName="Espèce des proies">
-    {#each getAnimalSpeciesConfigurationFormInputData('prey') as data}
+    {#each getAnimalSpeciesConfigurationFormInputData("prey") as data}
       <PreConfiguredInput {data} on:newValue={handleNewValue} {configuration} />
     {/each}
   </InputGroup>
 
   <InputGroup displayName="Espèce des prédateurs">
-    {#each getAnimalSpeciesConfigurationFormInputData('predator') as data}
+    {#each getAnimalSpeciesConfigurationFormInputData("predator") as data}
       <PreConfiguredInput {data} on:newValue={handleNewValue} {configuration} />
     {/each}
   </InputGroup>

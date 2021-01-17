@@ -3,8 +3,8 @@ import express, { Request, Response } from 'express';
 import compression from 'compression';
 import * as sapper from '@sapper/server';
 import cookieParser from 'cookie-parser';
-import isMobile from 'is-mobile';
 import { CookieKeys } from './types/cookie-keys';
+import isMobile from 'is-mobile';
 
 const { PORT, NODE_ENV } = process.env;
 const dev = NODE_ENV === 'development';

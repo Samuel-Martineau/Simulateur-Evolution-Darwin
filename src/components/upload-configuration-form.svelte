@@ -24,11 +24,12 @@
   name="Fichier de configuration"
   required
   accept=".json"
-  bind:files />
+  bind:files
+/>
 
 <Button
   color="green"
   disabled={!fileContent}
-  on:click={() => dispatch('upload-configuration', JSON.parse(fileContent))}>
-  Téléverser
-</Button>
+  on:click={() => dispatch("upload-configuration", JSON.parse(fileContent))}
+>Téléverser</Button
+>

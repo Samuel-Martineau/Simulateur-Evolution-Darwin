@@ -1,4 +1,4 @@
 export enum CookieKeys {
-  MobileOverride = 'mobileOverride',
-  IntroCompleted = 'introCompleted',
+  MobileOverride = "mobileOverride",
+  IntroCompleted = "introCompleted",
 }

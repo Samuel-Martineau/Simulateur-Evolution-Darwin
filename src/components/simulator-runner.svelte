@@ -33,4 +33,5 @@
   frameborder="0"
   title="simulateur"
   on:load={() => (loaded = true)}
-  bind:this={iframe} />
+  bind:this={iframe}
+/>

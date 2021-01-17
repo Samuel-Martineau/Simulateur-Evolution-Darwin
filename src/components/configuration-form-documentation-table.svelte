@@ -61,10 +61,12 @@
         <td id={data.glossaryId}>{data.name}</td>
         <td>{data.description}</td>
         <td>
-          {@html data.required ? '&check;' : '&cross;'}
+          {@html data.required ? "&check;" : "&cross;"}
         </td>
         <td>
-          {(data.type === 'number' || data.type === 'group' ? data.unit : undefined) || 'N/A'}
+          {(data.type === "number" || data.type === "group"
+            ? data.unit
+            : undefined) || "N/A"}
         </td>
       </tr>
     {/if}

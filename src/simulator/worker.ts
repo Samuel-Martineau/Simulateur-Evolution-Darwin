@@ -1,5 +1,5 @@
-console.log('worker thread');
+console.log("worker thread");
 
-while (true) {}
+// while (true) {}
 
 export {};

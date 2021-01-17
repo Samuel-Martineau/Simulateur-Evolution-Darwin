@@ -42,6 +42,6 @@ export interface V1Adjustments {
 }
 
 export enum V1Modificator {
-  Constant = 'constant',
-  Stddev = 'stddev',
+  Constant = "constant",
+  Stddev = "stddev",
 }

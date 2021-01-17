@@ -83,7 +83,7 @@
 
 {#if href}
   <a
-    href={disabled ? '' : href}
+    href={disabled ? "" : href}
     class="button {color} {type}"
     data-disabled={disabled}
     {...$$restProps}>
@@ -95,7 +95,8 @@
     class="button {color} {type}"
     {disabled}
     data-disabled={disabled}
-    {...$$restProps}>
+    {...$$restProps}
+  >
     <slot />
   </div>
 {/if}

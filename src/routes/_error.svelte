@@ -14,7 +14,8 @@
 
 <Cover>
   <span slot="title">Oh non!</span>
-  <span slot="description">Erreur
+  <span slot="description"
+    >Erreur
     {status}
     |
     {error.message}

@@ -1,5 +1,5 @@
 export enum LocalStorageKeys {
-  Configurations = 'configurations',
-  LastVisitedConfiguration = 'lastVisitedConfiguration',
-  HelpRequestFromElement = 'helpRequestFromElement',
+  Configurations = "configurations",
+  LastVisitedConfiguration = "lastVisitedConfiguration",
+  HelpRequestFromElement = "helpRequestFromElement",
 }

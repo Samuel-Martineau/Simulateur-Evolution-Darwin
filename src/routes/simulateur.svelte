@@ -197,7 +197,8 @@
 <svelte:head>
   <title>
     Simulateur d'évolution - Éditeur de configuration -
-    {(selectedConfiguration && selectedConfiguration.title) || 'Aucune configuration'}
+    {(selectedConfiguration && selectedConfiguration.title) ||
+      "Aucune configuration"}
   </title>
 </svelte:head>
 
@@ -209,11 +210,12 @@
     bind:selectedConfiguration
     on:click={() => (view = undefined)}
     on:create-configuration={createConfiguration}
-    on:upload-configuration={() => (view = 'uploadConfigurationForm')} />
+    on:upload-configuration={() => (view = "uploadConfigurationForm")}
+  />
   <main bind:this={main}>
-    {#if view === 'uploadConfigurationForm'}
+    {#if view === "uploadConfigurationForm"}
       <UploadConfigurationForm on:upload-configuration={uploadConfiguration} />
-    {:else if view === 'simulator' && selectedConfiguration}
+    {:else if view === "simulator" && selectedConfiguration}
       <SimulatorRunner configuration={selectedConfiguration} />
     {:else if selectedConfiguration}
       <Boundary onError={fixCorruptedConfiguration}>
@@ -222,7 +224,8 @@
           on:duplicate={duplicateConfiguration}
           on:download={downloadConfiguration}
           on:delete={deleteConfiguration}
-          on:run={() => (view = 'simulator')} />
+          on:run={() => (view = "simulator")}
+        />
       </Boundary>
     {:else}
       <h1>Bienvenue dans l'éditeur de configurations du simulateur</h1>

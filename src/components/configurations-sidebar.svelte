@@ -36,7 +36,6 @@
 
   ul {
     list-style: none;
-    padding: 0;
     background-color: map-get($colors, yellow);
     border-radius: 15px;
     padding: 10px;
@@ -90,7 +89,8 @@
       <li
         data-selected={selectedConfiguration === configuration}
         on:click
-        on:click={() => (selectedConfiguration = configuration)}>
+        on:click={() => (selectedConfiguration = configuration)}
+      >
         {#if configuration.title}
           {configuration.title}
         {:else}<span class="no-title">(Sans titre)</span>{/if}
@@ -104,13 +104,13 @@
   <Button
     color="green"
     style={buttonStyles}
-    on:click={toFactory(dispatch, 'create-configuration')}>
-    Créer une nouvelle configuration
-  </Button>
+    on:click={toFactory(dispatch, "create-configuration")}
+  >Créer une nouvelle configuration</Button
+  >
   <Button
     color="green"
     style={buttonStyles}
-    on:click={toFactory(dispatch, 'upload-configuration')}>
-    Téléverser une configuration
-  </Button>
+    on:click={toFactory(dispatch, "upload-configuration")}
+  >Téléverser une configuration</Button
+  >
 </aside>
