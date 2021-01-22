@@ -34,7 +34,7 @@
     display: inline-block;
     user-select: none;
     margin: 5px;
-    transition: all 250ms ease-in-out;
+    transition: all 125ms ease-in-out;
     text-decoration: none;
     box-sizing: border-box;
     text-align: center;
