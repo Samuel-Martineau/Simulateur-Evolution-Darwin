@@ -67,13 +67,16 @@
   $: if (
     selectedConfiguration &&
     previousSelectedConfiguration !== selectedConfiguration
-  ) {
+  )
+    document.querySelector("main")?.scroll({ top: 0, behavior: "smooth" });
+
+  // Sauvegarde de la dernière configuration choisie dans le stockage local
+  // Règle https://github.com/Samuel-Martineau/Simulateur-Evolution-Darwin/issues/27
+  $: selectedConfiguration &&
     localStorage.setItem(
       LocalStorageKeys.LastVisitedConfiguration,
       selectedConfiguration.id
     );
-    document.querySelector("main")?.scroll({ top: 0, behavior: "smooth" });
-  }
 
   // Nécessaire pour que Svelte remarque la mise à jour des configurations
   $: selectedConfiguration && (configurations = configurations);
