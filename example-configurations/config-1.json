@@ -1,0 +1,110 @@
+{
+  "version": "2",
+  "title": "Écosystème ➡️ Herbivores + Plantes",
+  "seed": 43726269,
+  "mapSideSize": 8000,
+  "species": {
+    "prey": {
+      "exists": true,
+      "startingNumber": 35,
+      "genes": {
+        "speed": {
+          "modificator": "evolutionary",
+          "value": 0,
+          "average": 40,
+          "standardDeviation": 4
+        },
+        "numberOfBabies": {
+          "modificator": "evolutionary",
+          "value": 0,
+          "average": 3,
+          "standardDeviation": 1
+        },
+        "intervalBetweenReproductionPeriods": {
+          "modificator": "evolutionary",
+          "value": 0,
+          "average": 1000,
+          "standardDeviation": 55
+        },
+        "viewDistance": {
+          "modificator": "evolutionary",
+          "value": 0,
+          "average": 200,
+          "standardDeviation": 20
+        },
+        "longevity": {
+          "modificator": "evolutionary",
+          "value": 0,
+          "average": 15000,
+          "standardDeviation": 200
+        },
+        "amountOfFoodToEat": {
+          "modificator": "evolutionary",
+          "value": 0,
+          "average": 3,
+          "standardDeviation": 1
+        },
+        "timeToEat": {
+          "modificator": "evolutionary",
+          "value": 0,
+          "average": 200,
+          "standardDeviation": 15
+        }
+      }
+    },
+    "predator": {
+      "exists": false,
+      "startingNumber": 0,
+      "genes": {
+        "speed": {
+          "modificator": "evolutionary",
+          "value": 0,
+          "average": 0,
+          "standardDeviation": 0
+        },
+        "numberOfBabies": {
+          "modificator": "evolutionary",
+          "value": 0,
+          "average": 0,
+          "standardDeviation": 0
+        },
+        "intervalBetweenReproductionPeriods": {
+          "modificator": "evolutionary",
+          "value": 0,
+          "average": 0,
+          "standardDeviation": 0
+        },
+        "viewDistance": {
+          "modificator": "evolutionary",
+          "value": 0,
+          "average": 0,
+          "standardDeviation": 0
+        },
+        "longevity": {
+          "modificator": "evolutionary",
+          "value": 0,
+          "average": 0,
+          "standardDeviation": 0
+        },
+        "amountOfFoodToEat": {
+          "modificator": "evolutionary",
+          "value": 0,
+          "average": 0,
+          "standardDeviation": 0
+        },
+        "timeToEat": {
+          "modificator": "evolutionary",
+          "value": 0,
+          "average": 0,
+          "standardDeviation": 0
+        }
+      }
+    },
+    "plant": {
+      "exists": true,
+      "startingNumber": 200,
+      "spawnAmount": 20,
+      "spawnInterval": 15
+    }
+  }
+}

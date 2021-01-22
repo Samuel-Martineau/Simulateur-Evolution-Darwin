@@ -82,6 +82,14 @@
   $: selectedConfiguration && (configurations = configurations);
 
   // Utilitaires de contrôle des configurations
+  async function downloadExampleConfigurations() {
+    const exampleConfigurations = (
+      await (await fetch("documentation/example-configurations")).json()
+    ).map((configuration) => Object.assign(configuration, { id: uuidv4() }));
+    configurations = [...exampleConfigurations, ...configurations];
+    selectedConfiguration = exampleConfigurations?.[0] || selectedConfiguration;
+  }
+
   function createConfiguration() {
     const configuration = generateBaseConfiguration();
     configurations = [...configurations, configuration];
@@ -212,6 +220,7 @@
     {configurations}
     bind:selectedConfiguration
     on:click={() => (view = undefined)}
+    on:download-example-configurations={downloadExampleConfigurations}
     on:create-configuration={createConfiguration}
     on:upload-configuration={() => (view = "uploadConfigurationForm")}
   />

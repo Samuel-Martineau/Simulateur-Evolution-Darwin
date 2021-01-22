@@ -97,7 +97,11 @@
       </li>
     {:else}
       <h2>Vous n'avez aucune configuration...</h2>
-      <Button color="green">Télécharger les configurations d'exemple</Button>
+      <Button
+        color="green"
+        on:click={toFactory(dispatch, "download-example-configurations")}
+      >Télécharger les configurations d'exemple</Button
+      >
     {/each}
   </ul>
 

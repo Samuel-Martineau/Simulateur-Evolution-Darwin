@@ -41,6 +41,7 @@ export function transpileV1ConfigurationToV2(
   const partialConfiguration: DeepPartial<SimulatorConfiguration> = {
     version: "2",
 
+    title: v1Configuration.name,
     id: uuidv4(),
     mapSideSize: v1Configuration.size,
     seed: v1Configuration.seed,

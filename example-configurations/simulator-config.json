@@ -1,0 +1,110 @@
+{
+  "version": "2",
+  "title": "Écosystème",
+  "seed": 9876154321,
+  "mapSideSize": 8000,
+  "species": {
+    "prey": {
+      "exists": true,
+      "startingNumber": 150,
+      "genes": {
+        "speed": {
+          "modificator": "evolutionary",
+          "value": 0,
+          "average": 40,
+          "standardDeviation": 4
+        },
+        "numberOfBabies": {
+          "modificator": "constant",
+          "value": 9,
+          "average": 0,
+          "standardDeviation": 0
+        },
+        "intervalBetweenReproductionPeriods": {
+          "modificator": "constant",
+          "value": 1000,
+          "average": 0,
+          "standardDeviation": 0
+        },
+        "viewDistance": {
+          "modificator": "constant",
+          "value": 200,
+          "average": 0,
+          "standardDeviation": 0
+        },
+        "longevity": {
+          "modificator": "constant",
+          "value": 50000,
+          "average": 0,
+          "standardDeviation": 0
+        },
+        "amountOfFoodToEat": {
+          "modificator": "constant",
+          "value": 3,
+          "average": 0,
+          "standardDeviation": 0
+        },
+        "timeToEat": {
+          "modificator": "constant",
+          "value": 200,
+          "average": 0,
+          "standardDeviation": 0
+        }
+      }
+    },
+    "predator": {
+      "exists": true,
+      "startingNumber": 15,
+      "genes": {
+        "speed": {
+          "modificator": "evolutionary",
+          "value": 0,
+          "average": 50,
+          "standardDeviation": 5
+        },
+        "numberOfBabies": {
+          "modificator": "constant",
+          "value": 1,
+          "average": 0,
+          "standardDeviation": 0
+        },
+        "intervalBetweenReproductionPeriods": {
+          "modificator": "constant",
+          "value": 2000,
+          "average": 0,
+          "standardDeviation": 0
+        },
+        "viewDistance": {
+          "modificator": "constant",
+          "value": 200,
+          "average": 0,
+          "standardDeviation": 0
+        },
+        "longevity": {
+          "modificator": "constant",
+          "value": 50000,
+          "average": 0,
+          "standardDeviation": 0
+        },
+        "amountOfFoodToEat": {
+          "modificator": "constant",
+          "value": 1,
+          "average": 0,
+          "standardDeviation": 0
+        },
+        "timeToEat": {
+          "modificator": "constant",
+          "value": 700,
+          "average": 0,
+          "standardDeviation": 0
+        }
+      }
+    },
+    "plant": {
+      "exists": true,
+      "startingNumber": 200,
+      "spawnAmount": 15,
+      "spawnInterval": 10
+    }
+  }
+}
