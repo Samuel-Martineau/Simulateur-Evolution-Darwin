@@ -6,7 +6,7 @@ import type { Dependency } from "../types/dependency";
 import type { SimulatorConfiguration } from "../types/simulator-configuration";
 import type { V1SimulatorConfiguration } from "../types/v1-simulator-configuration";
 
-export const getRandomSeed = () => Math.round(Math.random() * 100_000);
+export const getRandomSeed = (): number => Math.round(Math.random() * 100_000);
 
 export const baseConfiguration = {
   version: "2",
@@ -174,7 +174,7 @@ export function scrollIntoView(
   selector: string,
   container: HTMLElement | Window,
   offset: number
-) {
+): void {
   const element = document.querySelector(selector) as HTMLElement;
   if (!element) throw new Error(`Element "${element}" doesn't exist`);
 
@@ -183,7 +183,7 @@ export function scrollIntoView(
   );
 }
 
-export const pluralize = (str: string, condition: boolean, end = "s") =>
+export const pluralize = (str: string, condition: boolean, end = "s"): string =>
   str + (condition ? end : "");
 
 export { transpileV1ConfigurationToV2 } from "./transpile-v1-configuration-to-v2";

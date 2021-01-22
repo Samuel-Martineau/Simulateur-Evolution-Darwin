@@ -5,7 +5,6 @@ import { v4 as uuidv4 } from "uuid";
 import type {
   AnimalSpecie,
   AnimalSpecieConfiguration,
-  GeneConfiguration,
   SimulatorConfiguration,
 } from "../types/simulator-configuration";
 import {
