@@ -1,7 +1,7 @@
 import * as sapper from "@sapper/server";
 import compression from "compression";
 import cookieParser from "cookie-parser";
-import express, { Request, Response } from "express";
+import express, { Request } from "express";
 import isMobile from "is-mobile";
 import sirv from "sirv";
 
