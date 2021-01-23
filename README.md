@@ -6,6 +6,7 @@ Un projet d'[Expo-Science](https://technoscience.ca/programmes/expo-sciences/) q
 
 - Le simulateur est accessible sur [expo.smartineau.me](https://expo.smartineau.me)
 - Notre travail de recherche est disponible sur [Google Docs](https://docs.google.com/document/d/1-0XiVGQqNu3fPAFKN3vtxdBR2Abm4OA3ouX9kTg74Gk/edit?usp=sharing)
+- Notre rapport est disponible sur [Google Docs](https://docs.google.com/document/d/1Aln9mbRdnBkItP4O2jbGNKjLoYmpsrAKU2wY7LRIqyI/edit?usp=sharing)
 
 ## Captures d'écran
 
