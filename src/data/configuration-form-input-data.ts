@@ -1,5 +1,4 @@
 import ShuffleIcon from "images/shuffle.svg";
-import { v4 as uuidv4 } from "uuid";
 
 import type { ConfigurationFormInputData } from "../types/configuration-form-input-data";
 import type {

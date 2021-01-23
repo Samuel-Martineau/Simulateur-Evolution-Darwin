@@ -1,7 +1,7 @@
 {
   "name": "simulateur-evolution",
   "description": "Un simulateur d'évolution en ligne simple pour mieux comprendre ce complexe phénomène",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "license": "MIT",
   "author": {
     "name": "Samuel Martineau",
@@ -25,7 +25,7 @@
     "validate": "svelte-check --ignore src/node_modules/@sapper",
     "postinstall": "./postinstall.sh",
     "lint": "eslint src/**/*.*",
-    "lint:fix": "eslint src/**/*.* --fix",
+    "lint:fix": "eslint src/**/*.ts --fix",
     "prettier": "prettier src/**/*.* README.md --write"
   },
   "dependencies": {
