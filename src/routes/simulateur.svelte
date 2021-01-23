@@ -24,7 +24,9 @@
   import SimulatorRunner from "../components/simulator-runner.svelte";
 
   let main: HTMLElement;
+
   let view: "uploadConfigurationForm" | "simulator" | undefined;
+  const resetView = () => (view = undefined);
 
   // Chargement des configurations à partir du localStorage
   let configurations: SimulatorConfiguration[] = process.browser
@@ -71,7 +73,7 @@
     document.querySelector("main")?.scroll({ top: 0, behavior: "smooth" });
 
   // Sauvegarde de la dernière configuration choisie dans le stockage local
-  // Règle https://github.com/Samuel-Martineau/Simulateur-Evolution-Darwin/issues/27
+  // Règle #27
   $: selectedConfiguration &&
     localStorage.setItem(
       LocalStorageKeys.LastVisitedConfiguration,
@@ -101,7 +103,6 @@
   }: {
     detail: SimulatorConfiguration | V1SimulatorConfiguration;
   }) {
-    view = undefined;
     if (isV2SimulatorConfiguration(configuration)) {
       const newConfiguration = applyDefaultsDeep(
         Object.assign(configuration, { id: uuidv4() }),
@@ -219,14 +220,18 @@
   <ConfigurationsSidebar
     {configurations}
     bind:selectedConfiguration
-    on:click={() => (view = undefined)}
+    on:click={resetView}
     on:download-example-configurations={downloadExampleConfigurations}
+    on:create-configuration={resetView}
     on:create-configuration={createConfiguration}
     on:upload-configuration={() => (view = "uploadConfigurationForm")}
   />
   <main bind:this={main}>
     {#if view === "uploadConfigurationForm"}
-      <UploadConfigurationForm on:upload-configuration={uploadConfiguration} />
+      <UploadConfigurationForm
+        on:upload-configuration={resetView}
+        on:upload-configuration={uploadConfiguration}
+      />
     {:else if view === "simulator" && selectedConfiguration}
       <SimulatorRunner configuration={selectedConfiguration} />
     {:else if selectedConfiguration}
