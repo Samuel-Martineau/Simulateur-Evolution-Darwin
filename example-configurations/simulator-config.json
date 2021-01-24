@@ -1,7 +1,8 @@
 {
-  "version": "2",
+  "id": "f902d2dd-78a6-4e5c-ad48-662e50ce8dd8",
   "title": "Écosystème",
-  "seed": 9876154321,
+  "seed": 987654321,
+  "version": "2",
   "mapSideSize": 8000,
   "species": {
     "prey": {
@@ -12,43 +13,99 @@
           "modificator": "evolutionary",
           "value": 0,
           "average": 40,
-          "standardDeviation": 4
+          "standardDeviation": 4,
+          "adjustments": {
+            "numberOfBabies": 0,
+            "intervalBetweenReproductionPeriods": 0,
+            "viewDistance": 0,
+            "longevity": 0,
+            "amountOfFoodToEat": 0,
+            "timeToEat": 0
+          }
         },
         "numberOfBabies": {
           "modificator": "constant",
           "value": 9,
           "average": 0,
-          "standardDeviation": 0
+          "standardDeviation": 0,
+          "adjustments": {
+            "speed": 0,
+            "intervalBetweenReproductionPeriods": 0,
+            "viewDistance": 0,
+            "longevity": 0,
+            "amountOfFoodToEat": 0,
+            "timeToEat": 0
+          }
         },
         "intervalBetweenReproductionPeriods": {
           "modificator": "constant",
           "value": 1000,
           "average": 0,
-          "standardDeviation": 0
+          "standardDeviation": 0,
+          "adjustments": {
+            "speed": 0,
+            "numberOfBabies": 0,
+            "viewDistance": 0,
+            "longevity": 0,
+            "amountOfFoodToEat": 0,
+            "timeToEat": 0
+          }
         },
         "viewDistance": {
           "modificator": "constant",
           "value": 200,
           "average": 0,
-          "standardDeviation": 0
+          "standardDeviation": 0,
+          "adjustments": {
+            "speed": 0,
+            "numberOfBabies": 0,
+            "intervalBetweenReproductionPeriods": 0,
+            "longevity": 0,
+            "amountOfFoodToEat": 0,
+            "timeToEat": 0
+          }
         },
         "longevity": {
           "modificator": "constant",
           "value": 50000,
           "average": 0,
-          "standardDeviation": 0
+          "standardDeviation": 0,
+          "adjustments": {
+            "speed": 0,
+            "numberOfBabies": 0,
+            "intervalBetweenReproductionPeriods": 0,
+            "viewDistance": 0,
+            "amountOfFoodToEat": 0,
+            "timeToEat": 0
+          }
         },
         "amountOfFoodToEat": {
           "modificator": "constant",
           "value": 3,
           "average": 0,
-          "standardDeviation": 0
+          "standardDeviation": 0,
+          "adjustments": {
+            "speed": 0.05,
+            "numberOfBabies": 0,
+            "intervalBetweenReproductionPeriods": 0,
+            "viewDistance": 0,
+            "longevity": 0,
+            "timeToEat": 0
+          }
         },
         "timeToEat": {
           "modificator": "constant",
           "value": 200,
           "average": 0,
-          "standardDeviation": 0
+          "standardDeviation": 0,
+          "adjustments": {
+            "speed": 0,
+            "numberOfBabies": 0,
+            "intervalBetweenReproductionPeriods": 0,
+            "viewDistance": 0,
+            "longevity": 0,
+            "amountOfFoodToEat": 0
+          }
         }
       }
     },
@@ -60,43 +117,99 @@
           "modificator": "evolutionary",
           "value": 0,
           "average": 50,
-          "standardDeviation": 5
+          "standardDeviation": 5,
+          "adjustments": {
+            "numberOfBabies": 0,
+            "intervalBetweenReproductionPeriods": 0,
+            "viewDistance": 0,
+            "longevity": 0,
+            "amountOfFoodToEat": 0,
+            "timeToEat": 0
+          }
         },
         "numberOfBabies": {
           "modificator": "constant",
           "value": 1,
           "average": 0,
-          "standardDeviation": 0
+          "standardDeviation": 0,
+          "adjustments": {
+            "speed": 0,
+            "intervalBetweenReproductionPeriods": 0,
+            "viewDistance": 0,
+            "longevity": 0,
+            "amountOfFoodToEat": 0,
+            "timeToEat": 0
+          }
         },
         "intervalBetweenReproductionPeriods": {
           "modificator": "constant",
           "value": 2000,
           "average": 0,
-          "standardDeviation": 0
+          "standardDeviation": 0,
+          "adjustments": {
+            "speed": 0,
+            "numberOfBabies": 0,
+            "viewDistance": 0,
+            "longevity": 0,
+            "amountOfFoodToEat": 0,
+            "timeToEat": 0
+          }
         },
         "viewDistance": {
           "modificator": "constant",
           "value": 200,
           "average": 0,
-          "standardDeviation": 0
+          "standardDeviation": 0,
+          "adjustments": {
+            "speed": 0,
+            "numberOfBabies": 0,
+            "intervalBetweenReproductionPeriods": 0,
+            "longevity": 0,
+            "amountOfFoodToEat": 0,
+            "timeToEat": 0
+          }
         },
         "longevity": {
           "modificator": "constant",
           "value": 50000,
           "average": 0,
-          "standardDeviation": 0
+          "standardDeviation": 0,
+          "adjustments": {
+            "speed": 0,
+            "numberOfBabies": 0,
+            "intervalBetweenReproductionPeriods": 0,
+            "viewDistance": 0,
+            "amountOfFoodToEat": 0,
+            "timeToEat": 0
+          }
         },
         "amountOfFoodToEat": {
           "modificator": "constant",
           "value": 1,
           "average": 0,
-          "standardDeviation": 0
+          "standardDeviation": 0,
+          "adjustments": {
+            "speed": 0,
+            "numberOfBabies": 0,
+            "intervalBetweenReproductionPeriods": 0,
+            "viewDistance": 0,
+            "longevity": 0,
+            "timeToEat": 0
+          }
         },
         "timeToEat": {
           "modificator": "constant",
           "value": 700,
           "average": 0,
-          "standardDeviation": 0
+          "standardDeviation": 0,
+          "adjustments": {
+            "speed": 0,
+            "numberOfBabies": 0,
+            "intervalBetweenReproductionPeriods": 0,
+            "viewDistance": 0,
+            "longevity": 0,
+            "amountOfFoodToEat": 0
+          }
         }
       }
     },
