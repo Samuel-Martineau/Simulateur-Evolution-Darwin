@@ -1,14 +1,20 @@
 <script lang="ts">
   import type { ConfigurationFormInputData } from "../types/configuration-form-input-data";
-  import * as _ from "lodash";
+  import _ from "lodash";
 
   export let configurationFormInputData: ConfigurationFormInputData[];
 
-  $: flattenConfigurationFormInputData = _.flatMapDeep(
-    configurationFormInputData.map((inputData) =>
-      inputData.type === "group" ? [inputData, inputData.children] : inputData
-    )
-  );
+  function getChildren(inputData: ConfigurationFormInputData) {
+    if (inputData.type === "group") {
+      return [inputData, inputData.children.map(getChildren)];
+    } else return inputData;
+  }
+
+  const flattenConfigurationFormInputData = _.chain(configurationFormInputData)
+    .map(getChildren)
+    .flattenDeep()
+    .uniqBy("glossaryId")
+    .value();
 </script>
 
 <style lang="scss">

@@ -10,7 +10,7 @@ export type ConfigurationFormInputData = {
   | {
       shownInGlossary: true;
       description: string;
-      glossaryId: `configuration-${string}`;
+      glossaryId: string;
     }
 ) &
   (
@@ -34,7 +34,7 @@ export type ConfigurationFormInputData = {
           }
         | {
             type: "number";
-            step?: number;
+            step?: number | "any";
             max?: number;
             min?: number;
             unit?: string;

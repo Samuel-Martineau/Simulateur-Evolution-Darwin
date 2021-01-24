@@ -17,7 +17,9 @@ const alias = { svelte: path.resolve("node_modules", "svelte") };
 const extensions = [".mjs", ".js", ".ts", ".json", ".svelte", ".html", ".svx"];
 const mainFields = ["svelte", "module", "browser", "main"];
 const preprocessors = [
-  sveltePreprocess(),
+  sveltePreprocess({
+    postcss: { plugins: [require("autoprefixer")] },
+  }),
   mdsvex({
     remarkPlugins: [
       [
@@ -103,24 +105,8 @@ module.exports = {
               hydratable: true,
               preprocess: preprocessors,
               hotReload: false,
-              emitCss: true,
             },
           },
-        },
-        {
-          test: /\.css$/i,
-          use: [
-            "style-loader",
-            "css-loader",
-            {
-              loader: "postcss-loader",
-              options: {
-                postcssOptions: {
-                  plugins: [require("autoprefixer")],
-                },
-              },
-            },
-          ],
         },
         fileLoaderRule,
       ],

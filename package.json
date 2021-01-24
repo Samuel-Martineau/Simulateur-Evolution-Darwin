@@ -1,7 +1,7 @@
 {
   "name": "simulateur-evolution",
   "description": "Un simulateur d'évolution en ligne simple pour mieux comprendre ce complexe phénomène",
-  "version": "2.0.8",
+  "version": "2.0.9",
   "license": "MIT",
   "author": {
     "name": "Samuel Martineau",
@@ -24,7 +24,7 @@
     "start": "node __sapper__/build",
     "validate": "svelte-check --ignore src/node_modules/@sapper",
     "postinstall": "./postinstall.sh",
-    "lint": "eslint src/**/*.*",
+    "lint": "eslint src/**/*.ts",
     "lint:fix": "eslint src/**/*.ts --fix",
     "prettier": "prettier src/**/*.* README.md --write"
   },
@@ -54,7 +54,6 @@
     "@typescript-eslint/eslint-plugin": "^4.13.0",
     "@typescript-eslint/parser": "^4.13.0",
     "autoprefixer": "^10.0.4",
-    "css-loader": "^5.0.1",
     "eslint": "^7.18.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "file-loader": "^6.0.0",
@@ -67,7 +66,6 @@
     "mdsvex": "^0.8.9",
     "postcss": "^8.2.1",
     "postcss-load-config": "^3.0.0",
-    "postcss-loader": "^4.1.0",
     "prettier": "^2.2.1",
     "prettier-plugin-svelte": "^2.1.0",
     "rehype-autolink-headings": "^5.0.1",
@@ -76,7 +74,6 @@
     "remark-toc": "^7.0.0",
     "sapper": "^0.28.0",
     "sass": "^1.30.0",
-    "style-loader": "^2.0.0",
     "svelte": "^3.17.3",
     "svelte-check": "^1.0.46",
     "svelte-loader": "^2.9.0",

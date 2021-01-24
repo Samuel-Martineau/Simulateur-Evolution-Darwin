@@ -5,124 +5,9 @@ import { v4 as uuidv4 } from "uuid";
 import type { Dependency } from "../types/dependency";
 import type { SimulatorConfiguration } from "../types/simulator-configuration";
 import type { V1SimulatorConfiguration } from "../types/v1-simulator-configuration";
+import { baseConfiguration } from "./base-configuration";
 
 export const getRandomSeed = (): number => Math.round(Math.random() * 100_000);
-
-export const baseConfiguration = {
-  version: "2",
-
-  id: "0",
-  title: "",
-  seed: 0,
-  mapSideSize: 8000,
-
-  species: {
-    prey: {
-      exists: false,
-      startingNumber: 1,
-      genes: {
-        speed: {
-          modificator: "constant",
-          value: 0,
-          average: 0,
-          standardDeviation: 0,
-        },
-        numberOfBabies: {
-          modificator: "constant",
-          value: 0,
-          average: 0,
-          standardDeviation: 0,
-        },
-        intervalBetweenReproductionPeriods: {
-          modificator: "constant",
-          value: 0,
-          average: 0,
-          standardDeviation: 0,
-        },
-        viewDistance: {
-          modificator: "constant",
-          value: 0,
-          average: 0,
-          standardDeviation: 0,
-        },
-        longevity: {
-          modificator: "constant",
-          value: 0,
-          average: 0,
-          standardDeviation: 0,
-        },
-        amountOfFoodToEat: {
-          modificator: "constant",
-          value: 0,
-          average: 0,
-          standardDeviation: 0,
-        },
-        timeToEat: {
-          modificator: "constant",
-          value: 0,
-          average: 0,
-          standardDeviation: 0,
-        },
-      },
-    },
-
-    predator: {
-      exists: false,
-      startingNumber: 1,
-      genes: {
-        speed: {
-          modificator: "constant",
-          value: 0,
-          average: 0,
-          standardDeviation: 0,
-        },
-        numberOfBabies: {
-          modificator: "constant",
-          value: 0,
-          average: 0,
-          standardDeviation: 0,
-        },
-        intervalBetweenReproductionPeriods: {
-          modificator: "constant",
-          value: 0,
-          average: 0,
-          standardDeviation: 0,
-        },
-        viewDistance: {
-          modificator: "constant",
-          value: 0,
-          average: 0,
-          standardDeviation: 0,
-        },
-        longevity: {
-          modificator: "constant",
-          value: 0,
-          average: 0,
-          standardDeviation: 0,
-        },
-        amountOfFoodToEat: {
-          modificator: "constant",
-          value: 0,
-          average: 0,
-          standardDeviation: 0,
-        },
-        timeToEat: {
-          modificator: "constant",
-          value: 0,
-          average: 0,
-          standardDeviation: 0,
-        },
-      },
-    },
-
-    plant: {
-      exists: false,
-      startingNumber: 0,
-      spawnAmount: 0,
-      spawnInterval: 1,
-    },
-  },
-} as SimulatorConfiguration;
 
 export const isV2SimulatorConfiguration = (
   configuration: SimulatorConfiguration | V1SimulatorConfiguration
@@ -185,6 +70,8 @@ export function scrollIntoView(
 
 export const pluralize = (str: string, condition: boolean, end = "s"): string =>
   str + (condition ? end : "");
+export const titleize = (str: string): string =>
+  str[0].toUpperCase() + str.slice(1);
 
 export { transpileV1ConfigurationToV2 } from "./transpile-v1-configuration-to-v2";
 export { transpileV2ConfigurationToV1 } from "./transpile-v2-configuration-to-v1";

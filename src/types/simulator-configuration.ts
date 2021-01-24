@@ -1,24 +1,31 @@
+export type PlantSpecie = "plant";
 export type AnimalSpecie = "prey" | "predator";
-export type Specie = AnimalSpecie | "plant";
+export type Specie = AnimalSpecie | PlantSpecie;
 
-export interface GeneConfiguration {
+export type AnimalGene =
+  | "speed"
+  | "numberOfBabies"
+  | "intervalBetweenReproductionPeriods"
+  | "viewDistance"
+  | "longevity"
+  | "amountOfFoodToEat"
+  | "timeToEat";
+
+export interface GeneConfiguration<T extends AnimalGene> {
   modificator: "constant" | "evolutionary";
   value: number;
   average: number;
   standardDeviation: number;
+  adjustments: {
+    [key in Exclude<AnimalGene, T>]: number;
+  };
 }
 
 export interface AnimalSpecieConfiguration {
   exists: boolean;
   startingNumber: number;
   genes: {
-    speed: GeneConfiguration;
-    numberOfBabies: GeneConfiguration;
-    intervalBetweenReproductionPeriods: GeneConfiguration;
-    viewDistance: GeneConfiguration;
-    longevity: GeneConfiguration;
-    amountOfFoodToEat: GeneConfiguration;
-    timeToEat: GeneConfiguration;
+    [K in AnimalGene]: GeneConfiguration<K>;
   };
 }
 
@@ -39,8 +46,10 @@ export interface SimulatorConfiguration {
   mapSideSize: number;
 
   species: {
-    plant: PlantSpecieConfiguration;
-    prey: AnimalSpecieConfiguration;
-    predator: AnimalSpecieConfiguration;
+    [K in Specie]: K extends AnimalSpecie
+      ? AnimalSpecieConfiguration
+      : K extends PlantSpecie
+      ? PlantSpecieConfiguration
+      : never;
   };
 }

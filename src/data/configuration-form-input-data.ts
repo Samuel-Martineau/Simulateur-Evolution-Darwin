@@ -1,12 +1,15 @@
 import ShuffleIcon from "images/shuffle.svg";
+import _ from "lodash";
 
 import type { ConfigurationFormInputData } from "../types/configuration-form-input-data";
 import type {
+  AnimalGene,
   AnimalSpecie,
   SimulatorConfiguration,
   Specie,
 } from "../types/simulator-configuration";
-import { getRandomSeed } from "../utils";
+import { getRandomSeed, titleize } from "../utils";
+import { genesDisplayName } from "./simulator-configuration";
 
 const alwaysEnabled = () => false as const;
 const enabledIfSpecieExists = (specie: Specie) => (
@@ -81,10 +84,10 @@ export const plantsSpecieConfigurationFormInputData: ConfigurationFormInputData[
   },
   {
     type: "number",
-    name: "Interval entre les lots d’apparition",
-    glossaryId: "configuration-espèce-plantes-interval-entre-apparition",
+    name: "Intervalle entre les lots d’apparition",
+    glossaryId: "configuration-espèce-plantes-intervalle-entre-apparition",
     description:
-      "Dans le simulateur, les plantes apparaissent à une vitesse constante. Ce champ représente l’interval de temps entre les lots d’apparition",
+      "Dans le simulateur, les plantes apparaissent à une vitesse constante. Ce champ représente l’intervalle de temps entre les lots d’apparition",
     unit: "UT",
     min: 1,
     required: true,
@@ -109,57 +112,78 @@ export const plantsSpecieConfigurationFormInputData: ConfigurationFormInputData[
 
 const getChildrenFieldForGene = (
   animalSpecie: AnimalSpecie,
-  geneConfigPath: keyof SimulatorConfiguration["species"][AnimalSpecie]["genes"]
-): ConfigurationFormInputData[] => [
-  {
-    type: "select",
-    name: "Type de modificateur",
-    required: true,
-    shownInGlossary: false,
-    options: {
-      constant: "Constant",
-      evolutionary: "Évolutif",
+  geneName: AnimalGene
+): ConfigurationFormInputData[] => {
+  return [
+    {
+      type: "select",
+      name: "Type de modificateur",
+      required: true,
+      shownInGlossary: false,
+      options: {
+        constant: "Constant",
+        evolutionary: "Évolutif",
+      },
+      fieldPath: `species.${animalSpecie}.genes.${geneName}.modificator`,
+      disabled: enabledIfSpecieExists(animalSpecie),
     },
-    fieldPath: `species.${animalSpecie}.genes.${geneConfigPath}.modificator`,
-    disabled: enabledIfSpecieExists(animalSpecie),
-  },
-  {
-    type: "number",
-    name: "Valeur",
-    min: 0,
-    required: true,
-    shownInGlossary: false,
-    fieldPath: `species.${animalSpecie}.genes.${geneConfigPath}.value`,
-    disabled: (conf) =>
-      enabledIfSpecieExists(animalSpecie)(conf) ||
-      conf.species[animalSpecie].genes[geneConfigPath].modificator !==
-        "constant",
-  },
-  {
-    type: "number",
-    name: "Moyenne de départ",
-    min: 0,
-    required: true,
-    shownInGlossary: false,
-    fieldPath: `species.${animalSpecie}.genes.${geneConfigPath}.average`,
-    disabled: (conf) =>
-      enabledIfSpecieExists(animalSpecie)(conf) ||
-      conf.species[animalSpecie].genes[geneConfigPath].modificator !==
-        "evolutionary",
-  },
-  {
-    type: "number",
-    name: "Déviation standard de départ",
-    min: 0,
-    required: true,
-    shownInGlossary: false,
-    fieldPath: `species.${animalSpecie}.genes.${geneConfigPath}.standardDeviation`,
-    disabled: (conf) =>
-      enabledIfSpecieExists(animalSpecie)(conf) ||
-      conf.species[animalSpecie].genes[geneConfigPath].modificator !==
-        "evolutionary",
-  },
-];
+    {
+      type: "number",
+      name: "Valeur",
+      min: 0,
+      required: true,
+      shownInGlossary: false,
+      fieldPath: `species.${animalSpecie}.genes.${geneName}.value`,
+      disabled: (conf) =>
+        enabledIfSpecieExists(animalSpecie)(conf) ||
+        conf.species[animalSpecie].genes[geneName].modificator !== "constant",
+    },
+    {
+      type: "number",
+      name: "Moyenne de départ",
+      min: 0,
+      required: true,
+      shownInGlossary: false,
+      fieldPath: `species.${animalSpecie}.genes.${geneName}.average`,
+      disabled: (conf) =>
+        enabledIfSpecieExists(animalSpecie)(conf) ||
+        conf.species[animalSpecie].genes[geneName].modificator !==
+          "evolutionary",
+    },
+    {
+      type: "number",
+      name: "Déviation standard de départ",
+      min: 0,
+      required: true,
+      shownInGlossary: false,
+      fieldPath: `species.${animalSpecie}.genes.${geneName}.standardDeviation`,
+      disabled: (conf) =>
+        enabledIfSpecieExists(animalSpecie)(conf) ||
+        conf.species[animalSpecie].genes[geneName].modificator !==
+          "evolutionary",
+    },
+    {
+      type: "group",
+      name: "Ajustements",
+      glossaryId: "configuration-espèces-animales-gènes-ajustements",
+      description:
+        "Les ajustements permettent de modifier la valeur d'un gène en fonction de la valeur des autres gènes. Pour chacun des autres gènes, il est possible d'indiquer un nombre qui va être multiplier par la valeur de ce gène, puis soustrait",
+      required: true,
+      shownInGlossary: true,
+      children: Object.entries(_.omit(genesDisplayName, geneName)).map(
+        ([name, displayName]: [string, string]) => ({
+          type: "number",
+          name: titleize(displayName),
+          step: "any",
+          required: true,
+          shownInGlossary: false,
+          fieldPath: `species.${animalSpecie}.genes.${geneName}.adjustments.${name}`,
+          disabled: alwaysEnabled,
+        })
+      ),
+    },
+  ];
+};
 
 export const getAnimalSpeciesConfigurationFormInputData = (
   animalSpecie: AnimalSpecie
@@ -190,18 +214,20 @@ export const getAnimalSpeciesConfigurationFormInputData = (
   },
   {
     type: "group",
-    name: "Gênes",
-    glossaryId: "configuration-espèces-animales-gênes",
+    name: "Gènes",
+    glossaryId: "configuration-espèces-animales-gènes",
     description:
-      "Les gênes sont les attributs des animaux. Les champs suivants représentent les valeurs de départ des gênes pour la population. Il y a deux possibilités de valeurs pour un gêne: évolutif ou constant. Un gêne de type évolutif générera les valeurs de départ sur une distribution normale en fonction d’une moyenne de départ et une déviation standard de départ",
+      "Les gènes sont les attributs des animaux. Les champs suivants représentent les valeurs de départ des gènes pour la population. Il y a deux possibilités de valeurs pour un gène: évolutif ou constant. Un gène de type évolutif générera les valeurs de départ sur une distribution normale en fonction d’une moyenne de départ et une déviation standard de départ",
     required: true,
     shownInGlossary: true,
     children: [
       {
         type: "group",
-        name: "Gêne de vitesse",
-        glossaryId: "configuration-espèces-animales-gêne-vitesse",
-        description: "La vitesse de déplacement de l’individu",
+        name: `Gène de ${genesDisplayName["speed"]}`,
+        glossaryId: `configuration-espèces-animales-gène-${_.kebabCase(
+          genesDisplayName["speed"]
+        )}`,
+        description: `La ${genesDisplayName["speed"]} de déplacement de l’individu`,
         unit: "UE / UT",
         required: true,
         shownInGlossary: true,
@@ -209,20 +235,22 @@ export const getAnimalSpeciesConfigurationFormInputData = (
       },
       {
         type: "group",
-        name: "Gêne du nombre de bébés",
-        glossaryId: "configuration-espèces-animales-gêne-nombre-bébés",
-        description:
-          "Le nombre de bébés que vont faire deux individus lorsqu’ils vont se reproduires. À noter que la notion de sexe (masculin / féminin) n’est pas présente dans le simulateur",
-        unit: "Nombre de bébés",
+        name: `Gène du ${genesDisplayName["numberOfBabies"]}`,
+        glossaryId: `configuration-espèces-animales-gène-${_.kebabCase(
+          genesDisplayName["numberOfBabies"]
+        )}`,
+        description: `Le ${genesDisplayName["numberOfBabies"]} que vont faire deux individus lorsqu’ils vont se reproduires. À noter que la notion de sexe (masculin / féminin) n’est pas présente dans le simulateur`,
+        unit: titleize(genesDisplayName["numberOfBabies"]),
         required: true,
         shownInGlossary: true,
         children: getChildrenFieldForGene(animalSpecie, "numberOfBabies"),
       },
       {
         type: "group",
-        name: "Gêne de l'interval entre les périodes de reproduction",
-        glossaryId:
-          "configuration-espèces-animales-gêne-interval-périodes-reproduction",
+        name: `Gène de l'${genesDisplayName["intervalBetweenReproductionPeriods"]}`,
+        glossaryId: `configuration-espèces-animales-gène-${_.kebabCase(
+          genesDisplayName["intervalBetweenReproductionPeriods"]
+        )}`,
         description:
           "La quantité de temps qu’un individu doit attendre avant de pouvoir se reproduire à nouveau",
         unit: "UT",
@@ -235,8 +263,10 @@ export const getAnimalSpeciesConfigurationFormInputData = (
       },
       {
         type: "group",
-        name: "Gêne de la distance de vue",
-        glossaryId: "configuration-espèces-animales-gêne-distance-vue",
+        name: `Gène de la ${genesDisplayName["viewDistance"]}`,
+        glossaryId: `configuration-espèces-animales-gène-${_.kebabCase(
+          genesDisplayName["viewDistance"]
+        )}`,
         description:
           "La vue est le seul sens que les animaux possèdent dans le simulateur. Ce gène représente la distance maximale à laquelle ils peuvent voir de la nourriture, des partenaires de reproduction et des prédateurs",
         unit: "UE",
@@ -246,8 +276,10 @@ export const getAnimalSpeciesConfigurationFormInputData = (
       },
       {
         type: "group",
-        name: "Gêne de la longévité",
-        glossaryId: "configuration-espèces-animales-gêne-longévité",
+        name: `Gène de la ${genesDisplayName["longevity"]}`,
+        glossaryId: `configuration-espèces-animales-gène-${_.kebabCase(
+          genesDisplayName["longevity"]
+        )}`,
         description: "L’âge maximum d’un individu avant qu’il ne meure",
         unit: "UT",
         required: true,
@@ -256,8 +288,10 @@ export const getAnimalSpeciesConfigurationFormInputData = (
       },
       {
         type: "group",
-        name: "Gêne du temps pour manger",
-        glossaryId: "configuration-espèces-animales-gêne-temps-pour-manger",
+        name: `Gène du ${genesDisplayName["timeToEat"]}`,
+        glossaryId: `configuration-espèces-animales-gène-${_.kebabCase(
+          genesDisplayName["timeToEat"]
+        )}`,
         description:
           "Le temps qu’un individu a pour manger la quantité de nourriture qu’il doit manger",
         unit: "UT",
@@ -267,9 +301,10 @@ export const getAnimalSpeciesConfigurationFormInputData = (
       },
       {
         type: "group",
-        name: "Gêne de la quantité de nourriture à manger",
-        glossaryId:
-          "configuration-espèces-animales-gêne-quantité-nourriture-à-manger",
+        name: `Gène de la ${genesDisplayName["amountOfFoodToEat"]}`,
+        glossaryId: `configuration-espèces-animales-gène-${_.kebabCase(
+          genesDisplayName["amountOfFoodToEat"]
+        )}`,
         description:
           "La quantité de nourriture (plantes pour les proies et proies pour les carnivores) que l’individu doit manger dans le temps qu’il a pour manger",
         unit: "Nombre de plantes pour les proies et proies pour les carnivores",

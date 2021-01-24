@@ -5,7 +5,6 @@
   import UploadConfigurationForm from "../components/upload-configuration-form.svelte";
   import {
     applyDefaultsDeep,
-    baseConfiguration,
     generateBaseConfiguration,
     getRandomSeed,
     isV2SimulatorConfiguration,
@@ -106,7 +105,7 @@
     if (isV2SimulatorConfiguration(configuration)) {
       const newConfiguration = applyDefaultsDeep(
         Object.assign(configuration, { id: uuidv4() }),
-        Object.assign(baseConfiguration, { seed: getRandomSeed() })
+        generateBaseConfiguration()
       );
       configurations = [...configurations, newConfiguration];
       selectedConfiguration = newConfiguration;

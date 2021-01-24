@@ -2,39 +2,37 @@ import _ from "lodash";
 import type { DeepPartial } from "tsdef";
 import { v4 as uuidv4 } from "uuid";
 
+import { genesDisplayName, v1GenesName } from "../data/simulator-configuration";
 import type {
+  AnimalGene,
   AnimalSpecie,
-  AnimalSpecieConfiguration,
   SimulatorConfiguration,
 } from "../types/simulator-configuration";
 import {
-  V1Adjustments,
   V1Gene,
   V1Modificator,
   V1SimulatorConfiguration,
 } from "../types/v1-simulator-configuration";
-import { applyDefaultsDeep, baseConfiguration, getRandomSeed } from ".";
+import { applyDefaultsDeep, generateBaseConfiguration, titleize } from ".";
 
 export function transpileV2ConfigurationToV1(
   partialConfiguration: DeepPartial<SimulatorConfiguration>
 ): V1SimulatorConfiguration {
   const v2Configuration = applyDefaultsDeep(
     Object.assign(partialConfiguration, { id: uuidv4() }),
-    Object.assign(baseConfiguration, { seed: getRandomSeed() })
+    generateBaseConfiguration()
   );
 
   function transpileV2Gene(
     specie: AnimalSpecie,
-    geneName: keyof AnimalSpecieConfiguration["genes"],
-    displayName: string,
-    displayValue: string,
-    v1GeneName: string = geneName,
-    adjustments: V1Adjustments = {}
+    geneName: AnimalGene,
+    displayValue: string
   ): V1Gene {
+    const v1GeneName = v1GenesName[geneName];
     const gene = v2Configuration.species[specie].genes[geneName];
 
     return {
-      displayName,
+      displayName: titleize(genesDisplayName[geneName]),
       name: v1GeneName,
       modificator:
         gene.modificator === "constant"
@@ -44,7 +42,14 @@ export function transpileV2ConfigurationToV1(
       stdDev: gene.standardDeviation,
       value: gene.value,
       displayValue,
-      adjustments,
+      adjustments: _.transform(
+        gene.adjustments,
+        (result, value, key) => {
+          if (value === 0) return;
+          result[v1GenesName[key]] = `Math.round(\${value} * ${value})`;
+        },
+        {}
+      ),
     };
   }
   const transpileV2PreyGene = _.partial(transpileV2Gene, "prey");
@@ -69,49 +74,22 @@ export function transpileV2ConfigurationToV1(
       name: "Proie",
       startingNb: v2Configuration.species.prey.startingNumber,
       genes: [
-        transpileV2PreyGene(
-          "speed",
-          "Vitesse",
-          "${this.value.toFixed(2)} ue / ut"
-        ),
+        transpileV2PreyGene("speed", "${this.value.toFixed(2)} ue / ut"),
         transpileV2PreyGene(
           "numberOfBabies",
-          "Nombre de bébés",
-          "${Math.round(this.value)} bébé${ this.value > 1 ? 's' : '' }",
-          "nbOfBabies"
+          "${Math.round(this.value)} bébé${ this.value > 1 ? 's' : '' }"
         ),
-        transpileV2PreyGene(
-          "longevity",
-          "Longévité",
-          "${this.value.toFixed(2)} ut"
-        ),
+        transpileV2PreyGene("longevity", "${this.value.toFixed(2)} ut"),
         transpileV2PreyGene(
           "intervalBetweenReproductionPeriods",
-          "Interval entre les périodes de reproduction",
-          "${this.value.toFixed(2)} ut",
-          "intervalBetweenReproducingPeriods"
+          "${this.value.toFixed(2)} ut"
         ),
-        transpileV2PreyGene(
-          "viewDistance",
-          "Distance de vue",
-          "${this.value.toFixed(2)} ue",
-          "renderDistance"
-        ),
+        transpileV2PreyGene("viewDistance", "${this.value.toFixed(2)} ue"),
         transpileV2PreyGene(
           "amountOfFoodToEat",
-          "Nombre de plantes à manger",
-          "${Math.round(this.value)} plantes",
-          "hungerLevel",
-          {
-            speed: "Math.round(${value} * 0.05)",
-          }
+          "${Math.round(this.value)} plantes"
         ),
-        transpileV2PreyGene(
-          "timeToEat",
-          "Temps pour manger",
-          "${this.value.toFixed(2)} ue",
-          "eatingInterval"
-        ),
+        transpileV2PreyGene("timeToEat", "${this.value.toFixed(2)} ue"),
       ],
     },
 
@@ -119,49 +97,22 @@ export function transpileV2ConfigurationToV1(
       name: "Prédateur",
       startingNb: v2Configuration.species.predator.startingNumber,
       genes: [
-        transpileV2PredatorGene(
-          "speed",
-          "Vitesse",
-          "${this.value.toFixed(2)} ue / ut"
-        ),
+        transpileV2PredatorGene("speed", "${this.value.toFixed(2)} ue / ut"),
         transpileV2PredatorGene(
           "numberOfBabies",
-          "Nombre de bébés",
-          "${Math.round(this.value)} bébé${ this.value > 1 ? 's' : '' }",
-          "nbOfBabies"
+          "${Math.round(this.value)} bébé${ this.value > 1 ? 's' : '' }"
         ),
-        transpileV2PredatorGene(
-          "longevity",
-          "Longévité",
-          "${this.value.toFixed(2)} ut"
-        ),
+        transpileV2PredatorGene("longevity", "${this.value.toFixed(2)} ut"),
         transpileV2PredatorGene(
           "intervalBetweenReproductionPeriods",
-          "Interval entre les périodes de reproduction",
-          "${this.value.toFixed(2)} ut",
-          "intervalBetweenReproducingPeriods"
+          "${this.value.toFixed(2)} ut"
         ),
-        transpileV2PredatorGene(
-          "viewDistance",
-          "Distance de vue",
-          "${this.value.toFixed(2)} ue",
-          "renderDistance"
-        ),
+        transpileV2PredatorGene("viewDistance", "${this.value.toFixed(2)} ue"),
         transpileV2PredatorGene(
           "amountOfFoodToEat",
-          "Nombre de plantes à manger",
-          "${Math.round(this.value)} proies",
-          "hungerLevel",
-          {
-            speed: "Math.round(${value} * 0.05)",
-          }
+          "${Math.round(this.value)} proies"
         ),
-        transpileV2PredatorGene(
-          "timeToEat",
-          "Temps pour manger",
-          "${this.value.toFixed(2)} ue",
-          "eatingInterval"
-        ),
+        transpileV2PredatorGene("timeToEat", "${this.value.toFixed(2)} ue"),
       ],
     },
   };
