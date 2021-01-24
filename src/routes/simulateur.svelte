@@ -86,7 +86,12 @@
   async function downloadExampleConfigurations() {
     const exampleConfigurations = (
       await (await fetch("documentation/example-configurations")).json()
-    ).map((configuration) => Object.assign(configuration, { id: uuidv4() }));
+    ).map((configuration) =>
+      applyDefaultsDeep(
+        Object.assign(configuration, { id: uuidv4() }),
+        generateBaseConfiguration()
+      )
+    );
     configurations = [...exampleConfigurations, ...configurations];
     selectedConfiguration = exampleConfigurations?.[0] || selectedConfiguration;
   }
