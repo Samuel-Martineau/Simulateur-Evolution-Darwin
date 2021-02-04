@@ -1,7 +1,7 @@
 {
   "name": "simulateur-evolution",
   "description": "Un simulateur d'évolution en ligne simple pour mieux comprendre ce complexe phénomène",
-  "version": "2.0.11",
+  "version": "2.0.12",
   "license": "MIT",
   "author": {
     "name": "Samuel Martineau",

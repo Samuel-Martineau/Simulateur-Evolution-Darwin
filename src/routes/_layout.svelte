@@ -5,7 +5,14 @@
   ) {
     if (isMobileUA && !path.startsWith("/mobile") && !mobileOverride)
       this.redirect(303, "/mobile");
-    if (!introCompleted && path !== "/") this.redirect(303, "/");
+
+    if (
+      !introCompleted &&
+      path !== "/" &&
+      (!isMobileUA || (isMobileUA && mobileOverride))
+    )
+      this.redirect(303, "/");
+
     if (process.browser) {
       // Détection de si l'appareil utilise une sourie ou un écran tactile
       const { matches } = matchMedia("(pointer: fine)");
