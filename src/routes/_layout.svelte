@@ -14,11 +14,11 @@
       this.redirect(303, "/");
 
     if (process.browser) {
-      // Détection de si l'appareil utilise une sourie ou un écran tactile
+      // Détection de si l'appareil utilise une souris ou un écran tactile
       const { matches } = matchMedia("(pointer: fine)");
       if (!matches && !isMobileUA)
         alert(
-          "Cet outil a été conçu pour une utilisation avec une sourie, mais votre appareil ne semble pas en avoir"
+          "Cet outil a été conçu pour une utilisation avec une souris, mais votre appareil ne semble pas en avoir"
         );
     }
   }
