@@ -64,7 +64,7 @@
     "imagemin-optipng": "^8.0.0",
     "imagemin-svgo": "^8.0.0",
     "mdsvex": "^0.8.9",
-    "postcss": "^8.2.10",
+    "postcss": "^8.2.13",
     "postcss-load-config": "^3.0.0",
     "prettier": "^2.2.1",
     "prettier-plugin-svelte": "^2.1.0",
