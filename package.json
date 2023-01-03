@@ -74,7 +74,7 @@
     "remark-toc": "^7.0.0",
     "sapper": "^0.28.0",
     "sass": "^1.30.0",
-    "svelte": "^3.17.3",
+    "svelte": "^3.49.0",
     "svelte-check": "^1.0.46",
     "svelte-loader": "^2.9.0",
     "svelte-preprocess": "^4.3.0",
